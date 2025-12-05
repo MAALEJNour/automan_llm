@@ -4,7 +4,6 @@ outputs/
 benchmarking/
 outputs_with_examples/
 scores/
-images/
 .venv/
 __pycache__/
 *.pyc
