@@ -1,0 +1,26 @@
+# Core LLM clients
+google-genai
+openai~=2.8.1
+huggingface_hub
+ollama~=0.6.1
+
+# Autogen
+autogen-agentchat
+autogen-ext
+
+# Async / utils
+aiohttp
+asyncio~=4.0.0
+requests
+python-dotenv~=1.2.1
+
+# Plotting & data
+matplotlib~=3.10.7
+pandas
+numpy~=2.3.5
+
+# Optional (remove if unused)
+jsonlines
+tqdm
+protobuf~=5.29.5
+huggingface_hub~=1.1.7

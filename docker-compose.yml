@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  automan-llm:
+    build: .
+    container_name: automan-llm
+    # Mount the project so you can edit code locally and rerun without rebuilding every time (dev mode)
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    environment:
+      # Tell the container how to reach the host Ollama server
+      - OLLAMA_HOST=host.docker.internal
+    stdin_open: true
+    tty: true
