@@ -8,6 +8,7 @@ from .huggingface_client import HuggingFaceModelClient
 __all__ = [
     "BaseModelClient",
     "OllamaModelClient",
+    "OllamaLocalModelClient",
     "GeminiModelClient",
     "OpenRouterModelClient",
     "HuggingFaceModelClient",

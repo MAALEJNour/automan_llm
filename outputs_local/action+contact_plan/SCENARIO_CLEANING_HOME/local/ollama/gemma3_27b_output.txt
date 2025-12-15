@@ -1,0 +1,983 @@
+
+============================================================
+Timestamp: 2025-12-15 15:24:36
+Prompt:
+
+You are a single agent that must perform an end-to-end pipeline divided into three tasks:
+
+TASK 1 — ACTION PLAN (use SCENARIO)
+TASK 2 — ACTION→MESSAGE MAPPING (convert action lines to JSON messages)
+TASK 3 — CONTACT ANALYSIS (turn each message into a part-level contact graph)
+
+OUTPUT CONTRACT (very important):
+- Emit your results in THREE sections, in this exact order.
+- Do NOT print anything outside these sections.
+
+1) ===ACTION_PLAN===
+   (Only the numbered list per SCENARIO Output — no extra text)
+   ===END_ACTION_PLAN===
+
+2) ===COORDINATOR_OUTPUT===
+   (Pure JSON array only, as required by TASK 2)
+   ===END_COORDINATOR_OUTPUT===
+
+3) ===CONTACT_OUTPUT===
+   (A JSON list of graphs in the same order as messages in TASK 2.
+    After the list, write exactly: ALL INTERACTIONS PROCESSED)
+   ===END_CONTACT_OUTPUT===
+
+You MUST:
+- In TASK 2, use the exact action lines you produced in TASK 1 as input.
+- In TASK 3, use the exact JSON array you produced in TASK 2 as input.
+- Preserve ordering between all tasks.
+
+----------------------------------------------------------------
+TASK 1 PROMPT (SCENARIO_CLEANING_HOME) 
+----------------------------------------------------------------
+
+SCENARIO= Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene (rooms & surfaces/containers):
+- Kitchen: sink K_sink, dishwasher DW (door CLOSED), dish_rack K_rack, counter K_counter, trash_bin K_trash
+- Living room: TV_stand L_tv, bookshelf L_books, coffee_table L_coffee, toy_bin L_toys, shoe_rack L_shoes
+- Bedroom: bed B_bed, bedside_table B_side, closet B_closet, laundry_basket B_laundry
+- Bathroom: sink BA_sink, medicine_cabinet BA_med, towel_bar BA_towel
+- Entryway: mail_tray E_mail, shoe_rack E_shoes
+- Side table D_side (maximum capacity: one item)
+
+Initial clutter:
+- Dishes: mug1 on B_side, plate1 on L_coffee and bowl1 on B_bed
+- Toys: toy_car on K_counter and plush_bear on BA_sink
+- Clothes: tshirt1 on L_coffee and sock1 on L_tv
+- Shoes: shoe_pair1 on L_coffee
+- Tools/misc: scissors1 on L_coffee, remote1 on K_counter and pill_bottle on L_coffee
+- Trash: can_empty on B_side, tissue_used on L_coffee
+
+Robot initial condition:
+- The robot is standing on the floor with a base height of 0.7 m.
+- Dishwasher DW door is CLOSED.
+
+Goal:
+- Restore the home to a tidy, typical state by relocating each object to a reasonable storage/placement location available in the scene.
+- Choose destinations using ordinary household conventions.
+- Be consistent: similar items should end up in the same type of place you decide (your choice), and do not invent containers or locations not listed above.
+- Do not leave objects on the floor or on clearly inappropriate surfaces when finished.
+
+Constraints:
+- Carry/handle one small item at a time.
+- Do not place items on the floor as an intermediate surface.
+- D_side can hold at most one item at a time (temporary buffer).
+- Opening/closing DW requires a clear 0.6 m front sweep zone (use D_side if needed).
+- To place inside DW or on K_rack, DW door must be OPEN,
+- To close DW, hands must be free.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m (reach adjustment).
+- Avoid unsafe placements (e.g., sharp tools in non-kitchen living areas).
+
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. Must precede lift_two_hands_obj_from_loc.
+
+lift_two_hands_obj_from_loc(object, source_surface): Lift object from its current surface/container.
+
+place_two_hands_one_obj_on_loc(object, target_surface_or_container): Place object on/into target listed in the scene.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+stand(object): Stand on an object/surface if the height difference is ≤ 0.6 m to adjust reach.
+
+open_door(appliance): Open an appliance door. 
+
+close_door(appliance): Close an appliance door.
+
+
+Output:
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+
+----------------------------------------------------------------
+TASK 2 PROMPT (Action → Message mapping)
+----------------------------------------------------------------
+
+coordinator_prompt = 
+### Goal
+You receive a numbered list of robot actions.
+Each action line describes a manipulation or locomotion behavior involving one or more objects.
+
+Your task is to understand the meaning of each action and translate it into a short JSON message that describes:
+1. The objects involved.
+2. A brief, natural description of what the robot is doing.
+
+At the end, output one JSON array containing all converted messages in the same order as the input actions.
+
+---
+
+### Expected Output
+Your final answer must be pure JSON, structured like this:
+
+[
+  {
+    "objects": ["object 1", "object 2"],
+    "interaction": "short human-readable description of what happens"
+  },
+  ...
+]
+
+Strict rules:
+- Output only valid JSON — no text, no markdown, no code.
+- Each JSON object corresponds to exactly one input action.
+- If an action does not involve any object, set "objects": [].
+- Stop after producing the list — do not comment or summarize.
+
+---
+
+### How to think about each action
+When reading a line like:
+> grasp_two_hands_one_obj(box A)
+
+Ask yourself:
+- What are the objects? → ["box A"]
+- What is the interaction? → "grasp box A with both hands"
+
+Then express it in the required JSON format:
+{
+  "objects": ["box A"],
+  "interaction": "grasp box A with both hands"
+}
+
+Do this reasoning process for each action in order.
+
+
+
+----------------------------------------------------------------
+TASK 3 PROMPT (Contact analysis)
+----------------------------------------------------------------
+
+contact_prompt = 
+
+- Task: You will be given a list of objects and a short text description of human interactions with these objects. Your task is to analyze all the interaction relations among human body parts and object parts and output the results as a graph in the JSON format.
+
+- Input format: The input is provided in the JSON format as follows
+
+{
+    "objects": [
+        "object 1",
+        "object 2"
+    ],
+    "interaction": "a short interaction description"
+}
+
+If multiple inputs are provided, they will be in an array:
+[
+    { "objects": [...], "interaction": "..." },
+    { "objects": [...], "interaction": "..." },
+    ...
+]
+
+- Output format: Provide the output strictly in JSON format, without any additional explanation or commentary, structured as follows:
+[
+  {
+      "object part nodes": [
+          "object 1, object part 1",
+          "object 1, object part 2"
+      ],
+
+      "body part nodes": [
+          "person 1, human body part 1",
+          "person 1, human body part 2"
+      ],
+
+      "interaction edges": [
+          {
+              "nodes": [
+                  "object a, object part b",
+                  "person c, human body part d"
+              ],
+          },
+          {
+              "nodes": [
+                  "object x, object part y",
+                  "person z, human body part w"
+              ],
+          },
+          {
+              "nodes": [
+                  "object f, object part q",
+                  "object r, object part k"
+              ],
+          }
+      ],
+  },
+  ...
+]
+
+After this list, write exactly:
+**ALL INTERACTIONS PROCESSED**
+
+---
+
+- Rules for analysis:
+
+(1) There are two types of nodes in the output interaction graph: "object part nodes" representing object parts and "body part nodes" representing human body parts.
+(2) The "object part nodes" field represent a part-level segmentation of each input object. Segmentations should roughly cover the entire object without becoming excessively detailed. Use descriptive, specific part names rather than generic terms, for example, avoid "surface", "edge", "body", "base", "area", "cover", "support", "connector", "frame", and the like. Avoid numbering object parts.
+Example: For a "bike", use the following parts: "handlebar", "pedal", "seat", "frame tubes", "wheels". For a "skateboard", use the following parts: "longboard deck", "wheels". For a "cordless vacuum cleaner", use the following parts: "ergonomic hand grip", "wand", "floor roller". For a "ladder", use the following parts: "side rail tubes", "rungs". For a "boxing bag", use the following parts: "punching bag". For a "box", use the following "top side", "left side", "right side", "bottom side". For a "door", use the following parts: "handle", "door frame".
+(3) The "body part nodes" field must be the following: "left hand", "right hand", "left foot", "right foot". Distinguish between left/right human body parts.
+(4) The "interaction edges" represent direct physical contact relationships between two end nodes. An edge connects an object part node to either a human body part node or another object part node. Do not connect part nodes within the same object. Example: when ironing on an ironing board, the soleplate part of an iron should be connected to the top flat panel part of the ironing board.
+(5) Explicitly mentioned body parts in the input "interaction" field must be included.
+Example: For a description "a person is lifting a single dumbbell with one hand", include either "left hand" or "right hand" in the analysis. If no specific body part
+is mentioned, use the most common ergonomic interactions in the physical contact analysis.
+(6) Focus on primary actions influencing object use or movement in the physical contact
+analysis. Example: For "a person walking and carrying a briefcase in one hand", the
+primary action for analysis is "carrying".
+(7) Ensure the identified object parts belong to their respective objects in the node and
+edge outputs of the interaction graph.
+(8) Ensure plausible distribution and avoid conflicts or duplication of human body
+parts during the interaction analysis.
+(9) Exclude environmental elements, like floor, ground, or wall, from the physical contact
+analysis.
+
+- Examples:
+(1) If the input is
+{
+    "objects": [
+        "umbrella",
+        "suitcase"
+    ],
+    "interaction": "a person is dragging a suitcase with one hand and holding an
+    open umbrella with the other hand while walking"
+}
+then the output is
+{
+    "object part nodes": 
+    [
+        "umbrella, canopy",
+        "umbrella, shaft",
+        "suitcase, main compartment",
+        "suitcase, handle",
+        "suitcase, wheels"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "umbrella, shaft",
+                "person 1, left hand"
+            ],
+        },
+        {
+            "nodes": [
+                "suitcase, handle",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(2) If the input is
+{
+    "objects": [
+        "box"
+    ],
+    "interaction": "a person is lifting a box"
+}
+then the output is
+{
+    "object part nodes": [
+        "box, left side",
+        "box, right side",
+        "box, front side",
+        "box, back side",
+        "box, top side",
+        "box, bottom side"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "box, left side",
+                "person 1, left hand"
+            ]
+        },
+        {
+            "nodes": [
+                "box, right side",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(3) If the input is
+{
+    "objects": [
+        "guitar"
+    ],
+    "interaction": "a person is holding a guitar while standing"
+}
+then the output is
+{
+    "object part nodes": [
+        "guitar, neck",
+        "guitar, main compartment" 
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "guitar, neck",
+                "person 1, left_hand"
+            ]
+        }
+    ]
+}
+
+
+----------------------------------------------------------------
+PIPELINE EXECUTION REMINDER (do not print this section)
+----------------------------------------------------------------
+- Produce the three sections in order.
+- TASK 1 uses SCENARIO_1 to create the numbered Action Plan.
+- TASK 2 converts the Action Plan lines into the JSON array; place that array between the COORDINATOR_OUTPUT tags.
+- TASK 3 converts that array into a list of JSON contact graphs; place those between CONTACT_OUTPUT tags, then write exactly:
+  ALL INTERACTIONS PROCESSED
+- Do not include any commentary or markdown outside the specified section tags.
+
+------------------------------------------------------------
+Output:
+1) ===ACTION_PLAN===
+1. grasp_two_hands_one_obj(mug1)
+2. lift_two_hands_obj_from_loc(mug1, B_side)
+3. place_two_hands_one_obj_on_loc(mug1, K_sink)
+4. free_two_hands()
+5. grasp_two_hands_one_obj(plate1)
+6. lift_two_hands_obj_from_loc(plate1, L_coffee)
+7. place_two_hands_one_obj_on_loc(plate1, K_sink)
+8. free_two_hands()
+9. grasp_two_hands_one_obj(bowl1)
+10. lift_two_hands_obj_from_loc(bowl1, B_bed)
+11. place_two_hands_one_obj_on_loc(bowl1, K_sink)
+12. free_two_hands()
+13. grasp_two_hands_one_obj(toy_car)
+14. lift_two_hands_obj_from_loc(toy_car, K_counter)
+15. place_two_hands_one_obj_on_loc(toy_car, L_toys)
+16. free_two_hands()
+17. grasp_two_hands_one_obj(plush_bear)
+18. lift_two_hands_obj_from_loc(plush_bear, BA_sink)
+19. place_two_hands_one_obj_on_loc(plush_bear, L_toys)
+20. free_two_hands()
+21. grasp_two_hands_one_obj(tshirt1)
+22. lift_two_hands_obj_from_loc(tshirt1, L_coffee)
+23. place_two_hands_one_obj_on_loc(tshirt1, B_laundry)
+24. free_two_hands()
+25. grasp_two_hands_one_obj(sock1)
+26. lift_two_hands_obj_from_loc(sock1, L_tv)
+27. place_two_hands_one_obj_on_loc(sock1, B_laundry)
+28. free_two_hands()
+29. grasp_two_hands_one_obj(shoe_pair1)
+30. lift_two_hands_obj_from_loc(shoe_pair1, L_coffee)
+31. place_two_hands_one_obj_on_loc(shoe_pair1, E_shoes)
+32. free_two_hands()
+33. grasp_two_hands_one_obj(scissors1)
+34. lift_two_hands_obj_from_loc(scissors1, L_coffee)
+35. place_two_hands_one_obj_on_loc(scissors1, K_counter)
+36. free_two_hands()
+37. grasp_two_hands_one_obj(remote1)
+38. lift_two_hands_obj_from_loc(remote1, K_counter)
+39. place_two_hands_one_obj_on_loc(remote1, L_coffee)
+40. free_two_hands()
+41. grasp_two_hands_one_obj(pill1)
+42. lift_two_hands_obj_from_loc(pill1, K_counter)
+43. place_two_hands_one_obj_on_loc(pill1, K_sink)
+44. free_two_hands()
+===ACTION_PLAN===
+
+2) ===COORDINATOR_OUTPUT===
+[
+  {
+    "objects": [
+      "mug1"
+    ],
+    "interaction": "a person is grasping a mug"
+  },
+  {
+    "objects": [
+      "mug1"
+    ],
+    "interaction": "a person is lifting a mug from a surface"
+  },
+  {
+    "objects": [
+      "mug1",
+      "K_sink"
+    ],
+    "interaction": "a person is placing a mug on a sink"
+  },
+  {
+    "objects": [
+      "mug1"
+    ],
+    "interaction": "a person is releasing a mug"
+  },
+  {
+    "objects": [
+      "plate1"
+    ],
+    "interaction": "a person is grasping a plate"
+  },
+  {
+    "objects": [
+      "plate1"
+    ],
+    "interaction": "a person is lifting a plate from a surface"
+  },
+  {
+    "objects": [
+      "plate1",
+      "K_sink"
+    ],
+    "interaction": "a person is placing a plate on a sink"
+  },
+  {
+    "objects": [
+      "plate1"
+    ],
+    "interaction": "a person is releasing a plate"
+  },
+  {
+    "objects": [
+      "bowl1"
+    ],
+    "interaction": "a person is grasping a bowl"
+  },
+  {
+    "objects": [
+      "bowl1"
+    ],
+    "interaction": "a person is lifting a bowl from a surface"
+  },
+  {
+    "objects": [
+      "bowl1",
+      "K_sink"
+    ],
+    "interaction": "a person is placing a bowl on a sink"
+  },
+  {
+    "objects": [
+      "bowl1"
+    ],
+    "interaction": "a person is releasing a bowl"
+  },
+  {
+    "objects": [
+      "toy_car"
+    ],
+    "interaction": "a person is grasping a toy car"
+  },
+  {
+    "objects": [
+      "toy_car"
+    ],
+    "interaction": "a person is lifting a toy car from a surface"
+  },
+  {
+    "objects": [
+      "toy_car",
+      "L_toys"
+    ],
+    "interaction": "a person is placing a toy car on a toy box"
+  },
+  {
+    "objects": [
+      "toy_car"
+    ],
+    "interaction": "a person is releasing a toy car"
+  },
+  {
+    "objects": [
+      "plush_bear"
+    ],
+    "interaction": "a person is grasping a plush bear"
+  },
+  {
+    "objects": [
+      "plush_bear"
+    ],
+    "interaction": "a person is lifting a plush bear from a surface"
+  },
+  {
+    "objects": [
+      "plush_bear",
+      "L_toys"
+    ],
+    "interaction": "a person is placing a plush bear on a toy box"
+  },
+  {
+    "objects": [
+      "plush_bear"
+    ],
+    "interaction": "a person is releasing a plush bear"
+  },
+  {
+    "objects": [
+      "tshirt1"
+    ],
+    "interaction": "a person is grasping a t-shirt"
+  },
+  {
+    "objects": [
+      "tshirt1"
+    ],
+    "interaction": "a person is lifting a t-shirt from a surface"
+  },
+  {
+    "objects": [
+      "tshirt1",
+      "B_laundry"
+    ],
+    "interaction": "a person is placing a t-shirt on a laundry basket"
+  },
+  {
+    "objects": [
+      "tshirt1"
+    ],
+    "interaction": "a person is releasing a t-shirt"
+  },
+  {
+    "objects": [
+      "sock1"
+    ],
+    "interaction": "a person is grasping a sock"
+  },
+  {
+    "objects": [
+      "sock1"
+    ],
+    "interaction": "a person is lifting a sock from a surface"
+  },
+  {
+    "objects": [
+      "sock1",
+      "B_laundry"
+    ],
+    "interaction": "a person is placing a sock on a laundry basket"
+  },
+  {
+    "objects": [
+      "sock1"
+    ],
+    "interaction": "a person is releasing a sock"
+  },
+  {
+    "objects": [
+      "shoe_pair1"
+    ],
+    "interaction": "a person is grasping a pair of shoes"
+  },
+  {
+    "objects": [
+      "shoe_pair1"
+    ],
+    "interaction": "a person is lifting a pair of shoes from a surface"
+  },
+  {
+    "objects": [
+      "shoe_pair1",
+      "E_shoes"
+    ],
+    "interaction": "a person is placing a pair of shoes on a shoe rack"
+  },
+  {
+    "objects": [
+      "shoe_pair1"
+    ],
+    "interaction": "a person is releasing a pair of shoes"
+  },
+  {
+    "objects": [
+      "scissors1"
+    ],
+    "interaction": "a person is grasping a pair of scissors"
+  },
+  {
+    "objects": [
+      "scissors1"
+    ],
+    "interaction": "a person is lifting a pair of scissors from a surface"
+  },
+  {
+    "objects": [
+      "scissors1",
+      "K_counter"
+    ],
+    "interaction": "a person is placing a pair of scissors on a counter"
+  },
+  {
+    "objects": [
+      "scissors1"
+    ],
+    "interaction": "a person is releasing a pair of scissors"
+  },
+  {
+    "objects": [
+      "remote1"
+    ],
+    "interaction": "a person is grasping a remote"
+  },
+  {
+    "objects": [
+      "remote1"
+    ],
+    "interaction": "a person is lifting a remote from a surface"
+  },
+  {
+    "objects": [
+      "remote1",
+      "L_coffee"
+    ],
+    "interaction": "a person is placing a remote on a coffee table"
+  },
+  {
+    "objects": [
+      "remote1"
+    ],
+    "interaction": "a person is releasing a remote"
+  },
+  {
+    "objects": [
+      "pill1"
+    ],
+    "interaction": "a person is grasping a pill"
+  },
+  {
+    "objects": [
+      "pill1"
+    ],
+    "interaction": "a person is lifting a pill from a surface"
+  },
+  {
+    "objects": [
+      "pill1",
+      "K_sink"
+    ],
+    "interaction": "a person is placing a pill on a sink"
+  },
+  {
+    "objects": [
+      "pill1"
+    ],
+    "interaction": "a person is releasing a pill"
+  }
+]
+===COORDINATOR_OUTPUT===
+
+3) ===CONTACT_OUTPUT===
+[
+  {
+    "object part nodes": [
+      "mug1, handle",
+      "mug1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "mug1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "mug1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plate1, rim",
+      "plate1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plate1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plate1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "bowl1, rim",
+      "bowl1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "bowl1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "bowl1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "toy_car, body",
+      "toy_car, wheels"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "toy_car, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "toy_car, wheels",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plush_bear, body",
+      "plush_bear, head"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plush_bear, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plush_bear, head",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tshirt1, sleeve",
+      "tshirt1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tshirt1, sleeve",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tshirt1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "sock1, top",
+      "sock1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sock1, top",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sock1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "shoe_pair1, sole",
+      "shoe_pair1, upper"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "shoe_pair1, sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "shoe_pair1, upper",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "scissors1, handle",
+      "scissors1, blade"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "scissors1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "scissors1, blade",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "remote1, body",
+      "remote1, buttons"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "remote1, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "remote1, buttons",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "pill1, body",
+      "pill1, surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "pill1, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "pill1, surface",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  }
+]
+===CONTACT_OUTPUT===
+============================================================
+

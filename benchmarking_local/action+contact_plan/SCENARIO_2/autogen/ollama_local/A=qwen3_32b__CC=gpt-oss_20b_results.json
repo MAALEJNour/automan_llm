@@ -1,0 +1,8 @@
+{
+  "plan_type": "action+contact_plan",
+  "provider": "ollama_local",
+  "model": "A=qwen3:32b__CC=gpt-oss:20b",
+  "total_latency": [
+    26.98061227798462
+  ]
+}

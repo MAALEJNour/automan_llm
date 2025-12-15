@@ -4,10 +4,10 @@ import os
 import json
 
 
-SAVE_LATENCY_DIR = "benchmarking"
+SAVE_LATENCY_DIR = "benchmarking_local"
 os.makedirs(SAVE_LATENCY_DIR, exist_ok=True)
 
-SAVE_CONTENT_DIR = "outputs"
+SAVE_CONTENT_DIR = "outputs_local"
 os.makedirs(SAVE_CONTENT_DIR, exist_ok=True)
 
 def save_results(

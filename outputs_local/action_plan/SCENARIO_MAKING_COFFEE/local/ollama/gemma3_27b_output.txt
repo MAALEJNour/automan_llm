@@ -1,0 +1,115 @@
+
+============================================================
+Timestamp: 2025-12-15 13:23:22
+Prompt:
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Use only the actions listed—do not invent new ones. The number of steps may vary.
+
+Scene:
+
+- Countertop: coffee_machine CM (mug platform, OFF), sugar_jar SJ (closed)
+- Sink S with dish_soap DS, drying_rack DR
+- Fridge F 
+- Cup A on counter (CUP_A is CLEAN)
+- Cup B on counter (CUP_B is DIRTY)
+- milk_carton MC (closed and stored INSIDE fridge F which is also closed)
+
+Robot initial condition:
+
+- Robot stands on the floor, hands-free.
+
+
+Task:
+
+Prepare two coffees:
+1) One black coffee in CUP_A (no sugar, no milk).
+2) One coffee with sugar and milk in CUP_B.
+
+Limitations:
+
+- Do not place items on the floor as an intermediate surface.
+- Handle one small item at a time.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m.
+- Liquids must be poured only into a clean cup.
+- To access an item inside a closed container, you must open that container first and close it when finished.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between you and the object is less than 0.6m. Use this for locomotion or height adjustment when needed.
+
+open_container(container): Open a container (e.g., SJ).
+
+close_container(container): Close a container that was opened.
+
+wash_item_in_sink(item, sink, soap): Wash an item in the sink with soap (renders the item clean).
+
+dry_item_on_rack(item, rack): Place washed item on a rack briefly to drain (makes it ready to use).
+
+dispense_coffee(machine, target): Dispense hot coffee from CM into target.
+
+scoop_from_to(source_container, target, item_name): Transfer a small amount (e.g., sugar) from a container to a target.
+
+pour_from_to(source_container, target): Pour liquid from a container to a target.
+
+press_button(device, button_name): Press a device button (e.g., START, OFF).
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+------------------------------------------------------------
+Output:
+1. grasp_two_hands_one_obj(CUP_B)
+2. lift_two_hands_obj_from_loc(CUP_B, counter)
+3. place_two_hands_one_obj_on_loc(CUP_B, sink)
+4. free_two_hands()
+5. grasp_two_hands_one_obj(dish_soap)
+6. lift_two_hands_obj_from_loc(dish_soap, sink)
+7. place_two_hands_one_obj_on_loc(dish_soap, CUP_B)
+8. free_two_hands()
+9. wash_item_in_sink(CUP_B, sink, dish_soap)
+10. grasp_two_hands_one_obj(CUP_B)
+11. lift_two_hands_obj_from_loc(CUP_B, sink)
+12. place_two_hands_one_obj_on_loc(CUP_B, drying_rack)
+13. free_two_hands()
+14. dry_item_on_rack(CUP_B, drying_rack)
+15. grasp_two_hands_one_obj(CUP_B)
+16. lift_two_hands_obj_from_loc(CUP_B, drying_rack)
+17. place_two_hands_one_obj_on_loc(CUP_B, counter)
+18. free_two_hands()
+19. grasp_two_hands_one_obj(sugar_jar)
+20. lift_two_hands_obj_from_loc(sugar_jar, counter)
+21. open_container(sugar_jar)
+22. scoop_from_to(sugar_jar, CUP_B, sugar)
+23. close_container(sugar_jar)
+24. place_two_hands_one_obj_on_loc(sugar_jar, counter)
+25. free_two_hands()
+26. grasp_two_hands_one_obj(milk_carton)
+27. lift_two_hands_obj_from_loc(milk_carton, fridge)
+28. open_container(milk_carton)
+29. pour_from_to(milk_carton, CUP_B)
+30. close_container(milk_carton)
+31. place_two_hands_one_obj_on_loc(milk_carton, fridge)
+32. free_two_hands()
+33. grasp_two_hands_one_obj(CUP_A)
+34. lift_two_hands_obj_from_loc(CUP_A, counter)
+35. place_two_hands_one_obj_on_loc(CUP_A, coffee_machine)
+36. free_two_hands()
+37. press_button(coffee_machine, START)
+38. dispense_coffee(coffee_machine, CUP_A)
+39. grasp_two_hands_one_obj(CUP_A)
+40. lift_two_hands_obj_from_loc(CUP_A, coffee_machine)
+41. place_two_hands_one_obj_on_loc(CUP_A, counter)
+42. free_two_hands()
+
+============================================================
+

@@ -1,0 +1,9 @@
+{
+  "plan_type": "action_plan",
+  "provider": "ollama",
+  "model": "deepseek-r1:32b",
+  "total_latency": [
+    20.556110858917236,
+    20.429497003555298
+  ]
+}
