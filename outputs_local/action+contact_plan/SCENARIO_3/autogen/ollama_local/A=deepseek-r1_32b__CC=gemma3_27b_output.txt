@@ -685,3 +685,493 @@ ContactAgent: ```json
 ```
 ============================================================
 
+
+============================================================
+Timestamp: 2025-12-23 22:16:45
+Prompt:
+
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene:
+
+The objects available in the scene are the following:
+
+A table A placed on the floor
+A table B placed on the floor
+A box A placed on table A
+A box B placed on table A
+A box C placed on table A
+A trolley A placed on the floor, not near table A or table B
+
+Robot initial condition:
+
+The robot is standing on the floor with a base height of 0.7 m.
+
+Task:
+
+Place all the boxes to table B.
+
+Limitations:
+
+The trolley can only carry 2 boxes at the time.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between the robot base and the object is less than 0.6 m. object can also be the floor. If the robot stands on the object, then the robot base height gets increased by the object height.
+
+push_obj_near(object1, object2): Push object1 near object2.
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+1. stand(floor)
+2. grasp_two_hands_one_obj(box_a)
+3. lift_two_hands_obj_from_loc(box_a, table_a)
+4. place_two_hands_one_obj_on_loc(box_a, trolley_a)
+5. free_two_hands()
+6. grasp_two_hands_one_obj(box_b)
+7. lift_two_hands_obj_from_loc(box_b, table_a)
+8. place_two_hands_one_obj_on_loc(box_b, trolley_a)
+9. free_two_hands()
+10. push_obj_near(trolley_a, table_b)
+11. stand(floor)
+12. grasp_two_hands_one_obj(box_a)
+13. lift_two_hands_obj_from_loc(box_a, trolley_a)
+14. place_two_hands_one_obj_on_loc(box_a, table_b)
+15. free_two_hands()
+16. grasp_two_hands_one_obj(box_b)
+17. lift_two_hands_obj_from_loc(box_b, trolley_a)
+18. place_two_hands_one_obj_on_loc(box_b, table_b)
+19. free_two_hands()
+20. stand(table_b)
+21. grasp_two_hands_one_obj(box_c)
+22. lift_two_hands_obj_from_loc(box_c, table_a)
+23. place_two_hands_one_obj_on_loc(box_c, table_b)
+24. free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. stand(floor)
+2. grasp_two_hands_one_obj(box_a)
+3. lift_two_hands_obj_from_loc(box_a, table_a)
+4. place_two_hands_one_obj_on_loc(box_a, trolley_a)
+5. free_two_hands()
+6. grasp_two_hands_one_obj(box_b)
+7. lift_two_hands_obj_from_loc(box_b, table_a)
+8. place_two_hands_one_obj_on_loc(box_b, trolley_a)
+9. free_two_hands()
+10. push_obj_near(trolley_a, table_b)
+11. stand(floor)
+12. grasp_two_hands_one_obj(box_a)
+13. lift_two_hands_obj_from_loc(box_a, trolley_a)
+14. place_two_hands_one_obj_on_loc(box_a, table_b)
+15. free_two_hands()
+16. grasp_two_hands_one_obj(box_b)
+17. lift_two_hands_obj_from_loc(box_b, trolley_a)
+18. place_two_hands_one_obj_on_loc(box_b, table_b)
+19. free_two_hands()
+20. stand(table_b)
+21. grasp_two_hands_one_obj(box_c)
+22. lift_two_hands_obj_from_loc(box_c, table_a)
+23. place_two_hands_one_obj_on_loc(box_c, table_b)
+24. free_two_hands()
+CoordinatorAgent: ```json
+[
+  {
+    "objects": ["floor"],
+    "interaction": "stand on the floor"
+  },
+  {
+    "objects": ["box_a"],
+    "interaction": "grasp box A with both hands"
+  },
+  {
+    "objects": ["box_a", "table_a"],
+    "interaction": "lift box A from table A with both hands"
+  },
+  {
+    "objects": ["box_a", "trolley_a"],
+    "interaction": "place box A on trolley A with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["box_b"],
+    "interaction": "grasp box B with both hands"
+  },
+  {
+    "objects": ["box_b", "table_a"],
+    "interaction": "lift box B from table A with both hands"
+  },
+  {
+    "objects": ["box_b", "trolley_a"],
+    "interaction": "place box B on trolley A with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["trolley_a", "table_b"],
+    "interaction": "push trolley A near table B"
+  },
+  {
+    "objects": ["floor"],
+    "interaction": "stand on the floor"
+  },
+  {
+    "objects": ["box_a"],
+    "interaction": "grasp box A with both hands"
+  },
+  {
+    "objects": ["box_a", "trolley_a"],
+    "interaction": "lift box A from trolley A with both hands"
+  },
+  {
+    "objects": ["box_a", "table_b"],
+    "interaction": "place box A on table B with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["box_b"],
+    "interaction": "grasp box B with both hands"
+  },
+  {
+    "objects": ["box_b", "trolley_a"],
+    "interaction": "lift box B from trolley A with both hands"
+  },
+  {
+    "objects": ["box_b", "table_b"],
+    "interaction": "place box B on table B with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["table_b"],
+    "interaction": "stand on table B"
+  },
+  {
+    "objects": ["box_c"],
+    "interaction": "grasp box C with both hands"
+  },
+  {
+    "objects": ["box_c", "table_a"],
+    "interaction": "lift box C from table A with both hands"
+  },
+  {
+    "objects": ["box_c", "table_b"],
+    "interaction": "place box C on table B with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  }
+]
+```
+ContactAgent: ```json
+[
+  {
+    "object part nodes": ["floor, surface"],
+    "body part nodes": ["person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {
+        "nodes": ["floor, surface", "person 1, left foot"]
+      },
+      {
+        "nodes": ["floor, surface", "person 1, right foot"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side", "table_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_a, bottom side", "table_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side", "trolley_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_a, bottom side", "trolley_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side", "table_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_b, bottom side", "table_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side", "trolley_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_b, bottom side", "trolley_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["trolley_a, side", "table_b, surface"],
+    "body part nodes": [],
+    "interaction edges": [
+      {
+        "nodes": ["trolley_a, side", "table_b, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["floor, surface"],
+    "body part nodes": ["person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {
+        "nodes": ["floor, surface", "person 1, left foot"]
+      },
+      {
+        "nodes": ["floor, surface", "person 1, right foot"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side", "trolley_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_a, bottom side", "trolley_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_a, left side", "box_a, right side", "box_a, top side", "box_a, bottom side", "box_a, front side", "box_a, back side", "table_b, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_a, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_a, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_a, bottom side", "table_b, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side", "trolley_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_b, bottom side", "trolley_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_b, left side", "box_b, right side", "box_b, top side", "box_b, bottom side", "box_b, front side", "box_b, back side", "table_b, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_b, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_b, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_b, bottom side", "table_b, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["table_b, surface"],
+    "body part nodes": ["person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {
+        "nodes": ["table_b, surface", "person 1, left foot"]
+      },
+      {
+        "nodes": ["table_b, surface", "person 1, right foot"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_c, left side", "box_c, right side", "box_c, top side", "box_c, bottom side", "box_c, front side", "box_c, back side"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_c, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_c, right side", "person 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_c, left side", "box_c, right side", "box_c, top side", "box_c, bottom side", "box_c, front side", "box_c, back side", "table_a, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_c, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_c, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_c, bottom side", "table_a, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": ["box_c, left side", "box_c, right side", "box_c, top side", "box_c, bottom side", "box_c, front side", "box_c, back side", "table_b, surface"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": [
+      {
+        "nodes": ["box_c, left side", "person 1, left hand"]
+      },
+      {
+        "nodes": ["box_c, right side", "person 1, right hand"]
+      },
+      {
+        "nodes": ["box_c, bottom side", "table_b, surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],
+    "interaction edges": []
+  }
+]
+```
+============================================================
+

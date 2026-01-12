@@ -1,0 +1,4 @@
+{
+  "grasp_two_hands_one_obj(box a) lift_two_hands_obj_from_loc(box a, floor) stand(box b) place_two_hands_one_obj_on_loc(box a, shelf a) free_two_hands()": 61,
+  "stand(box b) grasp_two_hands_one_obj(box a) lift_two_hands_obj_from_loc(box a, floor) place_two_hands_one_obj_on_loc(box a, shelf a) free_two_hands()": 39
+}

@@ -913,3 +913,1318 @@ Now, let's generate the JSON graphs for each interaction:
 ]
 ============================================================
 
+
+============================================================
+Timestamp: 2025-12-27 23:45:24
+Prompt:
+
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene:
+
+The objects available in the scene are the following:
+
+A table A placed on the floor
+A table B placed on the floor
+A box A placed on table A
+A box B placed on table A
+A box C placed on table A
+The distance between table A and trolley A is 1.2 m.
+The distance between table B and trolley A is 1.2 m.
+The distance between table B and table A is 1.2 m.
+
+Robot initial condition:
+
+The robot is standing on the floor with a base height of 0.7 m.
+
+Task:
+
+Place all the boxes to table B.
+
+Limitations:
+
+The trolley can only carry 2 boxes at the time.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between the robot base and the object is less than 0.6 m. object can also be the floor. If the robot stands on the object, then the robot base height gets increased by the object height.
+
+push_obj_near(object1, object2): Push object1 near object2. This action must be used if and only if the distance between object1 and object2 is greater than 0.8 m.
+
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+To move all three boxes from Table A to Table B, considering the robot can only carry one box at a time using both hands and must use the trolley for intermediate storage, follow these steps:
+
+1. **Grasp Box A**: Use `grasp_two_hands_one_obj(Box A)` to pick up Box A.
+2. **Lift Box A**: Lift Box A from Table A with `lift_two_hands_obj_from_loc(Box A, Table A)`.
+3. **Place Box A on Trolley**: Place Box A on the trolley using `place_two_hands_one_obj_on_loc(Box A, Trolley A)`.
+4. **Free Hands**: Use `free_two_hands()` to release Box A.
+5. **Grasp Box B**: Pick up Box B with `grasp_two_hands_one_obj(Box B)`.
+6. **Lift Box B**: Lift Box B from Table A using `lift_two_hands_obj_from_loc(Box B, Table A)`.
+7. **Place Box B on Trolley**: Place Box B on the trolley with `place_two_hands_one_obj_on_loc(Box B, Trolley A)`.
+8. **Free Hands Again**: Use `free_two_hands()` to release Box B.
+9. **Push Boxes Near Table B**: Since the distance between Trolley A and Table B is 1.2m (more than 0.8m), push each box from the trolley near Table B:
+   - Push Box A: `push_obj_near(Box A, Table B)`.
+   - Push Box B: `push_obj_near(Box B, Table B)`.
+10. **Place Box A on Table B**: 
+    - Grasp Box A again with `grasp_two_hands_one_obj(Box A)`.
+    - Lift it from the trolley: `lift_two_hands_obj_from_loc(Box A, Trolley A)`.
+    - Place it on Table B: `place_two_hands_one_obj_on_loc(Box A, Table B)`.
+    - Free hands.
+11. **Place Box B on Table B**:
+    - Grasp Box B with `grasp_two_hands_one_obj(Box B)`.
+    - Lift it from the trolley: `lift_two_hands_obj_from_loc(Box B, Trolley A)`.
+    - Place it on Table B: `place_two_hands_one_obj_on_loc(Box B, Table B)`.
+    - Free hands.
+12. **Return to Table A for Box C**:
+    - Move back to Table A.
+    - Grasp Box C with `grasp_two_hands_one_obj(Box C)`.
+    - Lift it from Table A: `lift_two_hands_obj_from_loc(Box C, Table A)`.
+    - Place it on the trolley if needed or directly move towards Table B.
+13. **Move Box C to Table B**:
+    - If necessary, push Box C near Table B: `push_obj_near(Box C, Table B)`.
+    - Grasp Box C from the trolley (if placed there).
+    - Lift and place it on Table B as done for Boxes A and B.
+
+This sequence ensures all boxes are moved efficiently using the available actions and the trolley as an intermediate storage point.
+
+=== COORDINATOR + CONTACT ===
+user: To move all three boxes from Table A to Table B, considering the robot can only carry one box at a time using both hands and must use the trolley for intermediate storage, follow these steps:
+
+1. **Grasp Box A**: Use `grasp_two_hands_one_obj(Box A)` to pick up Box A.
+2. **Lift Box A**: Lift Box A from Table A with `lift_two_hands_obj_from_loc(Box A, Table A)`.
+3. **Place Box A on Trolley**: Place Box A on the trolley using `place_two_hands_one_obj_on_loc(Box A, Trolley A)`.
+4. **Free Hands**: Use `free_two_hands()` to release Box A.
+5. **Grasp Box B**: Pick up Box B with `grasp_two_hands_one_obj(Box B)`.
+6. **Lift Box B**: Lift Box B from Table A using `lift_two_hands_obj_from_loc(Box B, Table A)`.
+7. **Place Box B on Trolley**: Place Box B on the trolley with `place_two_hands_one_obj_on_loc(Box B, Trolley A)`.
+8. **Free Hands Again**: Use `free_two_hands()` to release Box B.
+9. **Push Boxes Near Table B**: Since the distance between Trolley A and Table B is 1.2m (more than 0.8m), push each box from the trolley near Table B:
+   - Push Box A: `push_obj_near(Box A, Table B)`.
+   - Push Box B: `push_obj_near(Box B, Table B)`.
+10. **Place Box A on Table B**: 
+    - Grasp Box A again with `grasp_two_hands_one_obj(Box A)`.
+    - Lift it from the trolley: `lift_two_hands_obj_from_loc(Box A, Trolley A)`.
+    - Place it on Table B: `place_two_hands_one_obj_on_loc(Box A, Table B)`.
+    - Free hands.
+11. **Place Box B on Table B**:
+    - Grasp Box B with `grasp_two_hands_one_obj(Box B)`.
+    - Lift it from the trolley: `lift_two_hands_obj_from_loc(Box B, Trolley A)`.
+    - Place it on Table B: `place_two_hands_one_obj_on_loc(Box B, Table B)`.
+    - Free hands.
+12. **Return to Table A for Box C**:
+    - Move back to Table A.
+    - Grasp Box C with `grasp_two_hands_one_obj(Box C)`.
+    - Lift it from Table A: `lift_two_hands_obj_from_loc(Box C, Table A)`.
+    - Place it on the trolley if needed or directly move towards Table B.
+13. **Move Box C to Table B**:
+    - If necessary, push Box C near Table B: `push_obj_near(Box C, Table B)`.
+    - Grasp Box C from the trolley (if placed there).
+    - Lift and place it on Table B as done for Boxes A and B.
+
+This sequence ensures all boxes are moved efficiently using the available actions and the trolley as an intermediate storage point.
+CoordinatorAgent: ```json
+[
+  {
+    "objects": ["Box A"],
+    "interaction": "grasp Box A with both hands"
+  },
+  {
+    "objects": ["Box A", "Table A"],
+    "interaction": "lift Box A from Table A using both hands"
+  },
+  {
+    "objects": ["Box A", "Trolley A"],
+    "interaction": "place Box A on Trolley A using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release the grasp of both hands"
+  },
+  {
+    "objects": ["Box B"],
+    "interaction": "grasp Box B with both hands"
+  },
+  {
+    "objects": ["Box B", "Table A"],
+    "interaction": "lift Box B from Table A using both hands"
+  },
+  {
+    "objects": ["Box B", "Trolley A"],
+    "interaction": "place Box B on Trolley A using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release the grasp of both hands"
+  },
+  {
+    "objects": ["Box A", "Table B"],
+    "interaction": "push Box A near Table B"
+  },
+  {
+    "objects": ["Box B", "Table B"],
+    "interaction": "push Box B near Table B"
+  },
+  {
+    "objects": ["Box A"],
+    "interaction": "grasp Box A with both hands"
+  },
+  {
+    "objects": ["Box A", "Trolley A"],
+    "interaction": "lift Box A from Trolley A using both hands"
+  },
+  {
+    "objects": ["Box A", "Table B"],
+    "interaction": "place Box A on Table B using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release the grasp of both hands"
+  },
+  {
+    "objects": ["Box B"],
+    "interaction": "grasp Box B with both hands"
+  },
+  {
+    "objects": ["Box B", "Trolley A"],
+    "interaction": "lift Box B from Trolley A using both hands"
+  },
+  {
+    "objects": ["Box B", "Table B"],
+    "interaction": "place Box B on Table B using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release the grasp of both hands"
+  },
+  {
+    "objects": ["Box C"],
+    "interaction": "grasp Box C with both hands"
+  },
+  {
+    "objects": ["Box C", "Table A"],
+    "interaction": "lift Box C from Table A using both hands"
+  },
+  {
+    "objects": ["Box C", "Trolley A"],
+    "interaction": "place Box C on Trolley A using both hands"
+  },
+  {
+    "objects": ["Box C", "Table B"],
+    "interaction": "push Box C near Table B"
+  },
+  {
+    "objects": ["Box C"],
+    "interaction": "grasp Box C with both hands"
+  },
+  {
+    "objects": ["Box C", "Trolley A"],
+    "interaction": "lift Box C from Trolley A using both hands"
+  },
+  {
+    "objects": ["Box C", "Table B"],
+    "interaction": "place Box C on Table B using both hands"
+  }
+]
+```
+ContactAgent: To process the given JSON inputs and generate interaction graphs, we will analyze each step of the robot manipulation sequence. Each step involves specific human-object interactions that need to be represented as nodes and edges in a graph format.
+
+### Step-by-Step Analysis
+
+1. **Grasp Box A with both hands**
+   - Objects: ["Box A"]
+   - Interaction: "grasp Box A with both hands"
+   - Object Parts: ["Box A, left side", "Box A, right side", "Box A, front side", "Box A, back side", "Box A, top side", "Box A, bottom side"]
+   - Body Parts: ["person 1, left hand", "person 1, right hand"]
+
+2. **Lift Box A from Table A using both hands**
+   - Objects: ["Box A", "Table A"]
+   - Interaction: "lift Box A from Table A using both hands"
+   - Object Parts: Same as above for Box A
+   - Body Parts: Same as above
+
+3. **Place Box A on Trolley A using both hands**
+   - Objects: ["Box A", "Trolley A"]
+   - Interaction: "place Box A on Trolley A using both hands"
+   - Object Parts: ["Trolley A, top surface"]
+   - Body Parts: Same as above
+
+4. **Release the grasp of both hands**
+   - No specific object interaction; just a release action.
+
+5. **Grasp Box B with both hands**
+   - Objects: ["Box B"]
+   - Interaction: "grasp Box B with both hands"
+   - Object Parts: ["Box B, left side", "Box B, right side", "Box B, front side", "Box B, back side", "Box B, top side", "Box B, bottom side"]
+   - Body Parts: Same as above
+
+6. **Lift Box B from Table A using both hands**
+   - Objects: ["Box B", "Table A"]
+   - Interaction: "lift Box B from Table A using both hands"
+   - Object Parts: Same as above for Box B
+   - Body Parts: Same as above
+
+7. **Place Box B on Trolley A using both hands**
+   - Objects: ["Box B", "Trolley A"]
+   - Interaction: "place Box B on Trolley A using both hands"
+   - Object Parts: ["Trolley A, top surface"]
+   - Body Parts: Same as above
+
+8. **Release the grasp of both hands**
+   - No specific object interaction; just a release action.
+
+9. **Push Box A near Table B**
+   - Objects: ["Box A", "Table B"]
+   - Interaction: "push Box A near Table B"
+   - Object Parts: ["Box A, bottom side"]
+   - Body Parts: None (pushing does not involve direct hand contact)
+
+10. **Push Box B near Table B**
+    - Objects: ["Box B", "Table B"]
+    - Interaction: "push Box B near Table B"
+    - Object Parts: ["Box B, bottom side"]
+    - Body Parts: None
+
+11. **Grasp Box A with both hands (again)**
+    - Objects: ["Box A"]
+    - Interaction: "grasp Box A with both hands"
+    - Object Parts: Same as initial grasp
+    - Body Parts: Same as above
+
+12. **Lift Box A from Trolley A using both hands**
+    - Objects: ["Box A", "Trolley A"]
+    - Interaction: "lift Box A from Trolley A using both hands"
+    - Object Parts: Same as initial lift
+    - Body Parts: Same as above
+
+13. **Place Box A on Table B using both hands**
+    - Objects: ["Box A", "Table B"]
+    - Interaction: "place Box A on Table B using both hands"
+    - Object Parts: ["Table B, top surface"]
+    - Body Parts: Same as above
+
+14. **Release the grasp of both hands**
+    - No specific object interaction; just a release action.
+
+15. **Grasp Box B with both hands (again)**
+    - Objects: ["Box B"]
+    - Interaction: "grasp Box B with both hands"
+    - Object Parts: Same as initial grasp
+    - Body Parts: Same as above
+
+16. **Lift Box B from Trolley A using both hands**
+    - Objects: ["Box B", "Trolley A"]
+    - Interaction: "lift Box B from Trolley A using both hands"
+    - Object Parts: Same as initial lift
+    - Body Parts: Same as above
+
+17. **Place Box B on Table B using both hands**
+    - Objects: ["Box B", "Table B"]
+    - Interaction: "place Box B on Table B using both hands"
+    - Object Parts: ["Table B, top surface"]
+    - Body Parts: Same as above
+
+18. **Release the grasp of both hands**
+    - No specific object interaction; just a release action.
+
+19. **Grasp Box C with both hands**
+    - Objects: ["Box C"]
+    - Interaction: "grasp Box C with both hands"
+    - Object Parts: ["Box C, left side", "Box C, right side", "Box C, front side", "Box C, back side", "Box C, top side", "Box C, bottom side"]
+    - Body Parts: Same as above
+
+20. **Lift Box C from Table A using both hands**
+    - Objects: ["Box C", "Table A"]
+    - Interaction: "lift Box C from Table A using both hands"
+    - Object Parts: Same as above for Box C
+    - Body Parts: Same as above
+
+21. **Place Box C on Trolley A using both hands**
+    - Objects: ["Box C", "Trolley A"]
+    - Interaction: "place Box C on Trolley A using both hands"
+    - Object Parts: ["Trolley A, top surface"]
+    - Body Parts: Same as above
+
+22. **Push Box C near Table B**
+    - Objects: ["Box C", "Table B"]
+    - Interaction: "push Box C near Table B"
+    - Object Parts: ["Box C, bottom side"]
+    - Body Parts: None
+
+23. **Grasp Box C with both hands (again)**
+    - Objects: ["Box C"]
+    - Interaction: "grasp Box C with both hands"
+    - Object Parts: Same as initial grasp
+    - Body Parts: Same as above
+
+24. **Lift Box C from Trolley A using both hands**
+    - Objects: ["Box C", "Trolley A"]
+    - Interaction: "lift Box C from Trolley A using both hands"
+    - Object Parts: Same as initial lift
+    - Body Parts: Same as above
+
+25. **Place Box C on Table B using both hands**
+    - Objects: ["Box C", "Table B"]
+    - Interaction: "place Box C on Table B using both hands"
+    - Object Parts: ["Table B, top surface"]
+    - Body Parts: Same as above
+
+### JSON Output
+
+```json
+[
+  {
+    "object_parts": [
+      "Box A, left side",
+      "Box A, right side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, top side",
+      "Box A, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, left side", "to": "person 1, left hand"},
+      {"from": "Box A, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box A, left side",
+      "Box A, right side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, top side",
+      "Box A, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, left side", "to": "person 1, left hand"},
+      {"from": "Box A, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box B, left side",
+      "Box B, right side",
+      "Box B, front side",
+      "Box B, back side",
+      "Box B, top side",
+      "Box B, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, left side", "to": "person 1, left hand"},
+      {"from": "Box B, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box B, left side",
+      "Box B, right side",
+      "Box B, front side",
+      "Box B, back side",
+      "Box B, top side",
+      "Box B, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, left side", "to": "person 1, left hand"},
+      {"from": "Box B, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Box A, bottom side"],
+    "edges": [
+      {"from": "Box A, bottom side", "to": "Table B"}
+    ]
+  },
+  {
+    "object_parts": ["Box B, bottom side"],
+    "edges": [
+      {"from": "Box B, bottom side", "to": "Table B"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box A, left side",
+      "Box A, right side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, top side",
+      "Box A, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, left side", "to": "person 1, left hand"},
+      {"from": "Box A, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Table B, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box A, bottom side", "to": "Table B, top surface"},
+      {"from": "Table B, top surface", "to": "person 1, left hand"},
+      {"from": "Table B, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box B, left side",
+      "Box B, right side",
+      "Box B, front side",
+      "Box B, back side",
+      "Box B, top side",
+      "Box B, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, left side", "to": "person 1, left hand"},
+      {"from": "Box B, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Table B, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box B, bottom side", "to": "Table B, top surface"},
+      {"from": "Table B, top surface", "to": "person 1, left hand"},
+      {"from": "Table B, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box C, left side",
+      "Box C, right side",
+      "Box C, front side",
+      "Box C, back side",
+      "Box C, top side",
+      "Box C, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, left side", "to": "person 1, left hand"},
+      {"from": "Box C, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box C, left side",
+      "Box C, right side",
+      "Box C, front side",
+      "Box C, back side",
+      "Box C, top side",
+      "Box C, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, left side", "to": "person 1, left hand"},
+      {"from": "Box C, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Box C, bottom side"],
+    "edges": [
+      {"from": "Box C, bottom side", "to": "Table B"}
+    ]
+  },
+  {
+    "object_parts": [
+      "Box C, left side",
+      "Box C, right side",
+      "Box C, front side",
+      "Box C, back side",
+      "Box C, top side",
+      "Box C, bottom side"
+    ],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, left side", "to": "person 1, left hand"},
+      {"from": "Box C, right side", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Trolley A, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, bottom side", "to": "Trolley A, top surface"},
+      {"from": "Trolley A, top surface", "to": "person 1, left hand"},
+      {"from": "Trolley A, top surface", "to": "person 1, right hand"}
+    ]
+  },
+  {
+    "object_parts": ["Table B, top surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      {"from": "Box C, bottom side", "to": "Table B, top surface"},
+      {"from": "Table B, top surface", "to": "person 1, left hand"},
+      {"from": "Table B, top surface", "to": "person 1, right hand"}
+    ]
+  }
+]
+```
+============================================================
+
+
+============================================================
+Timestamp: 2025-12-27 23:47:05
+Prompt:
+
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene:
+
+The objects available in the scene are the following:
+
+A table A placed on the floor
+A table B placed on the floor
+A box A placed on table A
+A box B placed on table A
+A box C placed on table A
+The distance between table A and trolley A is 1.2 m.
+The distance between table B and trolley A is 1.2 m.
+The distance between table B and table A is 1.2 m.
+
+Robot initial condition:
+
+The robot is standing on the floor with a base height of 0.7 m.
+
+Task:
+
+Place all the boxes to table B.
+
+Limitations:
+
+The trolley can only carry 2 boxes at the time.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between the robot base and the object is less than 0.6 m. object can also be the floor. If the robot stands on the object, then the robot base height gets increased by the object height.
+
+push_obj_near(object1, object2): Push object1 near object2. This action must be used if and only if the distance between object1 and object2 is greater than 0.8 m.
+
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+1. push_obj_near(trolleyA, tableA)
+2. stand(tableA)
+3. grasp_two_hands_one_obj(boxA)
+4. lift_two_hands_obj_from_loc(boxA, tableA)
+5. place_two_hands_one_obj_on_loc(boxA, trolleyA)
+6. free_two_hands()
+7. grasp_two_hands_one_obj(boxB)
+8. lift_two_hands_obj_from_loc(boxB, tableA)
+9. place_two_hands_one_obj_on_loc(boxB, trolleyA)
+10. free_two_hands()
+11. push_obj_near(trolleyA, tableB)
+12. stand(tableB)
+13. grasp_two_hands_one_obj(boxA)
+14. lift_two_hands_obj_from_loc(boxA, trolleyA)
+15. place_two_hands_one_obj_on_loc(boxA, tableB)
+16. free_two_hands()
+17. grasp_two_hands_one_obj(boxB)
+18. lift_two_hands_obj_from_loc(boxB, trolleyA)
+19. place_two_hands_one_obj_on_loc(boxB, tableB)
+20. free_two_hands()
+21. push_obj_near(trolleyA, tableA)
+22. stand(tableA)
+23. grasp_two_hands_one_obj(boxC)
+24. lift_two_hands_obj_from_loc(boxC, tableA)
+25. place_two_hands_one_obj_on_loc(boxC, trolleyA)
+26. free_two_hands()
+27. push_obj_near(trolleyA, tableB)
+28. stand(tableB)
+29. grasp_two_hands_one_obj(boxC)
+30. lift_two_hands_obj_from_loc(boxC, trolleyA)
+31. place_two_hands_one_obj_on_loc(boxC, tableB)
+32. free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. push_obj_near(trolleyA, tableA)
+2. stand(tableA)
+3. grasp_two_hands_one_obj(boxA)
+4. lift_two_hands_obj_from_loc(boxA, tableA)
+5. place_two_hands_one_obj_on_loc(boxA, trolleyA)
+6. free_two_hands()
+7. grasp_two_hands_one_obj(boxB)
+8. lift_two_hands_obj_from_loc(boxB, tableA)
+9. place_two_hands_one_obj_on_loc(boxB, trolleyA)
+10. free_two_hands()
+11. push_obj_near(trolleyA, tableB)
+12. stand(tableB)
+13. grasp_two_hands_one_obj(boxA)
+14. lift_two_hands_obj_from_loc(boxA, trolleyA)
+15. place_two_hands_one_obj_on_loc(boxA, tableB)
+16. free_two_hands()
+17. grasp_two_hands_one_obj(boxB)
+18. lift_two_hands_obj_from_loc(boxB, trolleyA)
+19. place_two_hands_one_obj_on_loc(boxB, tableB)
+20. free_two_hands()
+21. push_obj_near(trolleyA, tableA)
+22. stand(tableA)
+23. grasp_two_hands_one_obj(boxC)
+24. lift_two_hands_obj_from_loc(boxC, tableA)
+25. place_two_hands_one_obj_on_loc(boxC, trolleyA)
+26. free_two_hands()
+27. push_obj_near(trolleyA, tableB)
+28. stand(tableB)
+29. grasp_two_hands_one_obj(boxC)
+30. lift_two_hands_obj_from_loc(boxC, trolleyA)
+31. place_two_hands_one_obj_on_loc(boxC, tableB)
+32. free_two_hands()
+CoordinatorAgent: ```json
+[
+  {
+    "objects": ["trolleyA", "tableA"],
+    "interaction": "push trolleyA near tableA"
+  },
+  {
+    "objects": ["tableA"],
+    "interaction": "stand at tableA"
+  },
+  {
+    "objects": ["boxA"],
+    "interaction": "grasp boxA with both hands"
+  },
+  {
+    "objects": ["boxA", "tableA"],
+    "interaction": "lift boxA from tableA using both hands"
+  },
+  {
+    "objects": ["boxA", "trolleyA"],
+    "interaction": "place boxA on trolleyA using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["boxB"],
+    "interaction": "grasp boxB with both hands"
+  },
+  {
+    "objects": ["boxB", "tableA"],
+    "interaction": "lift boxB from tableA using both hands"
+  },
+  {
+    "objects": ["boxB", "trolleyA"],
+    "interaction": "place boxB on trolleyA using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["trolleyA", "tableB"],
+    "interaction": "push trolleyA near tableB"
+  },
+  {
+    "objects": ["tableB"],
+    "interaction": "stand at tableB"
+  },
+  {
+    "objects": ["boxA"],
+    "interaction": "grasp boxA with both hands"
+  },
+  {
+    "objects": ["boxA", "trolleyA"],
+    "interaction": "lift boxA from trolleyA using both hands"
+  },
+  {
+    "objects": ["boxA", "tableB"],
+    "interaction": "place boxA on tableB using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["boxB"],
+    "interaction": "grasp boxB with both hands"
+  },
+  {
+    "objects": ["boxB", "trolleyA"],
+    "interaction": "lift boxB from trolleyA using both hands"
+  },
+  {
+    "objects": ["boxB", "tableB"],
+    "interaction": "place boxB on tableB using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["trolleyA", "tableA"],
+    "interaction": "push trolleyA near tableA"
+  },
+  {
+    "objects": ["tableA"],
+    "interaction": "stand at tableA"
+  },
+  {
+    "objects": ["boxC"],
+    "interaction": "grasp boxC with both hands"
+  },
+  {
+    "objects": ["boxC", "tableA"],
+    "interaction": "lift boxC from tableA using both hands"
+  },
+  {
+    "objects": ["boxC", "trolleyA"],
+    "interaction": "place boxC on trolleyA using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["trolleyA", "tableB"],
+    "interaction": "push trolleyA near tableB"
+  },
+  {
+    "objects": ["tableB"],
+    "interaction": "stand at tableB"
+  },
+  {
+    "objects": ["boxC"],
+    "interaction": "grasp boxC with both hands"
+  },
+  {
+    "objects": ["boxC", "trolleyA"],
+    "interaction": "lift boxC from trolleyA using both hands"
+  },
+  {
+    "objects": ["boxC", "tableB"],
+    "interaction": "place boxC on tableB using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  }
+]
+```
+ContactAgent: To process the given interactions, we will analyze each step and generate a JSON graph for each interaction. We'll follow the rules provided to ensure accurate representation of human-object interactions.
+
+### Interaction Analysis
+
+1. **Push trolleyA near tableA**
+   - Objects: `trolleyA`, `tableA`
+   - Parts:
+     - TrolleyA: "handle"
+     - TableA: "top surface"
+   - Body parts involved: "left hand", "right hand"
+
+2. **Stand at tableA**
+   - Object: `tableA`
+   - Parts:
+     - TableA: "top surface"
+   - Body parts involved: "left foot", "right foot"
+
+3. **Grasp boxA with both hands**
+   - Object: `boxA`
+   - Parts:
+     - BoxA: "left side", "right side"
+   - Body parts involved: "left hand", "right hand"
+
+4. **Lift boxA from tableA using both hands**
+   - Objects: `boxA`, `tableA`
+   - Parts:
+     - BoxA: "left side", "right side"
+     - TableA: "top surface"
+   - Body parts involved: "left hand", "right hand"
+
+5. **Place boxA on trolleyA using both hands**
+   - Objects: `boxA`, `trolleyA`
+   - Parts:
+     - BoxA: "left side", "right side"
+     - TrolleyA: "top surface"
+   - Body parts involved: "left hand", "right hand"
+
+6. **Free both hands**
+   - No objects or body parts involved.
+
+7. **Grasp boxB with both hands**
+   - Object: `boxB`
+   - Parts:
+     - BoxB: "left side", "right side"
+   - Body parts involved: "left hand", "right hand"
+
+8. **Lift boxB from tableA using both hands**
+   - Objects: `boxB`, `tableA`
+   - Parts:
+     - BoxB: "left side", "right side"
+     - TableA: "top surface"
+   - Body parts involved: "left hand", "right hand"
+
+9. **Place boxB on trolleyA using both hands**
+   - Objects: `boxB`, `trolleyA`
+   - Parts:
+     - BoxB: "left side", "right side"
+     - TrolleyA: "top surface"
+   - Body parts involved: "left hand", "right hand"
+
+10. **Free both hands**
+    - No objects or body parts involved.
+
+11. **Push trolleyA near tableB**
+    - Objects: `trolleyA`, `tableB`
+    - Parts:
+      - TrolleyA: "handle"
+      - TableB: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+12. **Stand at tableB**
+    - Object: `tableB`
+    - Parts:
+      - TableB: "top surface"
+    - Body parts involved: "left foot", "right foot"
+
+13. **Grasp boxA with both hands**
+    - Object: `boxA`
+    - Parts:
+      - BoxA: "left side", "right side"
+    - Body parts involved: "left hand", "right hand"
+
+14. **Lift boxA from trolleyA using both hands**
+    - Objects: `boxA`, `trolleyA`
+    - Parts:
+      - BoxA: "left side", "right side"
+      - TrolleyA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+15. **Place boxA on tableB using both hands**
+    - Objects: `boxA`, `tableB`
+    - Parts:
+      - BoxA: "left side", "right side"
+      - TableB: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+16. **Free both hands**
+    - No objects or body parts involved.
+
+17. **Grasp boxB with both hands**
+    - Object: `boxB`
+    - Parts:
+      - BoxB: "left side", "right side"
+    - Body parts involved: "left hand", "right hand"
+
+18. **Lift boxB from trolleyA using both hands**
+    - Objects: `boxB`, `trolleyA`
+    - Parts:
+      - BoxB: "left side", "right side"
+      - TrolleyA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+19. **Place boxB on tableB using both hands**
+    - Objects: `boxB`, `tableB`
+    - Parts:
+      - BoxB: "left side", "right side"
+      - TableB: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+20. **Free both hands**
+    - No objects or body parts involved.
+
+21. **Push trolleyA near tableA**
+    - Objects: `trolleyA`, `tableA`
+    - Parts:
+      - TrolleyA: "handle"
+      - TableA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+22. **Stand at tableA**
+    - Object: `tableA`
+    - Parts:
+      - TableA: "top surface"
+    - Body parts involved: "left foot", "right foot"
+
+23. **Grasp boxC with both hands**
+    - Object: `boxC`
+    - Parts:
+      - BoxC: "left side", "right side"
+    - Body parts involved: "left hand", "right hand"
+
+24. **Lift boxC from tableA using both hands**
+    - Objects: `boxC`, `tableA`
+    - Parts:
+      - BoxC: "left side", "right side"
+      - TableA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+25. **Place boxC on trolleyA using both hands**
+    - Objects: `boxC`, `trolleyA`
+    - Parts:
+      - BoxC: "left side", "right side"
+      - TrolleyA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+26. **Free both hands**
+    - No objects or body parts involved.
+
+27. **Push trolleyA near tableB**
+    - Objects: `trolleyA`, `tableB`
+    - Parts:
+      - TrolleyA: "handle"
+      - TableB: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+28. **Stand at tableB**
+    - Object: `tableB`
+    - Parts:
+      - TableB: "top surface"
+    - Body parts involved: "left foot", "right foot"
+
+29. **Grasp boxC with both hands**
+    - Object: `boxC`
+    - Parts:
+      - BoxC: "left side", "right side"
+    - Body parts involved: "left hand", "right hand"
+
+30. **Lift boxC from trolleyA using both hands**
+    - Objects: `boxC`, `trolleyA`
+    - Parts:
+      - BoxC: "left side", "right side"
+      - TrolleyA: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+31. **Place boxC on tableB using both hands**
+    - Objects: `boxC`, `tableB`
+    - Parts:
+      - BoxC: "left side", "right side"
+      - TableB: "top surface"
+    - Body parts involved: "left hand", "right hand"
+
+32. **Free both hands**
+    - No objects or body parts involved.
+
+### JSON Graphs
+
+```json
+[
+  {
+    "object_parts": [
+      "trolleyA handle",
+      "tableA top surface"
+    ],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "trolleyA handle"},
+      {"from": "person right hand", "to": "trolleyA handle"}
+    ]
+  },
+  {
+    "object_parts": ["tableA top surface"],
+    "body_parts": ["left foot", "right foot"],
+    "interactions": [
+      {"from": "person left foot", "to": "tableA top surface"},
+      {"from": "person right foot", "to": "tableA top surface"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side", "tableA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side", "tableA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  },
+  {
+    "object_parts": ["trolleyA handle", "tableB top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "trolleyA handle"},
+      {"from": "person right hand", "to": "trolleyA handle"}
+    ]
+  },
+  {
+    "object_parts": ["tableB top surface"],
+    "body_parts": ["left foot", "right foot"],
+    "interactions": [
+      {"from": "person left foot", "to": "tableB top surface"},
+      {"from": "person right foot", "to": "tableB top surface"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxA left side", "boxA right side", "tableB top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxA left side"},
+      {"from": "person right hand", "to": "boxA right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxB left side", "boxB right side", "tableB top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxB left side"},
+      {"from": "person right hand", "to": "boxB right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  },
+  {
+    "object_parts": ["trolleyA handle", "tableA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "trolleyA handle"},
+      {"from": "person right hand", "to": "trolleyA handle"}
+    ]
+  },
+  {
+    "object_parts": ["tableA top surface"],
+    "body_parts": ["left foot", "right foot"],
+    "interactions": [
+      {"from": "person left foot", "to": "tableA top surface"},
+      {"from": "person right foot", "to": "tableA top surface"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side", "tableA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  },
+  {
+    "object_parts": ["trolleyA handle", "tableB top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "trolleyA handle"},
+      {"from": "person right hand", "to": "trolleyA handle"}
+    ]
+  },
+  {
+    "object_parts": ["tableB top surface"],
+    "body_parts": ["left foot", "right foot"],
+    "interactions": [
+      {"from": "person left foot", "to": "tableB top surface"},
+      {"from": "person right foot", "to": "tableB top surface"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side", "trolleyA top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": ["boxC left side", "boxC right side", "tableB top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interactions": [
+      {"from": "person left hand", "to": "boxC left side"},
+      {"from": "person right hand", "to": "boxC right side"}
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "interactions": []
+  }
+]
+```
+
+**asystent:**
+============================================================
+

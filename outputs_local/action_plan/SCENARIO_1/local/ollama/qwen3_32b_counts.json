@@ -1,0 +1,4 @@
+{
+  "grasp_two_hands_one_obj(boxa) lift_two_hands_obj_from_loc(boxa, tablea) place_two_hands_one_obj_on_loc(boxa, tablec) free_two_hands() grasp_two_hands_one_obj(boxb) lift_two_hands_obj_from_loc(boxb, tableb) place_two_hands_one_obj_on_loc(boxb, tablec) free_two_hands() grasp_two_hands_one_obj(boxc) lift_two_hands_obj_from_loc(boxc, floor) place_two_hands_one_obj_on_loc(boxc, tablec) free_two_hands()": 7,
+  "grasp_two_hands_one_obj(box a) lift_two_hands_obj_from_loc(box a, table a) place_two_hands_one_obj_on_loc(box a, table c) free_two_hands() grasp_two_hands_one_obj(box b) lift_two_hands_obj_from_loc(box b, table b) place_two_hands_one_obj_on_loc(box b, table c) free_two_hands() grasp_two_hands_one_obj(box c) lift_two_hands_obj_from_loc(box c, floor) place_two_hands_one_obj_on_loc(box c, table c) free_two_hands()": 93
+}

@@ -74,3 +74,89 @@ Output:
 22. Free_two_hands()
 ============================================================
 
+
+============================================================
+Timestamp: 2025-12-22 18:20:36
+Prompt:
+
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene:
+
+The objects available in the scene are the following:
+
+A table A placed on the floor
+A table B placed on the floor
+A box A placed on table A
+A box B placed on table A
+A box C placed on table A
+The distance between table A and trolley A is 1.2 m.
+The distance between table B and trolley A is 1.2 m.
+The distance between table B and table A is 1.2 m.
+
+Robot initial condition:
+
+The robot is standing on the floor with a base height of 0.7 m.
+
+Task:
+
+Place all the boxes to table B.
+
+Limitations:
+
+The trolley can only carry 2 boxes at the time.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between the robot base and the object is less than 0.6 m. object can also be the floor. If the robot stands on the object, then the robot base height gets increased by the object height.
+
+push_obj_near(object1, object2): Push object1 near object2. This action must be used if and only if the distance between object1 and object2 is greater than 0.8 m.
+
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+------------------------------------------------------------
+Output:
+To move all three boxes (A, B, and C) from Table A to Table B using the available actions, follow these steps:
+
+1. **Push Box A**: Move Box A from Table A towards Trolley A since it's more than 0.8 meters away.
+2. **Grasp Box A**: Use both hands to grasp Box A.
+3. **Lift Box A**: Lift Box A from the floor.
+4. **Place Box A on Trolley**: Place Box A onto Trolley A.
+5. **Push Box B**: Move Box B from Table A towards Trolley A.
+6. **Grasp Box B**: Use both hands to grasp Box B.
+7. **Lift Box B**: Lift Box B from the floor.
+8. **Place Box B on Trolley**: Place Box B onto Trolley A.
+9. **Push Trolley to Table B**: Move Trolley A towards Table B as it's more than 0.8 meters away.
+10. **Grasp Box A from Trolley**: Use both hands to grasp Box A from Trolley A.
+11. **Lift Box A**: Lift Box A from Trolley A.
+12. **Place Box A on Table B**: Place Box A onto Table B.
+13. **Grasp Box B from Trolley**: Use both hands to grasp Box B from Trolley A.
+14. **Lift Box B**: Lift Box B from Trolley A.
+15. **Place Box B on Table B**: Place Box B onto Table B.
+16. **Push Trolley back to Table A**: Move Trolley A back towards Table A.
+17. **Push Box C**: Move Box C from Table A towards Trolley A.
+18. **Grasp Box C**: Use both hands to grasp Box C.
+19. **Lift Box C**: Lift Box C from the floor.
+20. **Place Box C on Trolley**: Place Box C onto Trolley A.
+21. **Push Trolley to Table B again**: Move Trolley A towards Table B.
+22. **Grasp Box C from Trolley**: Use both hands to grasp Box C from Trolley A.
+23. **Lift Box C**: Lift Box C from Trolley A.
+24. **Place Box C on Table B**: Place Box C onto Table B.
+
+This sequence ensures all boxes are moved efficiently using the trolley and available actions, even though it involves multiple steps due to handling one box at a time with both hands.
+============================================================
+

@@ -1,0 +1,3 @@
+{
+  "stand(cm) grasp_two_hands_one_obj(cm) lift_two_hands_obj_from_loc(cm, floor) place_two_hands_one_obj_on_loc(cm, cm) // ensure coffee machine is stable on its platform press_button(cm, start) dispense_coffee(cm, cup_a) grasp_two_hands_one_obj(f) lift_two_hands_obj_from_loc(f, floor) open_container(mc) pour_from_to(mc, cup_b) close_container(mc) place_two_hands_one_obj_on_loc(f, floor) stand(sj) grasp_two_hands_one_obj(sj) lift_two_hands_obj_from_loc(sj, floor) open_container(sj) scoop_from_to(sj, cup_b, sugar) close_container(sj) place_two_hands_one_obj_on_loc(sj, floor) grasp_two_hands_one_obj(cm) lift_two_hands_obj_from_loc(cm, cm) // ensure coffee machine is stable on its platform press_button(cm, start) dispense_coffee(cm, cup_b) free_two_hands()": 1
+}

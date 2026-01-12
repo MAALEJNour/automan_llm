@@ -3,6 +3,7 @@
   "provider": "ollama_local",
   "model": "A=gpt-oss:20b__CC=gpt-oss:20b",
   "total_latency": [
-    25.750200748443604
+    25.750200748443604,
+    47.62881803512573
   ]
 }
