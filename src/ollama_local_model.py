@@ -1,54 +1,163 @@
 from typing import List, Dict, Tuple
 import time
-import ollama
 from ollama import chat
 from Prompts import *
-from bench_io import save_content, save_results
+from bench_io import *
+import os
+import re
+import json
 
 
+# -------------------------------------------------------------------
+# Output comparison helpers
+# -------------------------------------------------------------------
+def _counts_file_path(
+    plan_type: str,
+    scenario_name: str,
+    provider_type: str,
+    provider: str,
+    model: str,
+) -> str:
+    plan_type = plan_type.strip().lower().replace(" ", "_")
+    scenario_name = str(scenario_name)
+    safe_model = model.replace("/", "_").replace(":", "_")
+
+    return os.path.join(
+        SAVE_CONTENT_DIR,
+        plan_type,
+        scenario_name,
+        provider_type,
+        provider,
+        f"{safe_model}_counts.json",
+    )
+
+
+def _load_output_counts(path: str) -> Dict[str, int]:
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _save_output_counts(path: str, counts: Dict[str, int]) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(counts, f, indent=2)
+
+
+def _normalize_text(text: str) -> str:
+    """
+    Normalize model output to allow robust comparison:
+    - lowercase
+    - strip whitespace
+    - remove numbering like '1.' '2.' etc
+    - collapse multiple spaces
+    """
+    if not isinstance(text, str):
+        return ""
+
+    text = text.lower()
+
+    # remove numbered list prefixes: "1. ", "2) ", etc.
+    text = re.sub(r"^\s*\d+[\.\)]\s*", "", text, flags=re.MULTILINE)
+
+    # collapse whitespace
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+
+def _existing_outputs_for_model(
+    plan_type: str,
+    scenario_name: str,
+    provider_type: str,
+    provider: str,
+    model: str,
+) -> List[str]:
+    """
+    Read all previously saved outputs for a given (model, scenario).
+    Returns a list of raw output strings.
+    """
+    plan_type = plan_type.strip().lower().replace(" ", "_")
+    scenario_name = str(scenario_name)
+    safe_model = model.replace("/", "_").replace(":", "_")
+
+    file_path = os.path.join(
+        SAVE_CONTENT_DIR,
+        plan_type,
+        scenario_name,
+        provider_type,
+        provider,
+        f"{safe_model}_output.txt",
+    )
+
+    if not os.path.exists(file_path):
+        return []
+
+    outputs: List[str] = []
+    current_block: List[str] = []
+    recording = False
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("Output:"):
+                recording = True
+                current_block = []
+                continue
+            if recording and line.startswith("=" * 60):
+                outputs.append("".join(current_block).strip())
+                recording = False
+                continue
+            if recording:
+                current_block.append(line)
+
+    return outputs
 # -------------------------------------------------------------------
 # Configuration
 # -------------------------------------------------------------------
 
-N_WARM_TRIALS = 100
-KEEP_ALIVE_WARM = "12h"
+N_WARM_TRIALS = 1
+KEEP_ALIVE_WARM =None # KEEP_ALIVE_WARM ow long the model stays in memory after a request 
 OPTIONS = {"temperature": 0, "seed": 42}  # more deterministic output
 scenario_name1= "SCENARIO_1"
 scenario_name2= "SCENARIO_2"
 scenario_name3= "SCENARIO_3"
-scenario_name_SCENARIO_CLEANING_HOME= "SCENARIO_CLEANING_HOME"
-scenario_name_SCENARIO_MAKING_COFFEE= "SCENARIO_MAKING_COFFEE"
+scenario_name_4 = "SCENARIO_4"
+scenario_name_5=  "SCENARIO_5"
 
 #prompt= SCENARIO_3
 # choose the scenario between 1 and 6
 UNIFIED_PROMPT1= build_unified_prompt(scenario_name1)
 UNIFIED_PROMPT2= build_unified_prompt(scenario_name2)
 UNIFIED_PROMPT3= build_unified_prompt(scenario_name3)
-UNIFIED_PROMPT_SCENARIO_CLEANING_HOME = build_unified_prompt(scenario_name_SCENARIO_CLEANING_HOME)
-UNIFIED_PROMPT_SCENARIO_MAKING_COFFEE = build_unified_prompt(scenario_name_SCENARIO_MAKING_COFFEE)
+UNIFIED_PROMPT4 = build_unified_prompt(scenario_name_4)
+UNIFIED_PROMPT5 = build_unified_prompt(scenario_name_5)
 MODELS = [
     # "mistral",
     # "gemma3",
-  #  "qwen3:32b",
-   # "gpt-oss:20b",
-  #  "gemma3:27b",
+   "qwen3:32b",
+  "gpt-oss:20b",
+   "gemma3:27b",
     "phi4:14b",
-    #"deepseek-r1:32b",
+  # "deepseek-r1:32b",
     #  "ministral-3:8b",
     # "llama3.1:8b",
     # "qwen3"
-]
+   # "magistral"
+    #"mixtral:8x7b",
+ ]
 
 SCENARIOS = [
-  #("SCENARIO_1", UNIFIED_PROMPT1),  
-  #("SCENARIO_2", UNIFIED_PROMPT2),
-  #("SCENARIO_3", UNIFIED_PROMPT3),
-
-    ("SCENARIO_1", SCENARIO_1),
-    ("SCENARIO_2", SCENARIO_2),
-    ("SCENARIO_3", SCENARIO_3),
-    ("SCENARIO_CLEANING_HOME",  SCENARIO_CLEANING_HOME),
-    ("SCENARIO_MAKING_COFFEE",  SCENARIO_MAKING_COFFEE),
+ # ("SCENARIO_1", UNIFIED_PROMPT1),     
+ # ("SCENARIO_2", UNIFIED_PROMPT2),
+#  ("SCENARIO_3", UNIFIED_PROMPT3),
+ #("SCENARIO_1", SCENARIO_1),
+ #("SCENARIO_2", SCENARIO_2),
+ #("SCENARIO_3", SCENARIO_3),
+ ("SCENARIO_4",  SCENARIO_4 ),
+ ("SCENARIO_5",  SCENARIO_5 ),
 
 ]
 
@@ -61,44 +170,81 @@ provider = "ollama"
 # -------------------------------------------------------------------
 # Core inference function
 # -------------------------------------------------------------------
-
-def run_once(model: str, prompt: str, keep_alive: str | None = None) -> Tuple[float, str | None]:
-    """
-    Executes a synchronous model inference and returns:
-        (total_latency_in_seconds, output_text or None)
-
-    This version assumes that the model has already been pulled
-    (e.g., via scripts/pull_models.sh). If the model is missing, or
-    any error occurs, it prints an error and returns (NaN, None).
-    """
+def run_once(
+    model: str,
+    prompt: str,
+    scenario_name: str,
+    keep_alive: str | None = None
+) -> Tuple[float, str | None]:
     start_time = time.time()
 
     try:
+        # ------------------------------------------------------------
+        # Run inference FIRST
+        # ------------------------------------------------------------
         response = chat(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            keep_alive=keep_alive,
-            options=OPTIONS,
-            # think=True,  # only qwen3 supports thinking
-        )
+          model=model,
+          messages=[{"role": "user", "content": prompt}],
+          keep_alive=keep_alive,
+          options=OPTIONS,
+       )
         output_text = response["message"]["content"]
 
-    except ollama.ResponseError as e:
-        # No automatic pulling here anymore: report the issue.
-        print(f"[{model}] Ollama ResponseError (status {e.status_code}): {e.error}")
-        print("Hint: Make sure this model is installed, e.g. via scripts/pull_models.sh")
-        return float("nan"), None
+        # ------------------------------------------------------------
+        # Load existing counts
+        # ------------------------------------------------------------
+        counts_path = _counts_file_path(
+            plan_type=plan_type,
+            scenario_name=scenario_name,
+            provider_type=provider_type,
+            provider=provider,
+            model=model,
+        )
+
+        counts = _load_output_counts(counts_path)
+        norm_new = _normalize_text(output_text)
+
+        # ------------------------------------------------------------
+        # Update frequency
+        # ------------------------------------------------------------
+        counts[norm_new] = counts.get(norm_new, 0) + 1
+
+        # ------------------------------------------------------------
+        # Save content ONLY if first occurrence
+        # ------------------------------------------------------------
+        if counts[norm_new] == 1 and output_text.strip():
+            print(
+                f"[SAVE] New unique output found "
+                f"(Model={model}, Scenario={scenario_name})"
+            )
+            save_content(
+                plan_type=plan_type,
+                provider_type=provider_type,
+                provider=provider,
+                prompt=prompt,
+                content=output_text,
+                scenario_name=scenario_name,
+                model=model,
+            )
+        else:
+            print(
+                f"[COUNT] Output already seen "
+                f"(Model={model}, Scenario={scenario_name}) "
+                f"→ count={counts[norm_new]}"
+            )
+
+        # ------------------------------------------------------------
+        # Persist updated counts
+        # ------------------------------------------------------------
+        _save_output_counts(counts_path, counts)
 
     except Exception as e:
-        # Non-Ollama unexpected error
-        print(f"[{model}] Unexpected error: {e}")
+        print(f"[WARN] Output comparison/counting failed: {e}")
         return float("nan"), None
 
     end_time = time.time()
     total_time = end_time - start_time
     return total_time, output_text
-
-
 # -------------------------------------------------------------------
 # Trials runner
 # -------------------------------------------------------------------
@@ -121,12 +267,12 @@ def run_trials(
 
     for trial_idx in range(1, trials + 1):
         print(f"[RUN] Scenario={scenario_name} | Model={model} | Trial {trial_idx}/{trials}")
-
         total_time, output_text = run_once(
-            model=model,
-            prompt=prompt,
-            keep_alive=KEEP_ALIVE_WARM,
-        )
+        model=model,
+        prompt=prompt,
+        scenario_name=scenario_name,
+        keep_alive=KEEP_ALIVE_WARM,
+)
 
         if total_time != total_time:  # NaN check
             print(f"[ERROR] Model={model} | Trial {trial_idx} returned NaN latency")
@@ -134,26 +280,53 @@ def run_trials(
             print(f"[DONE] Model={model} | Trial {trial_idx} | Latency={total_time:.3f}s")
 
         latencies.append(total_time)
+        print(f"Output:\n{output_text}\n")
+        # Compare against existing saved outputs for this model in the scenario and save only if unique
+                # ------------------------------------------------------------
+        # Save output ONLY if it is new for this model + scenario
+        # ------------------------------------------------------------
+        try:
+            existing_outputs = _existing_outputs_for_model(
+                plan_type=plan_type,
+                scenario_name=scenario_name,
+                provider_type=provider_type,
+                provider=provider,
+                model=model,
+            )
 
-     #   if (
-     ##       not saved_once
-      #      and isinstance(output_text, str)
-      #      and output_text.strip()
-      #  ):
-      #      print(f"[SAVE] Saving first output for Model={model} | Scenario={scenario_name}")
+            norm_new = _normalize_text(output_text)
+            is_unique = True
 
-      #      save_content(
-      #          plan_type=plan_type,
-      #          provider=provider,
-      #          provider_type=provider_type,
-      #          prompt=prompt,
-      #          content=output_text,
-      #          scenario_name=scenario_name,
-      #          model=model,
-      #      )
-      #      saved_once = True
+            for prev in existing_outputs:
+                if _normalize_text(prev) == norm_new:
+                    is_unique = False
+                    break
 
+            if is_unique and isinstance(output_text, str) and output_text.strip():
+                print(
+                    f"[SAVE] New unique output found "
+                    f"(Model={model}, Scenario={scenario_name})"
+                )
+                print(output_text)
+                save_content(
+                    plan_type=plan_type,
+                    provider_type=provider_type,
+                    provider=provider,
+                    prompt=prompt,
+                    content=output_text,
+                    scenario_name=scenario_name,
+                    model=model,
+                )
+            else:
+                print(
+                    f"[SKIP] Output already seen "
+                    f"(Model={model}, Scenario={scenario_name})"
+                )
+
+        except Exception as e:
+            print(f"[WARN] Output comparison failed: {e}")
     print(f"[END] Scenario={scenario_name} | Model={model}")
+    time.sleep(10)  # cooldown between models
 
     return latencies
 
@@ -200,4 +373,5 @@ def main() -> None:
     print("\n===== BENCHMARK FINISHED =====\n")
 
 if __name__ == "__main__":
+    time.sleep(10)
     main()

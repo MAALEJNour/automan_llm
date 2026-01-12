@@ -11,28 +11,41 @@ from model_clients.ollama_client import OllamaModelClient
 from model_clients.ollama_local_client import OllamaLocalModelClient
 from dotenv import load_dotenv, find_dotenv
 import os
-
+from ollama_local_model import _counts_file_path, _save_output_counts, _load_output_counts, _normalize_text
+SLEEP_BETWEEN_AGENTS = 20 # seconds
 load_dotenv(find_dotenv())
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY")
 
 LOCAL_MODELS = [
+   "qwen3:32b",
+#   "gpt-oss:20b",
+   # "gemma3:27b",
+#   "deepseek-r1:32b",
+#    "phi4:14b",
+]
+action_planning_MODELS = [
     "qwen3:32b",
-    "gpt-oss:20b",
-    "gemma3:27b",
-    "deepseek-r1:32b",
-    "phi4:14b",
+   # "deepseek-r1:32b",
 ]
 SCENARIOS = [
-    ("SCENARIO_1", SCENARIO_1),
-    ("SCENARIO_2", SCENARIO_2),
-    ("SCENARIO_3", SCENARIO_3),
+ #  ("SCENARIO_1", SCENARIO_1),
+  # ("SCENARIO_2", SCENARIO_2),
+  ("SCENARIO_3", SCENARIO_3),
  #  ("SCENARIO_MAKING_COFFEE", SCENARIO_MAKING_COFFEE), 
- #  ("SCENARIO_CLEANING_HOME", SCENARIO_CLEANING_HOME),
- # both these scenarios are very long and take much time 
+ #  ("SCENARIO_CLEANING_HOME", SCENARIO_CLEANING_HOME), # both these scenarios are very long and take much time 
 ]
- 
+def build_canonical_output(final_plan: str, inner_messages) -> str:
+    parts = []
+    parts.append("=== ACTION PLAN ===")
+    parts.append(final_plan.strip())
+
+    parts.append("\n=== COORDINATOR + CONTACT ===")
+    for m in inner_messages:
+        parts.append(f"{m.source}: {m.content.strip()}")
+
+    return "\n".join(parts)
 
 # -----------------------------
 # Config
@@ -60,6 +73,7 @@ plan_type = "action+contact_plan"
 provider_type = "autogen"
 provider = "ollama_local"
 #prompt = SCENARIO_1
+
 #scenario_name = "SCENARIO_1"
 #
 #action_client = OllamaModelClient(
@@ -113,12 +127,10 @@ After you finish processing all inputs, you must write exactly: **ALL INTERACTIO
 
 def build_action_agent(action_model: str, scenario_prompt: str):
     action_client = OllamaLocalModelClient(model=action_model)
-
     return LLMAssistantAgent(
         name="ActionAgent",
         model_client=action_client,
-        system_message=scenario_prompt + "\n\n"
-        "You are the ActionAgent. Generate a logically feasible plan using the available actions.",
+        system_message=scenario_prompt,
     )
 
 
@@ -138,6 +150,7 @@ async def run_once_multi_agent(
         action_agent = build_action_agent(action_model, scenario_prompt)
         print(f"\n[ActionAgent:{action_model}] ({scenario_name}) Generating plan...")
         action_result = await action_agent.run()
+        time.sleep(SLEEP_BETWEEN_AGENTS)
 
         final_plan = ""
         for msg in reversed(action_result.messages):
@@ -149,24 +162,68 @@ async def run_once_multi_agent(
         team = build_inner_team(shared_model)
         print(f"[Coordinator+Contact:{shared_model}] ({scenario_name}) Processing plan...")
         inner_result = await team.run(task=final_plan)
-
         total = time.time() - start
 
         model_tag = f"A={action_model}__CC={shared_model}"
 
-        save_content(
-            plan_type=plan_type,
-            provider_type=provider_type,
-            provider=provider,
-            model=model_tag,
-            prompt=scenario_prompt,
-            content=(
-                "\n--- ACTION ---\n" + final_plan +
-                "\n\n--- COORD+CONTACT ---\n" +
-                "\n".join(f"{m.source}: {m.content}" for m in inner_result.messages)
-            ),
-            scenario_name=scenario_name,
+# ------------------------------------------------------------
+# Build canonical output
+# ------------------------------------------------------------
+        full_output = build_canonical_output(final_plan, inner_result.messages)
+
+# ------------------------------------------------------------
+# Load & update counts
+# ------------------------------------------------------------
+        counts_path = _counts_file_path(
+    plan_type=plan_type,
+    scenario_name=scenario_name,
+    provider_type=provider_type,
+    provider=provider,
+    model=model_tag,
+    )
+
+        counts = _load_output_counts(counts_path)
+        norm_new = _normalize_text(full_output)
+        counts[norm_new] = counts.get(norm_new, 0) + 1
+
+# ------------------------------------------------------------
+# Save content ONLY if first occurrence
+# ------------------------------------------------------------
+        if counts[norm_new] == 1:
+          print(
+        f"[SAVE] New unique multi-agent output "
+        f"(Scenario={scenario_name}, {model_tag})"
         )
+          
+          
+          save_content(
+        plan_type=plan_type,
+        provider_type=provider_type,
+        provider=provider,
+        model=model_tag,
+        prompt=scenario_prompt,
+        content=full_output,
+        scenario_name=scenario_name)
+        else:
+         print(
+        f"[COUNT] Output already seen "
+        f"(Scenario={scenario_name}, {model_tag}) → count={counts[norm_new]}"
+        ) 
+        _save_output_counts(counts_path, counts)
+        print(full_output)     
+       # save_content(
+       #     plan_type=plan_type,
+       #     provider_type=provider_type,
+       #     provider=provider,
+         #     model=model_tag,
+         #     prompt=scenario_prompt,
+         #     content=(
+         #         "\n--- ACTION ---\n" + final_plan +
+         #         "\n\n--- COORD+CONTACT ---\n" +
+       #           "\n".join(f"{m.source}: {m.content}" for m in inner_result.messages)
+        #      ),
+         #     scenario_name=scenario_name,
+       #   )
 
         save_results(
             plan_type=plan_type,
@@ -194,7 +251,7 @@ async def main():
         print(f"=== SCENARIO: {scenario_name} ===")
         print(f"==============================")
 
-        for action_model in LOCAL_MODELS:
+        for action_model in action_planning_MODELS:
             for shared_model in LOCAL_MODELS:
 
                 combo_name = f"{scenario_name} | A={action_model} | CC={shared_model}"
@@ -213,10 +270,11 @@ async def main():
                         f"[{combo_name}] "
                         f"Trial {i+1}/{N_TRIALS}: {total:.3f}s"
                     )
+                    
                     results.append(total)
-
-                    #await asyncio.sleep(10)  # cooldown needed only for local models to not exceed usage limit
-
-
+                    # Always sleep after each trial to stabilize local inference
+                    sleep_time = 20 if math.isnan(total) else 10
+                    await asyncio.sleep(sleep_time)
+                await asyncio.sleep(5) # ading extra sleep after all trials
 if __name__ == "__main__":
     asyncio.run(main())

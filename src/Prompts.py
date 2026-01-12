@@ -131,6 +131,17 @@ parts during the interaction analysis.
 (9) Exclude environmental elements, like floor, ground, or wall, from the physical contact
 analysis.
 
+(10) Final-state physical reasoning rule:
+For each interaction, infer all physical contact relations that must exist in the successful end state of the action.
+If the action implies a stable placement, resting, or support condition, you must include the necessary
+object–object contact relations that make this configuration physically possible.
+ A configuration is considered physically incomplete if an object would not remain in its final position
+after human contact is removed.
+In such cases, interaction edges representing support, resting, or constraint contacts between object parts
+must be included.   
+(11) A placement interaction is considered invalid if the interaction graph does not
+contain at least one object–object contact that provides physical support for the placed object.
+Graphs that only include human–object contacts for placement actions are incomplete.
 - Examples:
 (1) If the input is
 {
@@ -255,7 +266,7 @@ The object available in the scene are the following:
 A table A on the floor of size 3 m x 3 m
 A table B on the floor of size 2 m x 5 m
 A table C on the floor of size 3 m x 4 m
-A box A on table A of size 0.2 m x 0.2 m
+A box A on table A of size 0.2  m x 0.2 m
 A box B on table B of size 0.4 m x 0.5 m
 A box C on the floor of size 0.5 m x 0.4 m
 
@@ -266,7 +277,7 @@ Place all the boxes on table C
 Available Actions:
 
 grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
-
+    
 free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
 
 lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
@@ -321,20 +332,24 @@ Output:
 Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
 """
 
-SCENARIO_3= """Setup
+SCENARIO_3= """
+Setup
 
 You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
 
 Scene:
 
 The objects available in the scene are the following:
-
-A table A placed on the floor
-A table B placed on the floor
+A table A on the floor of size 3 m x 3 m
+A table B on the floor of size 2 m x 5 m
+A table C on the floor of size 3 m x 4 m
+All tables have a height of 0.5 m.
 A box A placed on table A
 A box B placed on table A
 A box C placed on table A
-A trolley A placed on the floor, not near table A or table B
+The distance between table A and trolley A is 1.2 m.
+The distance between table B and trolley A is 1.2 m.
+The distance between table B and table A is 1.2 m.
 
 Robot initial condition:
 
@@ -360,12 +375,10 @@ place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using
 
 stand(object): Stand on the specified object if the height difference between the robot base and the object is less than 0.6 m. object can also be the floor. If the robot stands on the object, then the robot base height gets increased by the object height.
 
-push_obj_near(object1, object2): Push object1 near object2.
+push_obj_near(object1, object2): Push object1 near object2. This action must be used if and only if the distance between object1 and object2 is greater than 0.8 m.
 
-Output:
-
+Output: 
 Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
-
 """
 
 
@@ -417,84 +430,7 @@ Deduced Action Plan from the reasoning above (model output should look like this
 6. free_two_hands()
 """
 
-SCENARIO_4 = """Setup
 
-You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene and a task list, you must output a sequence of actions from the provided list only—do not invent new actions. Use as many steps as needed.
-
-Scene:
-
-- Surfaces & furniture:
-  - table A (floor-standing)
-  - table B (floor-standing)
-  - counter C (floor-standing)
-  - side table D (single-item buffer only)
-  - bed E (has head area 'bed_head')
-
-- Containers / appliances:
-  - dishwasher DW (door closed, empty; rack capacity: 6 dish items)
-  - laundry basket LB (capacity: 12 clothing items)
-
-- Objects to organize:
-  - dirty dishes: dish_1, dish_2 on table A; dish_3 on table B; dish_4 on counter C
-  - dirty clothes: cloth_1, cloth_2 on chair near bed; cloth_3 on floor near table B
-  - bedding: crumpled duvet U on bed E; pillows P1, P2 on chair
-
-- Heavy objects:
-  - heavy box H ≈ 20 kg in the room center
-  - heavy cylinder R ≈ 15 kg near counter C
-
-Robot initial condition:
-
-- The robot is standing on the floor with a base height of 0.7 m.
-- Dishwasher DW door is CLOSED.
-
-Task (do all, in a reasonable order):
-
-1) Dishes: Load all dirty dishes (dish_1..dish_4) into DW, then start DW.
-2) Clothes: Put all dirty clothes (cloth_1..cloth_3) into LB.
-3) Heavy objects: Move H to corner X and R to corner Y.
-4) Bed: Make the bed — spread U flat on bed E, place P1 and P2 at 'bed_head'.
-
-Limitations & constraints:
-
-- Do not place items on the floor as an intermediate surface for dishes/clothes/bedding. (Floor interaction is permitted when moving heavy objects.)
-- Side table D is a single-slot buffer: at most one item at a time.
-- The robot may hold only one small item at a time in hands.
-- To open/close DW, keep a 0.6 m front sweep zone clear (use D as temporary buffer if needed).
-- Dishwasher DW: to load, door must be OPEN; to start, door must be CLOSED and ≥ 1 item loaded; rack capacity 6.
-- Laundry LB: can receive clothes anytime; no door operation required.
-- Lifting constraint: Lifting is allowed only for objects ≤ 10 kg.
-- stand() allowed only if |Δheight| ≤ 0.6 m (for reach).
-- Avoid stacking items on tables/counter; place directly on intended surfaces/containers only.
-
-Available Actions:
-
-grasp_two_hands_one_obj(object): Grasp the specified object using two hands. Must be called before using lift_two_hands_obj_from_loc.
-
-free_two_hands(): Free both hands after placing an object, releasing any held object. Must be called after using place_two_hands_one_obj_on_loc.
-
-lift_two_hands_obj_from_loc(object1, source_surface): Lift object1 from source_surface using two hands. Must be called before using place_two_hands_one_obj_on_loc. source_surface can also be the floor (only if lifting is allowed).
-
-place_two_hands_one_obj_on_loc(object1, target_surface_or_container): Place object1 on target_surface_or_container using two hands. Target can also be the floor (only for heavy-object relocation tasks).
-
-stand(object): Stand on the specified object if the height difference between you and the object is ≤ 0.6 m. Use this for locomotion or height adjustment when needed.
-
-open_door(appliance): Open the appliance door (e.g., open_door(DW)); requires sweep zone clear.
-
-close_door(appliance): Close the appliance door (e.g., close_door(DW)).
-
-start_appliance(appliance, mode): Start the appliance with a mode (e.g., start_appliance(DW, normal)); door must be closed; capacity respected.
-
-push_obj_to_loc(object, floor_location): Push an object along the floor to a given location.
-
-roll_obj_to_loc(object, floor_location): Roll an object along the floor to a given location.
-
-spread_fabric_on_loc(object_fabric, surface): Spread/arrange a deformable fabric (e.g., duvet/sheet/blanket) evenly across a planar surface (e.g., bed). Use two-hand sweeping; remove wrinkles; ensure full coverage.
-
-Output:
-
-Return only a numbered list of actions with their parameters, based on the scene and tasks. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
-"""
 SCENARIO_2_test = """
 This is an example and you need to solve another task try to follow the reasoning provided to demonstrate what you should do and get a general overview.
 
@@ -911,7 +847,7 @@ def build_unified_prompt(scenario_var_name: str) -> str:
     )
 
 
-SCENARIO_CLEANING_HOME= """Setup
+SCENARIO_4 = """Setup
 
 You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
 
@@ -973,8 +909,7 @@ Output:
 Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
 """
 
-
-SCENARIO_MAKING_COFFEE = """Setup
+SCENARIO_5  = """Setup
 
 You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Use only the actions listed—do not invent new ones. The number of steps may vary.
 

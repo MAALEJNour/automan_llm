@@ -21,11 +21,13 @@ class LLMAssistantAgent(BaseChatAgent):
         description: str = "Generic AutoGen LLM Agent",
         system_message: str = "You are a helpful assistant.",
         temperature: float = 0.0,
+        seed: int | None = 42,
     ):
         super().__init__(name=name, description=description)
         self._model_client = model_client
         self._system_message = system_message
         self._temperature = temperature
+        self._seed = seed
 
         # memory
         self._ctx = UnboundedChatCompletionContext()
@@ -56,7 +58,19 @@ class LLMAssistantAgent(BaseChatAgent):
         messages: Sequence[BaseChatMessage],
         cancellation_token: CancellationToken
     ) -> AsyncGenerator[BaseAgentEvent | BaseChatMessage | Response, None]:
-
+    # --------------------------------------------------
+    # Reset conversational memory BEFORE each generation.
+    #
+    # Why this is necessary:
+    # - Ensures the agent behaves like a single-shot LLM call
+    # - Matches the behavior of direct `ollama.chat(...)` usage
+    # - Prevents hidden state accumulation across turns
+    # - Enables deterministic and comparable outputs across runs
+    #
+    # Without this, AutoGen accumulates previous messages,
+    # causing deviations even with temperature=0 and fixed seed.
+    # --------------------------------------------------
+        await self._ctx.clear()
         # 1. Add incoming messages to memory
         for msg in messages:
             await self._ctx.add_message(msg.to_model_message())
@@ -78,7 +92,8 @@ class LLMAssistantAgent(BaseChatAgent):
         # 3. Call underlying model API through BaseModelClient
         text, prompt_tokens, completion_tokens = await self._model_client.generate(
             messages=history,
-            temperature=self._temperature
+            temperature=self._temperature,
+            seed=self._seed, 
         )
 
         # 4. Build AutoGen usage structure

@@ -27,7 +27,7 @@ class OllamaLocalModelClient(BaseModelClient):
     # --------------------------------------------------
     # Internal sync call (your proven logic)
     # --------------------------------------------------
-    def _run_sync(self, messages: List[Dict[str, str]], temperature: float):
+    def _run_sync(self, messages: List[Dict[str, str]], temperature: float, seed: int | None):
         start = time.time()
 
         response = ollama.chat(
@@ -37,6 +37,7 @@ class OllamaLocalModelClient(BaseModelClient):
             options={
                 **self._options,
                 "temperature": temperature,
+                **({"seed": seed} if seed is not None else {}),
             },
         )
 
@@ -56,11 +57,12 @@ class OllamaLocalModelClient(BaseModelClient):
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.0,
+        seed: int | None = None,
     ) -> Tuple[str, int, int]:
 
         try:
             text, prompt_tokens, completion_tokens, _ = await asyncio.to_thread(
-                self._run_sync, messages, temperature
+                self._run_sync, messages, temperature, seed
             )
             return text, prompt_tokens, completion_tokens
 
