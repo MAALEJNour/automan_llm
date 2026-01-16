@@ -7,36 +7,28 @@ import os
 import re
 import json
 from baseline_output import  *
-def build_contact_prompt(baseline_coordinator_output: str) -> str:
-    return f"""
+
+
+
+CONTACT_AGENT_SYSTEM_MESSAGE = """
 You are a helpful assistant in analyzing human-object interactions.
 
-Each message describes one or more specific human-object interactions
-that occur during a robot manipulation sequence.
+Each message describes one or more specific human-object interactions that occur during a robot manipulation sequence.
 
-You will receive MULTIPLE JSON inputs from the CoordinatorAgent.
-Each JSON object describes ONE interaction step.
+You will receive multiple JSON inputs from the CoordinatorAgent, each describing a separate interaction step.
+Your task is to process each input individually, generate a separate JSON graph for each,
+and return a list of all JSON graphs in the same order as the inputs.
 
-Your task:
-- Process EACH input individually
-- Generate ONE contact graph per interaction
-- Return a LIST of JSON contact graphs
-- Preserve the SAME ORDER as the inputs
-
-Rules:
-- Do NOT invent new actions
-- Do NOT modify interaction descriptions
-- Use only the provided interaction information
-- Each output must be valid JSON
-
-After you finish processing all inputs, write EXACTLY:
+After you finish processing all inputs, you must write exactly:
 ALL INTERACTIONS PROCESSED
+---
+""" + contact_prompt
 
-====================
-INPUT INTERACTIONS:
-{baseline_coordinator_output}
-====================
-"""
+def build_contact_prompt(contact_input: str) -> str:
+    return CONTACT_AGENT_SYSTEM_MESSAGE + contact_input
+
+
+
 # -------------------------------------------------------------------
 # Output comparison helpers
 # -------------------------------------------------------------------
@@ -147,7 +139,7 @@ def _existing_outputs_for_model(
 # Configuration
 # -------------------------------------------------------------------
 
-N_WARM_TRIALS = 10
+N_WARM_TRIALS = 5
 KEEP_ALIVE_WARM =None # KEEP_ALIVE_WARM ow long the model stays in memory after a request 
 OPTIONS = {"temperature": 0, "seed": 42}  # more deterministic output
 scenario_name1= "SCENARIO_1"
@@ -169,8 +161,8 @@ CONTACT_PROMPT3 = build_contact_prompt(baseline_coordinator_scenario_3)
 CONTACT_PROMPT4 = build_contact_prompt(baseline_coordinator_scenario_4)
 CONTACT_PROMPT5 = build_contact_prompt(baseline_coordinator_scenario_5)
 MODELS = [
-     "mistral",
-     "gemma3",
+     #"mistral",
+     #"gemma3",
    #"qwen3:32b",
   #"gpt-oss:20b",
   # "gemma3:27b",
