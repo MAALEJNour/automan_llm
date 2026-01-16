@@ -1,0 +1,797 @@
+
+============================================================
+Timestamp: 2026-01-15 23:26:10
+Prompt:
+
+You are a single agent that must perform an end-to-end pipeline divided into three tasks:
+
+TASK 1 — ACTION PLAN (use SCENARIO)
+TASK 2 — ACTION→MESSAGE MAPPING (convert action lines to JSON messages)
+TASK 3 — CONTACT ANALYSIS (turn each message into a part-level contact graph)
+
+OUTPUT CONTRACT (very important):
+- Emit your results in THREE sections, in this exact order.
+- Do NOT print anything outside these sections.
+
+1) ===ACTION_PLAN===
+   (Only the numbered list per SCENARIO Output — no extra text)
+   ===END_ACTION_PLAN===
+
+2) ===COORDINATOR_OUTPUT===
+   (Pure JSON array only, as required by TASK 2)
+   ===END_COORDINATOR_OUTPUT===
+
+3) ===CONTACT_OUTPUT===
+   (A JSON list of graphs in the same order as messages in TASK 2.
+    After the list, write exactly: ALL INTERACTIONS PROCESSED)
+   ===END_CONTACT_OUTPUT===
+
+You MUST:
+- In TASK 2, use the exact action lines you produced in TASK 1 as input.
+- In TASK 3, use the exact JSON array you produced in TASK 2 as input.
+- Preserve ordering between all tasks.
+
+----------------------------------------------------------------
+TASK 1 PROMPT (SCENARIO_5) 
+----------------------------------------------------------------
+
+SCENARIO= Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Use only the actions listed—do not invent new ones. The number of steps may vary.
+
+Scene:
+
+- Countertop: coffee_machine CM (mug platform, OFF), sugar_jar SJ (closed)
+- Sink S with dish_soap DS, drying_rack DR
+- Fridge F 
+- Cup A on counter (CUP_A is CLEAN)
+- Cup B on counter (CUP_B is DIRTY)
+- milk_carton MC (closed and stored INSIDE fridge F which is also closed)
+
+Robot initial condition:
+
+- Robot stands on the floor, hands-free.
+
+
+Task:
+
+Prepare two coffees:
+1) One black coffee in CUP_A (no sugar, no milk).
+2) One coffee with sugar and milk in CUP_B.
+
+Limitations:
+
+- Do not place items on the floor as an intermediate surface.
+- Handle one small item at a time.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m.
+- Liquids must be poured only into a clean cup.
+- To access an item inside a closed container, you must open that container first and close it when finished.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between you and the object is less than 0.6m. Use this for locomotion or height adjustment when needed.
+
+open_container(container): Open a container (e.g., SJ).
+
+close_container(container): Close a container that was opened.
+
+wash_item_in_sink(item, sink, soap): Wash an item in the sink with soap (renders the item clean).
+
+dry_item_on_rack(item, rack): Place washed item on a rack briefly to drain (makes it ready to use).
+
+dispense_coffee(machine, target): Dispense hot coffee from CM into target.
+
+scoop_from_to(source_container, target, item_name): Transfer a small amount (e.g., sugar) from a container to a target.
+
+pour_from_to(source_container, target): Pour liquid from a container to a target.
+
+press_button(device, button_name): Press a device button (e.g., START, OFF).
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+
+----------------------------------------------------------------
+TASK 2 PROMPT (Action → Message mapping)
+----------------------------------------------------------------
+
+coordinator_prompt = 
+### Goal
+You receive a numbered list of robot actions.
+Each action line describes a manipulation or locomotion behavior involving one or more objects.
+
+Your task is to understand the meaning of each action and translate it into a short JSON message that describes:
+1. The objects involved.
+2. A brief, natural description of what the robot is doing.
+
+At the end, output one JSON array containing all converted messages in the same order as the input actions.
+
+---
+
+### Expected Output
+Your final answer must be pure JSON, structured like this:
+
+[
+  {
+    "objects": ["object 1", "object 2"],
+    "interaction": "short human-readable description of what happens"
+  },
+  ...
+]
+
+Strict rules:
+- Output only valid JSON — no text, no markdown, no code.
+- Each JSON object corresponds to exactly one input action.
+- If an action does not involve any object, set "objects": [].
+- Stop after producing the list — do not comment or summarize.
+
+---
+
+### How to think about each action
+When reading a line like:
+> grasp_two_hands_one_obj(box A)
+
+Ask yourself:
+- What are the objects? → ["box A"]
+- What is the interaction? → "grasp box A with both hands"
+
+Then express it in the required JSON format:
+{
+  "objects": ["box A"],
+  "interaction": "grasp box A with both hands"
+}
+
+Do this reasoning process for each action in order.
+
+
+
+----------------------------------------------------------------
+TASK 3 PROMPT (Contact analysis)
+----------------------------------------------------------------
+
+contact_prompt = 
+
+- Task: You will be given a list of objects and a short text description of human interactions with these objects. Your task is to analyze all the interaction relations among human body parts and object parts and output the results as a graph in the JSON format.
+
+- Input format: The input is provided in the JSON format as follows
+
+{
+    "objects": [
+        "object 1",
+        "object 2"
+    ],
+    "interaction": "a short interaction description"
+}
+
+If multiple inputs are provided, they will be in an array:
+[
+    { "objects": [...], "interaction": "..." },
+    { "objects": [...], "interaction": "..." },
+    ...
+]
+
+- Output format: Provide the output strictly in JSON format, without any additional explanation or commentary, structured as follows:
+[
+  {
+      "object part nodes": [
+          "object 1, object part 1",
+          "object 1, object part 2"
+      ],
+
+      "body part nodes": [
+          "person 1, human body part 1",
+          "person 1, human body part 2"
+      ],
+
+      "interaction edges": [
+          {
+              "nodes": [
+                  "object a, object part b",
+                  "person c, human body part d"
+              ],
+          },
+          {
+              "nodes": [
+                  "object x, object part y",
+                  "person z, human body part w"
+              ],
+          },
+          {
+              "nodes": [
+                  "object f, object part q",
+                  "object r, object part k"
+              ],
+          }
+      ],
+  },
+  ...
+]
+
+After this list, write exactly:
+**ALL INTERACTIONS PROCESSED**
+
+---
+
+- Rules for analysis:
+
+(1) There are two types of nodes in the output interaction graph: "object part nodes" representing object parts and "body part nodes" representing human body parts.
+(2) The "object part nodes" field represent a part-level segmentation of each input object. Segmentations should roughly cover the entire object without becoming excessively detailed. Use descriptive, specific part names rather than generic terms, for example, avoid "surface", "edge", "body", "base", "area", "cover", "support", "connector", "frame", and the like. Avoid numbering object parts.
+Example: For a "bike", use the following parts: "handlebar", "pedal", "seat", "frame tubes", "wheels". For a "skateboard", use the following parts: "longboard deck", "wheels". For a "cordless vacuum cleaner", use the following parts: "ergonomic hand grip", "wand", "floor roller". For a "ladder", use the following parts: "side rail tubes", "rungs". For a "boxing bag", use the following parts: "punching bag". For a "box", use the following "top side", "left side", "right side", "bottom side". For a "door", use the following parts: "handle", "door frame".
+(3) The "body part nodes" field must be the following: "left hand", "right hand", "left foot", "right foot". Distinguish between left/right human body parts.
+(4) The "interaction edges" represent direct physical contact relationships between two end nodes. An edge connects an object part node to either a human body part node or another object part node. Do not connect part nodes within the same object. Example: when ironing on an ironing board, the soleplate part of an iron should be connected to the top flat panel part of the ironing board.
+(5) Explicitly mentioned body parts in the input "interaction" field must be included.
+Example: For a description "a person is lifting a single dumbbell with one hand", include either "left hand" or "right hand" in the analysis. If no specific body part
+is mentioned, use the most common ergonomic interactions in the physical contact analysis.
+(6) Focus on primary actions influencing object use or movement in the physical contact
+analysis. Example: For "a person walking and carrying a briefcase in one hand", the
+primary action for analysis is "carrying".
+(7) Ensure the identified object parts belong to their respective objects in the node and
+edge outputs of the interaction graph.
+(8) Ensure plausible distribution and avoid conflicts or duplication of human body
+parts during the interaction analysis.
+(9) Exclude environmental elements, like floor, ground, or wall, from the physical contact
+analysis.
+
+(10) Final-state physical reasoning rule:
+For each interaction, infer all physical contact relations that must exist in the successful end state of the action.
+If the action implies a stable placement, resting, or support condition, you must include the necessary
+object–object contact relations that make this configuration physically possible.
+ A configuration is considered physically incomplete if an object would not remain in its final position
+after human contact is removed.
+In such cases, interaction edges representing support, resting, or constraint contacts between object parts
+must be included.   
+(11) A placement interaction is considered invalid if the interaction graph does not
+contain at least one object–object contact that provides physical support for the placed object.
+Graphs that only include human–object contacts for placement actions are incomplete.
+- Examples:
+(1) If the input is
+{
+    "objects": [
+        "umbrella",
+        "suitcase"
+    ],
+    "interaction": "a person is dragging a suitcase with one hand and holding an
+    open umbrella with the other hand while walking"
+}
+then the output is
+{
+    "object part nodes": 
+    [
+        "umbrella, canopy",
+        "umbrella, shaft",
+        "suitcase, main compartment",
+        "suitcase, handle",
+        "suitcase, wheels"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "umbrella, shaft",
+                "person 1, left hand"
+            ],
+        },
+        {
+            "nodes": [
+                "suitcase, handle",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(2) If the input is
+{
+    "objects": [
+        "box"
+    ],
+    "interaction": "a person is lifting a box"
+}
+then the output is
+{
+    "object part nodes": [
+        "box, left side",
+        "box, right side",
+        "box, front side",
+        "box, back side",
+        "box, top side",
+        "box, bottom side"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "box, left side",
+                "person 1, left hand"
+            ]
+        },
+        {
+            "nodes": [
+                "box, right side",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(3) If the input is
+{
+    "objects": [
+        "guitar"
+    ],
+    "interaction": "a person is holding a guitar while standing"
+}
+then the output is
+{
+    "object part nodes": [
+        "guitar, neck",
+        "guitar, main compartment" 
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "guitar, neck",
+                "person 1, left_hand"
+            ]
+        }
+    ]
+}
+
+
+----------------------------------------------------------------
+PIPELINE EXECUTION REMINDER (do not print this section)
+----------------------------------------------------------------
+- Produce the three sections in order.
+- TASK 1 uses SCENARIO_1 to create the numbered Action Plan.
+- TASK 2 converts the Action Plan lines into the JSON array; place that array between the COORDINATOR_OUTPUT tags.
+- TASK 3 converts that array into a list of JSON contact graphs; place those between CONTACT_OUTPUT tags, then write exactly:
+  ALL INTERACTIONS PROCESSED
+- Do not include any commentary or markdown outside the specified section tags.
+
+------------------------------------------------------------
+Output:
+To solve this problem, we need to follow a structured approach across three tasks: creating an action plan, converting actions into JSON messages, and analyzing contacts. Let's break down each task step-by-step.
+
+### TASK 1 — ACTION PLAN
+
+Based on the scenario provided, here is the sequence of actions required for the robot to prepare two coffees:
+
+1. **stand(CM)**: Stand on the coffee machine to reach it.
+2. **grasp_two_hands_one_obj(CM)**: Grasp the coffee machine with both hands.
+3. **lift_two_hands_obj_from_loc(CM, CM)**: Lift the coffee machine from its location.
+4. **place_two_hands_one_obj_on_loc(CM, DR)**: Place the coffee machine on the drying rack to free one hand.
+5. **free_two_hands()**: Free both hands after placing the coffee machine.
+6. **stand(SJ)**: Stand on the sugar jar to reach it.
+7. **open_container(SJ)**: Open the sugar jar.
+8. **grasp_two_hands_one_obj(SJ)**: Grasp the opened sugar jar with both hands.
+9. **lift_two_hands_obj_from_loc(SJ, SJ)**: Lift the sugar jar from its location.
+10. **place_two_hands_one_obj_on_loc(SJ, DR)**: Place the sugar jar on the drying rack to free one hand.
+11. **free_two_hands()**: Free both hands after placing the sugar jar.
+12. **stand(MC)**: Stand on the milk carton inside the fridge.
+13. **open_container(F)**: Open the fridge.
+14. **grasp_two_hands_one_obj(MC)**: Grasp the milk carton with both hands.
+15. **lift_two_hands_obj_from_loc(MC, F)**: Lift the milk carton from the fridge.
+16. **place_two_hands_one_obj_on_loc(MC, DR)**: Place the milk carton on the drying rack to free one hand.
+17. **free_two_hands()**: Free both hands after placing the milk carton.
+18. **stand(CM)**: Stand on the coffee machine again.
+19. **grasp_two_hands_one_obj(CM)**: Grasp the coffee machine with both hands.
+20. **lift_two_hands_obj_from_loc(CM, DR)**: Lift the coffee machine from the drying rack.
+21. **place_two_hands_one_obj_on_loc(CM, CM)**: Place the coffee machine back on its original location.
+22. **press_button(CM, START)**: Press the start button to turn on the coffee machine.
+23. **stand(SJ)**: Stand on the sugar jar again.
+24. **grasp_two_hands_one_obj(SJ)**: Grasp the opened sugar jar with both hands.
+25. **lift_two_hands_obj_from_loc(SJ, DR)**: Lift the sugar jar from the drying rack.
+26. **place_two_hands_one_obj_on_loc(SJ, CM)**: Place the sugar jar on the coffee machine to scoop sugar later.
+27. **free_two_hands()**: Free both hands after placing the sugar jar.
+28. **stand(MC)**: Stand on the milk carton again.
+29. **grasp_two_hands_one_obj(MC)**: Grasp the milk carton with both hands.
+30. **lift_two_hands_obj_from_loc(MC, DR)**: Lift the milk carton from the drying rack.
+31. **place_two_hands_one_obj_on_loc(MC, CM)**: Place the milk carton on the coffee machine to pour milk later.
+32. **free_two_hands()**: Free both hands after placing the milk carton.
+33. **stand(CM)**: Stand on the coffee machine again.
+34. **grasp_two_hands_one_obj(CUP_A)**: Grasp cup A with both hands.
+35. **lift_two_hands_obj_from_loc(CUP_A, counter)**: Lift cup A from the counter.
+36. **place_two_hands_one_obj_on_loc(CUP_A, CM)**: Place cup A on the coffee machine to dispense black coffee.
+37. **dispense_coffee(CM, CUP_A)**: Dispense hot coffee into cup A.
+38. **stand(SJ)**: Stand on the sugar jar again.
+39. **grasp_two_hands_one_obj(SJ)**: Grasp the opened sugar jar with both hands.
+40. **lift_two_hands_obj_from_loc(SJ, CM)**: Lift the sugar jar from the coffee machine.
+41. **scoop_from_to(SJ, CUP_B, sugar)**: Scoop sugar into cup B.
+42. **stand(MC)**: Stand on the milk carton again.
+43. **grasp_two_hands_one_obj(MC)**: Grasp the milk carton with both hands.
+44. **lift_two_hands_obj_from_loc(MC, CM)**: Lift the milk carton from the coffee machine.
+45. **pour_from_to(MC, CUP_B)**: Pour milk into cup B.
+46. **stand(CM)**: Stand on the coffee machine again.
+47. **grasp_two_hands_one_obj(CUP_B)**: Grasp cup B with both hands.
+48. **lift_two_hands_obj_from_loc(CUP_B, counter)**: Lift cup B from the counter.
+49. **place_two_hands_one_obj_on_loc(CUP_B, CM)**: Place cup B on the coffee machine to dispense coffee.
+50. **dispense_coffee(CM, CUP_B)**: Dispense hot coffee into cup B.
+
+### TASK 2 — COORDINATOR OUTPUT
+
+```json
+[
+    {"action": "stand", "object": "CM"},
+    {"action": "grasp_two_hands_one_obj", "object": "CM"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "CM", "object2": "CM"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "CM", "object2": "DR"},
+    {"action": "free_two_hands"},
+    {"action": "stand", "object": "SJ"},
+    {"action": "open_container", "object": "SJ"},
+    {"action": "grasp_two_hands_one_obj", "object": "SJ"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "SJ", "object2": "SJ"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "SJ", "object2": "DR"},
+    {"action": "free_two_hands"},
+    {"action": "stand", "object": "MC"},
+    {"action": "open_container", "object": "F"},
+    {"action": "grasp_two_hands_one_obj", "object": "MC"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "MC", "object2": "F"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "MC", "object2": "DR"},
+    {"action": "free_two_hands"},
+    {"action": "stand", "object": "CM"},
+    {"action": "grasp_two_hands_one_obj", "object": "CM"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "CM", "object2": "DR"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "CM", "object2": "CM"},
+    {"action": "press_button", "object": "CM", "button": "START"},
+    {"action": "stand", "object": "SJ"},
+    {"action": "grasp_two_hands_one_obj", "object": "SJ"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "SJ", "object2": "DR"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "SJ", "object2": "CM"},
+    {"action": "free_two_hands"},
+    {"action": "stand", "object": "MC"},
+    {"action": "grasp_two_hands_one_obj", "object": "MC"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "MC", "object2": "DR"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "MC", "object2": "CM"},
+    {"action": "free_two_hands"},
+    {"action": "stand", "object": "CM"},
+    {"action": "grasp_two_hands_one_obj", "object": "CUP_A"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "CUP_A", "object2": "counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "CUP_A", "object2": "CM"},
+    {"action": "dispense_coffee", "object": "CM", "target": "CUP_A"},
+    {"action": "stand", "object": "SJ"},
+    {"action": "grasp_two_hands_one_obj", "object": "SJ"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "SJ", "object2": "CM"},
+    {"action": "scoop_from_to", "source": "SJ", "target": "CUP_B", "item": "sugar"},
+    {"action": "stand", "object": "MC"},
+    {"action": "grasp_two_hands_one_obj", "object": "MC"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "MC", "object2": "CM"},
+    {"action": "pour_from_to", "source": "MC", "target": "CUP_B"},
+    {"action": "stand", "object": "CM"},
+    {"action": "grasp_two_hands_one_obj", "object": "CUP_B"},
+    {"action": "lift_two_hands_obj_from_loc", "object1": "CUP_B", "object2": "counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object1": "CUP_B", "object2": "CM"},
+    {"action": "dispense_coffee", "object": "CM", "target": "CUP_B"}
+]
+```
+
+### TASK 3 — CONTACT OUTPUT
+
+```json
+[
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "person 1, left foot"
+                ]
+            },
+            {
+                "nodes": [
+                    "drying rack, surface",
+                    "person 1, right foot"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "sugar jar, lid",
+            "sugar jar, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "sugar jar, lid",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "sugar jar, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "milk carton, cap",
+            "milk carton, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "milk carton, cap",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "milk carton, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "drying rack, surface"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "sugar jar, lid",
+            "sugar jar, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "sugar jar, lid",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "sugar jar, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "milk carton, cap",
+            "milk carton, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "milk carton, cap",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "milk carton, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "drying rack, surface"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "cup A, handle",
+            "cup A, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "cup A, handle",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "cup A, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "drying rack, surface"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "sugar jar, lid",
+            "sugar jar, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "sugar jar, lid",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "sugar jar, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "milk carton, cap",
+            "milk carton, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "milk carton, cap",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "milk carton, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "drying rack, surface"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "cup B, handle",
+            "cup B, body"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "cup B, handle",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "cup B, body",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    },
+    {
+        "object part nodes": [
+            "coffee machine, base",
+            "drying rack, surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "coffee machine, base",
+                    "drying rack, surface"
+                ]
+            }
+        ]
+    }
+]
+```
+
+**ALL CAPS SUMMARY**
+
+- **TASK 1**: Detailed action plan for robot to prepare coffee.
+- **TASK 2**: JSON representation of actions for robot execution.
+- **TASK 3**: Contact points and interactions in JSON format.
+============================================================
+

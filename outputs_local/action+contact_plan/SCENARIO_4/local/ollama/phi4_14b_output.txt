@@ -1,0 +1,790 @@
+
+============================================================
+Timestamp: 2026-01-15 23:23:29
+Prompt:
+
+You are a single agent that must perform an end-to-end pipeline divided into three tasks:
+
+TASK 1 — ACTION PLAN (use SCENARIO)
+TASK 2 — ACTION→MESSAGE MAPPING (convert action lines to JSON messages)
+TASK 3 — CONTACT ANALYSIS (turn each message into a part-level contact graph)
+
+OUTPUT CONTRACT (very important):
+- Emit your results in THREE sections, in this exact order.
+- Do NOT print anything outside these sections.
+
+1) ===ACTION_PLAN===
+   (Only the numbered list per SCENARIO Output — no extra text)
+   ===END_ACTION_PLAN===
+
+2) ===COORDINATOR_OUTPUT===
+   (Pure JSON array only, as required by TASK 2)
+   ===END_COORDINATOR_OUTPUT===
+
+3) ===CONTACT_OUTPUT===
+   (A JSON list of graphs in the same order as messages in TASK 2.
+    After the list, write exactly: ALL INTERACTIONS PROCESSED)
+   ===END_CONTACT_OUTPUT===
+
+You MUST:
+- In TASK 2, use the exact action lines you produced in TASK 1 as input.
+- In TASK 3, use the exact JSON array you produced in TASK 2 as input.
+- Preserve ordering between all tasks.
+
+----------------------------------------------------------------
+TASK 1 PROMPT (SCENARIO_4) 
+----------------------------------------------------------------
+
+SCENARIO= Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene (rooms & surfaces/containers):
+- Kitchen: sink K_sink, dishwasher DW (door CLOSED), dish_rack K_rack, counter K_counter, trash_bin K_trash
+- Living room: TV_stand L_tv, bookshelf L_books, coffee_table L_coffee, toy_bin L_toys, shoe_rack L_shoes
+- Bedroom: bed B_bed, bedside_table B_side, closet B_closet, laundry_basket B_laundry
+- Bathroom: sink BA_sink, medicine_cabinet BA_med, towel_bar BA_towel
+- Entryway: mail_tray E_mail, shoe_rack E_shoes
+- Side table D_side (maximum capacity: one item)
+
+Initial clutter:
+- Dishes: mug1 on B_side, plate1 on L_coffee and bowl1 on B_bed
+- Toys: toy_car on K_counter and plush_bear on BA_sink
+- Clothes: tshirt1 on L_coffee and sock1 on L_tv
+- Shoes: shoe_pair1 on L_coffee
+- Tools/misc: scissors1 on L_coffee, remote1 on K_counter and pill_bottle on L_coffee
+- Trash: can_empty on B_side, tissue_used on L_coffee
+
+Robot initial condition:
+- The robot is standing on the floor with a base height of 0.7 m.
+- Dishwasher DW door is CLOSED.
+
+Goal:
+- Restore the home to a tidy, typical state by relocating each object to a reasonable storage/placement location available in the scene.
+- Choose destinations using ordinary household conventions.
+- Be consistent: similar items should end up in the same type of place you decide (your choice), and do not invent containers or locations not listed above.
+- Do not leave objects on the floor or on clearly inappropriate surfaces when finished.
+
+Constraints:
+- Carry/handle one small item at a time.
+- Do not place items on the floor as an intermediate surface.
+- D_side can hold at most one item at a time (temporary buffer).
+- Opening/closing DW requires a clear 0.6 m front sweep zone (use D_side if needed).
+- To place inside DW or on K_rack, DW door must be OPEN,
+- To close DW, hands must be free.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m (reach adjustment).
+- Avoid unsafe placements (e.g., sharp tools in non-kitchen living areas).
+
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. Must precede lift_two_hands_obj_from_loc.
+
+lift_two_hands_obj_from_loc(object, source_surface): Lift object from its current surface/container.
+
+place_two_hands_one_obj_on_loc(object, target_surface_or_container): Place object on/into target listed in the scene.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+stand(object): Stand on an object/surface if the height difference is ≤ 0.6 m to adjust reach.
+
+open_door(appliance): Open an appliance door. 
+
+close_door(appliance): Close an appliance door.
+
+
+Output:
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+
+
+----------------------------------------------------------------
+TASK 2 PROMPT (Action → Message mapping)
+----------------------------------------------------------------
+
+coordinator_prompt = 
+### Goal
+You receive a numbered list of robot actions.
+Each action line describes a manipulation or locomotion behavior involving one or more objects.
+
+Your task is to understand the meaning of each action and translate it into a short JSON message that describes:
+1. The objects involved.
+2. A brief, natural description of what the robot is doing.
+
+At the end, output one JSON array containing all converted messages in the same order as the input actions.
+
+---
+
+### Expected Output
+Your final answer must be pure JSON, structured like this:
+
+[
+  {
+    "objects": ["object 1", "object 2"],
+    "interaction": "short human-readable description of what happens"
+  },
+  ...
+]
+
+Strict rules:
+- Output only valid JSON — no text, no markdown, no code.
+- Each JSON object corresponds to exactly one input action.
+- If an action does not involve any object, set "objects": [].
+- Stop after producing the list — do not comment or summarize.
+
+---
+
+### How to think about each action
+When reading a line like:
+> grasp_two_hands_one_obj(box A)
+
+Ask yourself:
+- What are the objects? → ["box A"]
+- What is the interaction? → "grasp box A with both hands"
+
+Then express it in the required JSON format:
+{
+  "objects": ["box A"],
+  "interaction": "grasp box A with both hands"
+}
+
+Do this reasoning process for each action in order.
+
+
+
+----------------------------------------------------------------
+TASK 3 PROMPT (Contact analysis)
+----------------------------------------------------------------
+
+contact_prompt = 
+
+- Task: You will be given a list of objects and a short text description of human interactions with these objects. Your task is to analyze all the interaction relations among human body parts and object parts and output the results as a graph in the JSON format.
+
+- Input format: The input is provided in the JSON format as follows
+
+{
+    "objects": [
+        "object 1",
+        "object 2"
+    ],
+    "interaction": "a short interaction description"
+}
+
+If multiple inputs are provided, they will be in an array:
+[
+    { "objects": [...], "interaction": "..." },
+    { "objects": [...], "interaction": "..." },
+    ...
+]
+
+- Output format: Provide the output strictly in JSON format, without any additional explanation or commentary, structured as follows:
+[
+  {
+      "object part nodes": [
+          "object 1, object part 1",
+          "object 1, object part 2"
+      ],
+
+      "body part nodes": [
+          "person 1, human body part 1",
+          "person 1, human body part 2"
+      ],
+
+      "interaction edges": [
+          {
+              "nodes": [
+                  "object a, object part b",
+                  "person c, human body part d"
+              ],
+          },
+          {
+              "nodes": [
+                  "object x, object part y",
+                  "person z, human body part w"
+              ],
+          },
+          {
+              "nodes": [
+                  "object f, object part q",
+                  "object r, object part k"
+              ],
+          }
+      ],
+  },
+  ...
+]
+
+After this list, write exactly:
+**ALL INTERACTIONS PROCESSED**
+
+---
+
+- Rules for analysis:
+
+(1) There are two types of nodes in the output interaction graph: "object part nodes" representing object parts and "body part nodes" representing human body parts.
+(2) The "object part nodes" field represent a part-level segmentation of each input object. Segmentations should roughly cover the entire object without becoming excessively detailed. Use descriptive, specific part names rather than generic terms, for example, avoid "surface", "edge", "body", "base", "area", "cover", "support", "connector", "frame", and the like. Avoid numbering object parts.
+Example: For a "bike", use the following parts: "handlebar", "pedal", "seat", "frame tubes", "wheels". For a "skateboard", use the following parts: "longboard deck", "wheels". For a "cordless vacuum cleaner", use the following parts: "ergonomic hand grip", "wand", "floor roller". For a "ladder", use the following parts: "side rail tubes", "rungs". For a "boxing bag", use the following parts: "punching bag". For a "box", use the following "top side", "left side", "right side", "bottom side". For a "door", use the following parts: "handle", "door frame".
+(3) The "body part nodes" field must be the following: "left hand", "right hand", "left foot", "right foot". Distinguish between left/right human body parts.
+(4) The "interaction edges" represent direct physical contact relationships between two end nodes. An edge connects an object part node to either a human body part node or another object part node. Do not connect part nodes within the same object. Example: when ironing on an ironing board, the soleplate part of an iron should be connected to the top flat panel part of the ironing board.
+(5) Explicitly mentioned body parts in the input "interaction" field must be included.
+Example: For a description "a person is lifting a single dumbbell with one hand", include either "left hand" or "right hand" in the analysis. If no specific body part
+is mentioned, use the most common ergonomic interactions in the physical contact analysis.
+(6) Focus on primary actions influencing object use or movement in the physical contact
+analysis. Example: For "a person walking and carrying a briefcase in one hand", the
+primary action for analysis is "carrying".
+(7) Ensure the identified object parts belong to their respective objects in the node and
+edge outputs of the interaction graph.
+(8) Ensure plausible distribution and avoid conflicts or duplication of human body
+parts during the interaction analysis.
+(9) Exclude environmental elements, like floor, ground, or wall, from the physical contact
+analysis.
+
+(10) Final-state physical reasoning rule:
+For each interaction, infer all physical contact relations that must exist in the successful end state of the action.
+If the action implies a stable placement, resting, or support condition, you must include the necessary
+object–object contact relations that make this configuration physically possible.
+ A configuration is considered physically incomplete if an object would not remain in its final position
+after human contact is removed.
+In such cases, interaction edges representing support, resting, or constraint contacts between object parts
+must be included.   
+(11) A placement interaction is considered invalid if the interaction graph does not
+contain at least one object–object contact that provides physical support for the placed object.
+Graphs that only include human–object contacts for placement actions are incomplete.
+- Examples:
+(1) If the input is
+{
+    "objects": [
+        "umbrella",
+        "suitcase"
+    ],
+    "interaction": "a person is dragging a suitcase with one hand and holding an
+    open umbrella with the other hand while walking"
+}
+then the output is
+{
+    "object part nodes": 
+    [
+        "umbrella, canopy",
+        "umbrella, shaft",
+        "suitcase, main compartment",
+        "suitcase, handle",
+        "suitcase, wheels"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "umbrella, shaft",
+                "person 1, left hand"
+            ],
+        },
+        {
+            "nodes": [
+                "suitcase, handle",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(2) If the input is
+{
+    "objects": [
+        "box"
+    ],
+    "interaction": "a person is lifting a box"
+}
+then the output is
+{
+    "object part nodes": [
+        "box, left side",
+        "box, right side",
+        "box, front side",
+        "box, back side",
+        "box, top side",
+        "box, bottom side"
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "box, left side",
+                "person 1, left hand"
+            ]
+        },
+        {
+            "nodes": [
+                "box, right side",
+                "person 1, right hand"
+            ]
+        }
+    ]
+}
+
+(3) If the input is
+{
+    "objects": [
+        "guitar"
+    ],
+    "interaction": "a person is holding a guitar while standing"
+}
+then the output is
+{
+    "object part nodes": [
+        "guitar, neck",
+        "guitar, main compartment" 
+    ],
+    "body part nodes": [
+        "person 1, left hand",
+        "person 1, right hand",
+        "person 1, left foot",
+        "person 1, right foot"
+    ],
+    "interaction edges": [
+        {
+            "nodes": [
+                "guitar, neck",
+                "person 1, left_hand"
+            ]
+        }
+    ]
+}
+
+
+----------------------------------------------------------------
+PIPELINE EXECUTION REMINDER (do not print this section)
+----------------------------------------------------------------
+- Produce the three sections in order.
+- TASK 1 uses SCENARIO_1 to create the numbered Action Plan.
+- TASK 2 converts the Action Plan lines into the JSON array; place that array between the COORDINATOR_OUTPUT tags.
+- TASK 3 converts that array into a list of JSON contact graphs; place those between CONTACT_OUTPUT tags, then write exactly:
+  ALL INTERACTIONS PROCESSED
+- Do not include any commentary or markdown outside the specified section tags.
+
+------------------------------------------------------------
+Output:
+To tackle this task, we need to follow a structured approach across three tasks: creating an action plan, converting actions into JSON messages, and analyzing contacts. Let's break it down step-by-step.
+
+### TASK 1 — ACTION PLAN
+
+**Objective:** Tidy up the home by relocating each object to its appropriate location using the specified actions.
+
+#### Action Plan:
+
+1. **grasp_two_hands_one_obj(mug1)**
+2. **lift_two_hands_obj_from_loc(mug1, B_side)**
+3. **place_two_hands_one_obj_on_loc(mug1, K_sink)**
+4. **free_two_hands()**
+
+5. **grasp_two_hands_one_obj(can_empty)**
+6. **lift_two_hands_obj_from_loc(can_empty, B_side)**
+7. **stand(K_trash)**
+8. **place_two_hands_one_obj_on_loc(can_empty, K_trash)**
+9. **free_two_hands()**
+
+10. **grasp_two_hands_one_obj(plate1)**
+11. **lift_two_hands_obj_from_loc(plate1, L_coffee)**
+12. **stand(K_counter)**
+13. **place_two_hands_one_obj_on_loc(plate1, K_counter)**
+14. **free_two_hands()**
+
+15. **grasp_two_hands_one_obj(bowl1)**
+16. **lift_two_hands_obj_from_loc(bowl1, B_bed)**
+17. **stand(K_counter)**
+18. **place_two_hands_one_obj_on_loc(bowl1, K_counter)**
+19. **free_two_hands()**
+
+20. **grasp_two_hands_one_obj(toy_car)**
+21. **lift_two_hands_obj_from_loc(toy_car, K_counter)**
+22. **stand(L_toys)**
+23. **place_two_hands_one_obj_on_loc(toy_car, L_toys)**
+24. **free_two_hands()**
+
+25. **grasp_two_hands_one_obj(plush_bear)**
+26. **lift_two_hands_obj_from_loc(plush_bear, BA_sink)**
+27. **stand(L_toys)**
+28. **place_two_hands_one_obj_on_loc(plush_bear, L_toys)**
+29. **free_two_hands()**
+
+30. **grasp_two_hands_one_obj(tshirt1)**
+31. **lift_two_hands_obj_from_loc(tshirt1, L_coffee)**
+32. **stand(B_closet)**
+33. **place_two_hands_one_obj_on_loc(tshirt1, B_closet)**
+34. **free_two_hands()**
+
+35. **grasp_two_hands_one_obj(sock1)**
+36. **lift_two_hands_obj_from_loc(sock1, L_tv)**
+37. **stand(B_closet)**
+38. **place_two_hands_one_obj_on_loc(sock1, B_closet)**
+39. **free_two_hands()**
+
+40. **grasp_two_hands_one_obj(shoe_pair1)**
+41. **lift_two_hands_obj_from_loc(shoe_pair1, L_coffee)**
+42. **stand(L_shoes)**
+43. **place_two_hands_one_obj_on_loc(shoe_pair1, L_shoes)**
+44. **free_two_hands()**
+
+45. **grasp_two_hands_one_obj(scissors1)**
+46. **lift_two_hands_obj_from_loc(scissors1, L_coffee)**
+47. **stand(K_counter)**
+48. **place_two_hands_one_obj_on_loc(scissors1, K_counter)**
+49. **free_two_hands()**
+
+50. **grasp_two_hands_one_obj(remote1)**
+51. **lift_two_hands_obj_from_loc(remote1, K_counter)**
+52. **stand(L_tv)**
+53. **place_two_hands_one_obj_on_loc(remote1, L_tv)**
+54. **free_two_hands()**
+
+55. **grasp_two_hands_one_obj(pill_bottle)**
+56. **lift_two_hands_obj_from_loc(pill_bottle, L_coffee)**
+57. **stand(BA_med)**
+58. **place_two_hands_one_obj_on_loc(pill_bottle, BA_med)**
+59. **free_two_hands()**
+
+60. **grasp_two_hands_one_obj(tissue_used)**
+61. **lift_two_hands_obj_from_loc(tissue_used, L_coffee)**
+62. **stand(K_trash)**
+63. **place_two_hands_one_obj_on_loc(tissue_used, K_trash)**
+64. **free_two_hands()**
+
+65. **open_DW(DW)**
+66. **grasp_two_hands_one_obj(DW)**
+67. **lift_two_hands_obj_from_loc(DW, DW_location)**
+68. **stand(K_counter)**
+69. **place_two_hands_one_obj_on_loc(DW, K_counter)**
+70. **close_DW()**
+71. **free_two_hands()**
+
+72. **open_DW(DW)**
+73. **grasp_two_hands_one_obj(DW)**
+74. **lift_two_hands_obj_from_loc(DW, DW_location)**
+75. **stand(L_shoes)**
+76. **place_two_hands_one_obj_on_loc(DW, L_shoes)**
+77. **close_DW()**
+78. **free_two_hands()**
+
+79. **open_DW(DW)**
+80. **grasp_two_hands_one_obj(DW)**
+81. **lift_two_hands_obj_from_loc(DW, DW_location)**
+82. **stand(B_closet)**
+83. **place_two_hands_one_obj_on_loc(DW, B_closet)**
+84. **close_DW()**
+85. **free_two_hands()**
+
+86. **open_DW(DW)**
+87. **grasp_two_hands_one_obj(DW)**
+88. **lift_two_hands_obj_from_loc(DW, DW_location)**
+89. **stand(BA_med)**
+90. **place_two_hands_one_obj_on_loc(DW, BA_med)**
+91. **close_DW()**
+92. **free_two_hands()**
+
+93. **open_DW(DW)**
+94. **grasp_two_hands_one_obj(DW)**
+95. **lift_two_hands_obj_from_loc(DW, DW_location)**
+96. **stand(L_tv)**
+97. **place_two_hands_one_obj_on_loc(DW, L_tv)**
+98. **close_DW()**
+99. **free_two_hands()**
+
+100. **open_DW(DW)**
+101. **grasp_two_hands_one_obj(DW)**
+102. **lift_two_hands_obj_from_loc(DW, DW_location)**
+103. **stand(L_toys)**
+104. **place_two_hands_one_obj_on_loc(DW, L_toys)**
+105. **close_DW()**
+106. **free_two_hands()**
+
+107. **open_DW(DW)**
+108. **grasp_two_hands_one_obj(DW)**
+109. **lift_two_hands_obj_from_loc(DW, DW_location)**
+110. **stand(K_trash)**
+111. **place_two_hands_one_obj_on_loc(DW, K_trash)**
+112. **close_DW()**
+113. **free_two_hands()**
+
+### TASK 2 — COORDINATOR OUTPUT
+
+```json
+[
+    {"action": "grasp_two_hands_one_obj", "object": "mug1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "mug1", "location": "B_side"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "mug1", "location": "K_sink"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "can_empty"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "can_empty", "location": "B_side"},
+    {"action": "stand", "object": "K_trash"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "can_empty", "location": "K_trash"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "plate1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "plate1", "location": "L_coffee"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "plate1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "bowl1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "bowl1", "location": "B_bed"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "bowl1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "toy_car"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "toy_car", "location": "K_counter"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "toy_car", "location": "L_toys"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "plush_bear"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "plush_bear", "location": "BA_sink"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "plush_bear", "location": "L_toys"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "tshirt1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "tshirt1", "location": "L_coffee"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "tshirt1", "location": "B_closet"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "sock1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "sock1", "location": "L_tv"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "sock1", "location": "B_closet"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "shoe_pair1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "shoe_pair1", "location": "L_coffee"},
+    {"action": "stand", "object": "L_shoes"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "shoe_pair1", "location": "L_shoes"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "scissors1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "scissors1", "location": "L_coffee"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "scissors1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "remote1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "remote1", "location": "K_counter"},
+    {"action": "stand", "object": "L_tv"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "remote1", "location": "L_tv"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "pill_bottle"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "pill_bottle", "location": "L_coffee"},
+    {"action": "stand", "object": "BA_med"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "pill_bottle", "location": "BA_med"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "tissue_used"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "tissue_used", "location": "L_coffee"},
+    {"action": "stand", "object": "K_trash"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "tissue_used", "location": "K_trash"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "K_counter"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_shoes"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_shoes"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "B_closet"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "BA_med"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "BA_med"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_tv"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_tv"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_toys"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "K_trash"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "K_trash"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"}
+]
+```
+
+### TASK 3 — REWRITTEN ACTION SEQUENCE
+
+```json
+[
+    {"action": "grasp_two_hands_one_obj", "object": "mug1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "mug1", "location": "B_side"},
+    {"action": "stand", "object": "K_sink"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "mug1", "location": "K_sink"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "can_empty"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "can_empty", "location": "B_side"},
+    {"action": "stand", "object": "K_trash"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "can_empty", "location": "K_trash"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "plate1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "plate1", "location": "L_coffee"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "plate1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "bowl1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "bowl1", "location": "B_bed"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "bowl1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "toy_car"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "toy_car", "location": "K_counter"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "toy_car", "location": "L_toys"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "plush_bear"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "plush_bear", "location": "BA_sink"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "plush_bear", "location": "L_toys"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "tshirt1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "tshirt1", "location": "L_coffee"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "tshirt1", "location": "B_closet"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "sock1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "sock1", "location": "L_tv"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "sock1", "location": "B_closet"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "shoe_pair1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "shoe_pair1", "location": "L_coffee"},
+    {"action": "stand", "object": "L_shoes"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "shoe_pair1", "location": "L_shoes"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "scissors1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "scissors1", "location": "L_coffee"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "scissors1", "location": "K_counter"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "remote1"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "remote1", "location": "K_counter"},
+    {"action": "stand", "object": "L_tv"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "remote1", "location": "L_tv"},
+    {"action": "free_two_hands"},
+
+    {"action": "grasp_two_hands_one_obj", "object": "pill_bottle"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "pill_bottle", "location": "L_coffee"},
+    {"action": "stand", "object": "BA_med"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "pill_bottle", "location": "BA_med"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "K_counter"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "K_counter"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_shoes"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_shoes"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "B_closet"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "B_closet"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "BA_med"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "BA_med"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_tv"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_tv"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "L_toys"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "L_toys"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"},
+
+    {"action": "open_DW", "object": "DW"},
+    {"action": "grasp_two_hands_one_obj", "object": "DW"},
+    {"action": "lift_two_hands_obj_from_loc", "object": "DW", "location": "DW_location"},
+    {"action": "stand", "object": "K_trash"},
+    {"action": "place_two_hands_one_obj_on_loc", "object": "DW", "location": "K_trash"},
+    {"action": "close_DW"},
+    {"action": "free_two_hands"}
+]
+```
+============================================================
+

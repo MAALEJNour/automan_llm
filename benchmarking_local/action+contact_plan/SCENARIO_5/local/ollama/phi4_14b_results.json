@@ -1,0 +1,8 @@
+{
+  "plan_type": "action+contact_plan",
+  "provider": "ollama",
+  "model": "phi4:14b",
+  "total_latency": [
+    30.171738862991333
+  ]
+}
