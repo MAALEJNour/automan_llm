@@ -6,6 +6,27 @@ from bench_io import *
 import os
 import re
 import json
+from baseline_output import  *
+
+
+
+CONTACT_AGENT_SYSTEM_MESSAGE = """
+You are a helpful assistant in analyzing human-object interactions.
+
+Each message describes one or more specific human-object interactions that occur during a robot manipulation sequence.
+
+You will receive multiple JSON inputs from the CoordinatorAgent, each describing a separate interaction step.
+Your task is to process each input individually, generate a separate JSON graph for each,
+and return a list of all JSON graphs in the same order as the inputs.
+
+After you finish processing all inputs, you must write exactly:
+ALL INTERACTIONS PROCESSED
+---
+""" + contact_prompt
+
+def build_contact_prompt(contact_input: str) -> str:
+    return CONTACT_AGENT_SYSTEM_MESSAGE + contact_input
+
 
 
 # -------------------------------------------------------------------
@@ -118,7 +139,7 @@ def _existing_outputs_for_model(
 # Configuration
 # -------------------------------------------------------------------
 
-N_WARM_TRIALS = 1
+N_WARM_TRIALS = 5
 KEEP_ALIVE_WARM =None # KEEP_ALIVE_WARM ow long the model stays in memory after a request 
 OPTIONS = {"temperature": 0, "seed": 42}  # more deterministic output
 scenario_name1= "SCENARIO_1"
@@ -134,36 +155,46 @@ UNIFIED_PROMPT2= build_unified_prompt(scenario_name2)
 UNIFIED_PROMPT3= build_unified_prompt(scenario_name3)
 UNIFIED_PROMPT4 = build_unified_prompt(scenario_name_4)
 UNIFIED_PROMPT5 = build_unified_prompt(scenario_name_5)
+CONTACT_PROMPT1 = build_contact_prompt(baseline_coordinator_scenario_1)
+CONTACT_PROMPT2 = build_contact_prompt(baseline_coordinator_scenario_2)
+CONTACT_PROMPT3 = build_contact_prompt(baseline_coordinator_scenario_3)
+CONTACT_PROMPT4 = build_contact_prompt(baseline_coordinator_scenario_4)
+CONTACT_PROMPT5 = build_contact_prompt(baseline_coordinator_scenario_5)
 MODELS = [
-    # "mistral",
-    # "gemma3",
-   "qwen3:32b",
-  "gpt-oss:20b",
-   "gemma3:27b",
-    "phi4:14b",
+     #"mistral",
+     #"gemma3",
+   #"qwen3:32b",
+  #"gpt-oss:20b",
+  # "gemma3:27b",
+  #  "phi4:14b",
   # "deepseek-r1:32b",
     #  "ministral-3:8b",
-    # "llama3.1:8b",
+   "llama3.1:8b",
     # "qwen3"
    # "magistral"
     #"mixtral:8x7b",
  ]
 
 SCENARIOS = [
- # ("SCENARIO_1", UNIFIED_PROMPT1),     
+    ("SCENARIO_1", CONTACT_PROMPT1),
+    ("SCENARIO_2", CONTACT_PROMPT2),
+    ("SCENARIO_3", CONTACT_PROMPT3),
+    ("SCENARIO_4", CONTACT_PROMPT4),
+    ("SCENARIO_5", CONTACT_PROMPT5),
+ # ("SCENARIO_1", UNIFIED_PROMPT1),
  # ("SCENARIO_2", UNIFIED_PROMPT2),
 #  ("SCENARIO_3", UNIFIED_PROMPT3),
  #("SCENARIO_1", SCENARIO_1),
  #("SCENARIO_2", SCENARIO_2),
  #("SCENARIO_3", SCENARIO_3),
- ("SCENARIO_4",  SCENARIO_4 ),
- ("SCENARIO_5",  SCENARIO_5 ),
+# ("SCENARIO_4",  SCENARIO_4 ),
+# ("SCENARIO_5",  SCENARIO_5 ),
 
 ]
 
 #plan_type = "action+contact_plan"
-plan_type = "action_plan"
-provider_type = "local"
+plan_type= "contact_plan"
+provider_type= "local"
 provider = "ollama"
 
 
