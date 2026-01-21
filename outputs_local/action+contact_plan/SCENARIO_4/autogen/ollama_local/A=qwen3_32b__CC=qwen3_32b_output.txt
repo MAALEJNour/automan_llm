@@ -1,0 +1,5098 @@
+
+============================================================
+Timestamp: 2026-01-21 00:23:42
+Prompt:
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Given a scene description and a task, you must output a sequence of actions from the provided list of available actions to achieve the task. Use only the actions specified—do not invent new ones. The number of actions in the sequence can vary based on the task requirements.
+
+Scene (rooms & surfaces/containers):
+- Kitchen: sink K_sink, dishwasher DW (door CLOSED), dish_rack K_rack, counter K_counter, trash_bin K_trash
+- Living room: TV_stand L_tv, bookshelf L_books, coffee_table L_coffee, toy_bin L_toys, shoe_rack L_shoes
+- Bedroom: bed B_bed, bedside_table B_side, closet B_closet, laundry_basket B_laundry
+- Bathroom: sink BA_sink, medicine_cabinet BA_med, towel_bar BA_towel
+- Entryway: mail_tray E_mail, shoe_rack E_shoes
+- Side table D_side (maximum capacity: one item)
+
+Initial clutter:
+- Dishes: mug1 on B_side, plate1 on L_coffee and bowl1 on B_bed
+- Toys: toy_car on K_counter and plush_bear on BA_sink
+- Clothes: tshirt1 on L_coffee and sock1 on L_tv
+- Shoes: shoe_pair1 on L_coffee
+- Tools/misc: scissors1 on L_coffee, remote1 on K_counter and pill_bottle on L_coffee
+- Trash: can_empty on B_side, tissue_used on L_coffee
+
+Robot initial condition:
+- The robot is standing on the floor with a base height of 0.7 m.
+- Dishwasher DW door is CLOSED.
+
+Goal:
+- Restore the home to a tidy, typical state by relocating each object to a reasonable storage/placement location available in the scene.
+- Choose destinations using ordinary household conventions.
+- Be consistent: similar items should end up in the same type of place you decide (your choice), and do not invent containers or locations not listed above.
+- Do not leave objects on the floor or on clearly inappropriate surfaces when finished.
+
+Constraints:
+- Carry/handle one small item at a time.
+- Do not place items on the floor as an intermediate surface.
+- D_side can hold at most one item at a time (temporary buffer).
+- Opening/closing DW requires a clear 0.6 m front sweep zone (use D_side if needed).
+- To place inside DW or on K_rack, DW door must be OPEN,
+- To close DW, hands must be free.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m (reach adjustment).
+- Avoid unsafe placements (e.g., sharp tools in non-kitchen living areas).
+
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. Must precede lift_two_hands_obj_from_loc.
+
+lift_two_hands_obj_from_loc(object, source_surface): Lift object from its current surface/container.
+
+place_two_hands_one_obj_on_loc(object, target_surface_or_container): Place object on/into target listed in the scene.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+stand(object): Stand on an object/surface if the height difference is ≤ 0.6 m to adjust reach.
+
+open_door(appliance): Open an appliance door. 
+
+close_door(appliance): Close an appliance door.
+
+
+Output:
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+1. open_door(DW)
+2. grasp_two_hands_one_obj(plate1)
+3. lift_two_hands_obj_from_loc(plate1, L_coffee)
+4. place_two_hands_one_obj_on_loc(plate1, DW)
+5. free_two_hands()
+6. grasp_two_hands_one_obj(bowl1)
+7. lift_two_hands_obj_from_loc(bowl1, B_bed)
+8. place_two_hands_one_obj_on_loc(bowl1, DW)
+9. free_two_hands()
+10. grasp_two_hands_one_obj(mug1)
+11. lift_two_hands_obj_from_loc(mug1, B_side)
+12. place_two_hands_one_obj_on_loc(mug1, DW)
+13. free_two_hands()
+14. grasp_two_hands_one_obj(can_empty)
+15. lift_two_hands_obj_from_loc(can_empty, B_side)
+16. place_two_hands_one_obj_on_loc(can_empty, K_trash)
+17. free_two_hands()
+18. grasp_two_hands_one_obj(tissue_used)
+19. lift_two_hands_obj_from_loc(tissue_used, L_coffee)
+20. place_two_hands_one_obj_on_loc(tissue_used, K_trash)
+21. free_two_hands()
+22. grasp_two_hands_one_obj(toy_car)
+23. lift_two_hands_obj_from_loc(toy_car, K_counter)
+24. place_two_hands_one_obj_on_loc(toy_car, L_toys)
+25. free_two_hands()
+26. grasp_two_hands_one_obj(plush_bear)
+27. lift_two_hands_obj_from_loc(plush_bear, BA_sink)
+28. place_two_hands_one_obj_on_loc(plush_bear, L_toys)
+29. free_two_hands()
+30. grasp_two_hands_one_obj(tshirt1)
+31. lift_two_hands_obj_from_loc(tshirt1, L_coffee)
+32. place_two_hands_one_obj_on_loc(tshirt1, B_laundry)
+33. free_two_hands()
+34. grasp_two_hands_one_obj(sock1)
+35. lift_two_hands_obj_from_loc(sock1, L_coffee)
+36. place_two_hands_one_obj_on_loc(sock1, B_laundry)
+37. free_two_hands()
+38. grasp_two_hands_one_obj(shoe_pair1)
+39. lift_two_hands_obj_from_loc(shoe_pair1, L_coffee)
+40. place_two_hands_one_obj_on_loc(shoe_pair1, E_shoes)
+41. free_two_hands()
+42. grasp_two_hands_one_obj(scissors1)
+43. lift_two_hands_obj_from_loc(scissors1, L_coffee)
+44. place_two_hands_one_obj_on_loc(scissors1, K_counter)
+45. free_two_hands()
+46. grasp_two_hands_one_obj(remote1)
+47. lift_two_hands_obj_from_loc(remote1, K_counter)
+48. place_two_hands_one_obj_on_loc(remote1, L_tv)
+49. free_two_hands()
+50. grasp_two_hands_one_obj(pill_bottle)
+51. lift_two_hands_obj_from_loc(pill_bottle, L_coffee)
+52. place_two_hands_one_obj_on_loc(pill_bottle, BA_med)
+53. free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. open_door(DW)
+2. grasp_two_hands_one_obj(plate1)
+3. lift_two_hands_obj_from_loc(plate1, L_coffee)
+4. place_two_hands_one_obj_on_loc(plate1, DW)
+5. free_two_hands()
+6. grasp_two_hands_one_obj(bowl1)
+7. lift_two_hands_obj_from_loc(bowl1, B_bed)
+8. place_two_hands_one_obj_on_loc(bowl1, DW)
+9. free_two_hands()
+10. grasp_two_hands_one_obj(mug1)
+11. lift_two_hands_obj_from_loc(mug1, B_side)
+12. place_two_hands_one_obj_on_loc(mug1, DW)
+13. free_two_hands()
+14. grasp_two_hands_one_obj(can_empty)
+15. lift_two_hands_obj_from_loc(can_empty, B_side)
+16. place_two_hands_one_obj_on_loc(can_empty, K_trash)
+17. free_two_hands()
+18. grasp_two_hands_one_obj(tissue_used)
+19. lift_two_hands_obj_from_loc(tissue_used, L_coffee)
+20. place_two_hands_one_obj_on_loc(tissue_used, K_trash)
+21. free_two_hands()
+22. grasp_two_hands_one_obj(toy_car)
+23. lift_two_hands_obj_from_loc(toy_car, K_counter)
+24. place_two_hands_one_obj_on_loc(toy_car, L_toys)
+25. free_two_hands()
+26. grasp_two_hands_one_obj(plush_bear)
+27. lift_two_hands_obj_from_loc(plush_bear, BA_sink)
+28. place_two_hands_one_obj_on_loc(plush_bear, L_toys)
+29. free_two_hands()
+30. grasp_two_hands_one_obj(tshirt1)
+31. lift_two_hands_obj_from_loc(tshirt1, L_coffee)
+32. place_two_hands_one_obj_on_loc(tshirt1, B_laundry)
+33. free_two_hands()
+34. grasp_two_hands_one_obj(sock1)
+35. lift_two_hands_obj_from_loc(sock1, L_coffee)
+36. place_two_hands_one_obj_on_loc(sock1, B_laundry)
+37. free_two_hands()
+38. grasp_two_hands_one_obj(shoe_pair1)
+39. lift_two_hands_obj_from_loc(shoe_pair1, L_coffee)
+40. place_two_hands_one_obj_on_loc(shoe_pair1, E_shoes)
+41. free_two_hands()
+42. grasp_two_hands_one_obj(scissors1)
+43. lift_two_hands_obj_from_loc(scissors1, L_coffee)
+44. place_two_hands_one_obj_on_loc(scissors1, K_counter)
+45. free_two_hands()
+46. grasp_two_hands_one_obj(remote1)
+47. lift_two_hands_obj_from_loc(remote1, K_counter)
+48. place_two_hands_one_obj_on_loc(remote1, L_tv)
+49. free_two_hands()
+50. grasp_two_hands_one_obj(pill_bottle)
+51. lift_two_hands_obj_from_loc(pill_bottle, L_coffee)
+52. place_two_hands_one_obj_on_loc(pill_bottle, BA_med)
+53. free_two_hands()
+CoordinatorAgent: [
+  {
+    "objects": ["DW"],
+    "interaction": "open door DW"
+  },
+  {
+    "objects": ["plate1"],
+    "interaction": "grasp plate1 with both hands"
+  },
+  {
+    "objects": ["plate1"],
+    "interaction": "lift plate1 from location L_coffee with both hands"
+  },
+  {
+    "objects": ["plate1"],
+    "interaction": "place plate1 on door DW with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["bowl1"],
+    "interaction": "grasp bowl1 with both hands"
+  },
+  {
+    "objects": ["bowl1"],
+    "interaction": "lift bowl1 from location B_bed with both hands"
+  },
+  {
+    "objects": ["bowl1"],
+    "interaction": "place bowl1 on door DW with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["mug1"],
+    "interaction": "grasp mug1 with both hands"
+  },
+  {
+    "objects": ["mug1"],
+    "interaction": "lift mug1 from location B_side with both hands"
+  },
+  {
+    "objects": ["mug1"],
+    "interaction": "place mug1 on door DW with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["can_empty"],
+    "interaction": "grasp can_empty with both hands"
+  },
+  {
+    "objects": ["can_empty"],
+    "interaction": "lift can_empty from location B_side with both hands"
+  },
+  {
+    "objects": ["can_empty"],
+    "interaction": "place can_empty on trash K_trash with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["tissue_used"],
+    "interaction": "grasp tissue_used with both hands"
+  },
+  {
+    "objects": ["tissue_used"],
+    "interaction": "lift tissue_used from location L_coffee with both hands"
+  },
+  {
+    "objects": ["tissue_used"],
+    "interaction": "place tissue_used on trash K_trash with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["toy_car"],
+    "interaction": "grasp toy_car with both hands"
+  },
+  {
+    "objects": ["toy_car"],
+    "interaction": "lift toy_car from location K_counter with both hands"
+  },
+  {
+    "objects": ["toy_car"],
+    "interaction": "place toy_car on location L_toys with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["plush_bear"],
+    "interaction": "grasp plush_bear with both hands"
+  },
+  {
+    "objects": ["plush_bear"],
+    "interaction": "lift plush_bear from location BA_sink with both hands"
+  },
+  {
+    "objects": ["plush_bear"],
+    "interaction": "place plush_bear on location L_toys with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["tshirt1"],
+    "interaction": "grasp tshirt1 with both hands"
+  },
+  {
+    "objects": ["tshirt1"],
+    "interaction": "lift tshirt1 from location L_coffee with both hands"
+  },
+  {
+    "objects": ["tshirt1"],
+    "interaction": "place tshirt1 on location B_laundry with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["sock1"],
+    "interaction": "grasp sock1 with both hands"
+  },
+  {
+    "objects": ["sock1"],
+    "interaction": "lift sock1 from location L_coffee with both hands"
+  },
+  {
+    "objects": ["sock1"],
+    "interaction": "place sock1 on location B_laundry with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "interaction": "grasp shoe_pair1 with both hands"
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "interaction": "lift shoe_pair1 from location L_coffee with both hands"
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "interaction": "place shoe_pair1 on location E_shoes with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["scissors1"],
+    "interaction": "grasp scissors1 with both hands"
+  },
+  {
+    "objects": ["scissors1"],
+    "interaction": "lift scissors1 from location L_coffee with both hands"
+  },
+  {
+    "objects": ["scissors1"],
+    "interaction": "place scissors1 on location K_counter with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["remote1"],
+    "interaction": "grasp remote1 with both hands"
+  },
+  {
+    "objects": ["remote1"],
+    "interaction": "lift remote1 from location K_counter with both hands"
+  },
+  {
+    "objects": ["remote1"],
+    "interaction": "place remote1 on location L_tv with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["pill_bottle"],
+    "interaction": "grasp pill_bottle with both hands"
+  },
+  {
+    "objects": ["pill_bottle"],
+    "interaction": "lift pill_bottle from location L_coffee with both hands"
+  },
+  {
+    "objects": ["pill_bottle"],
+    "interaction": "place pill_bottle on location BA_med with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  }
+]
+ContactAgent: [
+  {
+    "object_parts": ["DW, handle"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "DW, handle"],
+      ["person 1, right hand", "DW, handle"]
+    ]
+  },
+  {
+    "object_parts": ["plate1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plate1, rim"],
+      ["person 1, right hand", "plate1, rim"]
+    ]
+  },
+  {
+    "object_parts": ["plate1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plate1, rim"],
+      ["person 1, right hand", "plate1, rim"]
+    ]
+  },
+  {
+    "object_parts": ["plate1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plate1, rim"],
+      ["person 1, right hand", "plate1, rim"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["bowl1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "bowl1, rim"],
+      ["person 1, right hand", "bowl1, rim"]
+    ]
+  },
+  {
+    "object_parts": ["bowl1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "bowl1, rim"],
+      ["person 1, right hand", "bowl1, rim"]
+    ]
+  },
+  {
+    "object_parts": ["bowl1, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "bowl1, rim"],
+      ["person 1, right hand", "bowl1, rim"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["can_empty, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "can_empty, rim"],
+      ["person 1, right hand", "can_empty, rim"]
+    ]
+  },
+  {
+    "object_parts": ["can_empty, rim"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "can_empty, rim"],
+      ["person 1, right hand", "can_empty, rim"]
+    ]
+  },
+  {
+    "object_parts": ["tissue_used, edge"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "tissue_used, edge"],
+      ["person 1, right hand", "tissue_used, edge"]
+    ]
+  },
+  {
+    "object_parts": ["tissue_used, edge"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "tissue_used, edge"],
+      ["person 1, right hand", "tissue_used, edge"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["toy_car, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "toy_car, body"],
+      ["person 1, right hand", "toy_car, body"]
+    ]
+  },
+  {
+    "object_parts": ["toy_car, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "toy_car, body"],
+      ["person 1, right hand", "toy_car, body"]
+    ]
+  },
+  {
+    "object_parts": ["toy_car, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "toy_car, body"],
+      ["person 1, right hand", "toy_car, body"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["plush_bear, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plush_bear, body"],
+      ["person 1, right hand", "plush_bear, body"]
+    ]
+  },
+  {
+    "object_parts": ["plush_bear, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plush_bear, body"],
+      ["person 1, right hand", "plush_bear, body"]
+    ]
+  },
+  {
+    "object_parts": ["plush_bear, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "plush_bear, body"],
+      ["person 1, right hand", "plush_bear, body"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["tshirt1, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "tshirt1, body"],
+      ["person 1, right hand", "tshirt1, body"]
+    ]
+  },
+  {
+    "object_parts": ["tshirt1, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "tshirt1, body"],
+      ["person 1, right hand", "tshirt1, body"]
+    ]
+  },
+  {
+    "object_parts": ["tshirt1, body"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "tshirt1, body"],
+      ["person 1, right hand", "tshirt1, body"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["sock1, cuff"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "sock1, cuff"],
+      ["person 1, right hand", "sock1, cuff"]
+    ]
+  },
+  {
+    "object_parts": ["sock1, cuff"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "sock1, cuff"],
+      ["person 1, right hand", "sock1, cuff"]
+    ]
+  },
+  {
+    "object_parts": ["sock1, cuff"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "sock1, cuff"],
+      ["person 1, right hand", "sock1, cuff"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["shoe_pair1, upper"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "shoe_pair1, upper"],
+      ["person 1, right hand", "shoe_pair1, upper"]
+    ]
+  },
+  {
+    "object_parts": ["shoe_pair1, upper"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "shoe_pair1, upper"],
+      ["person 1, right hand", "shoe_pair1, upper"]
+    ]
+  },
+  {
+    "object_parts": ["shoe_pair1, upper"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "shoe_pair1, upper"],
+      ["person 1, right hand", "shoe_pair1, upper"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["scissors1, left handle", "scissors1, right handle"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "scissors1, left handle"],
+      ["person 1, right hand", "scissors1, right handle"]
+    ]
+  },
+  {
+    "object_parts": ["scissors1, left handle", "scissors1, right handle"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "scissors1, left handle"],
+      ["person 1, right hand", "scissors1, right handle"]
+    ]
+  },
+  {
+    "object_parts": ["scissors1, left handle", "scissors1, right handle"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "scissors1, left handle"],
+      ["person 1, right hand", "scissors1, right handle"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["remote1, left side", "remote1, right side"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "remote1, left side"],
+      ["person 1, right hand", "remote1, right side"]
+    ]
+  },
+  {
+    "object_parts": ["remote1, left side", "remote1, right side"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "remote1, left side"],
+      ["person 1, right hand", "remote1, right side"]
+    ]
+  },
+  {
+    "object_parts": ["remote1, left side", "remote1, right side"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "remote1, left side"],
+      ["person 1, right hand", "remote1, right side"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+      ["person 1, left hand", "pillow, surface"],
+      ["person 1, right hand", "pillow, surface"]
+    ]
+  },
+  {
+    "object_parts": ["pillow, surface"],
+    "body_parts": ["person 1, left hand", "person 1, right hand"],
+    "edges": [
+============================================================
+

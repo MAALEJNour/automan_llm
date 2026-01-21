@@ -1,0 +1,408 @@
+
+============================================================
+Timestamp: 2026-01-21 01:00:29
+Prompt:
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Use only the actions listed—do not invent new ones. The number of steps may vary.
+
+Scene:
+
+- Countertop: coffee_machine CM (mug platform, OFF), sugar_jar SJ (closed)
+- Sink S with dish_soap DS, drying_rack DR
+- Fridge F 
+- Cup A on counter (CUP_A is CLEAN)
+- Cup B on counter (CUP_B is DIRTY)
+- milk_carton MC (closed and stored INSIDE fridge F which is also closed)
+
+Robot initial condition:
+
+- Robot stands on the floor, hands-free.
+
+
+Task:
+
+Prepare two coffees:
+1) One black coffee in CUP_A (no sugar, no milk).
+2) One coffee with sugar and milk in CUP_B.
+
+Limitations:
+
+- Do not place items on the floor as an intermediate surface.
+- Handle one small item at a time.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m.
+- Liquids must be poured only into a clean cup.
+- To access an item inside a closed container, you must open that container first and close it when finished.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between you and the object is less than 0.6m. Use this for locomotion or height adjustment when needed.
+
+open_container(container): Open a container (e.g., SJ).
+
+close_container(container): Close a container that was opened.
+
+wash_item_in_sink(item, sink, soap): Wash an item in the sink with soap (renders the item clean).
+
+dry_item_on_rack(item, rack): Place washed item on a rack briefly to drain (makes it ready to use).
+
+dispense_coffee(machine, target): Dispense hot coffee from CM into target.
+
+scoop_from_to(source_container, target, item_name): Transfer a small amount (e.g., sugar) from a container to a target.
+
+pour_from_to(source_container, target): Pour liquid from a container to a target.
+
+press_button(device, button_name): Press a device button (e.g., START, OFF).
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+1. Grasp_two_hands_one_obj(CUP_B)  
+2. Lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. Place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. Free_two_hands()  
+5. Grasp_two_hands_one_obj(CUP_B)  
+6. Lift_two_hands_obj_from_loc(CUP_B, sink)  
+7. Place_two_hands_one_obj_on_loc(CUP_B, DR)  
+8. Free_two_hands()  
+9. Grasp_two_hands_one_obj(CUP_B)  
+10. Lift_two_hands_obj_from_loc(CUP_B, DR)  
+11. Place_two_hands_one_obj_on_loc(CUP_B, counter)  
+12. Free_two_hands()  
+13. Grasp_two_hands_one_obj(CUP_A)  
+14. Lift_two_hands_obj_from_loc(CUP_A, counter)  
+15. Place_two_hands_one_obj_on_loc(CUP_A, coffee_machine)  
+16. Free_two_hands()  
+17. Press_button(coffee_machine)  
+18. Grasp_two_hands_one_obj(CUP_A)  
+19. Lift_two_hands_obj_from_loc(CUP_A, coffee_machine)  
+20. Place_two_hands_one_obj_on_loc(CUP_A, counter)  
+21. Free_two_hands()  
+22. Grasp_two_hands_one_obj(CUP_B)  
+23. Lift_two_hands_obj_from_loc(CUP_B, counter)  
+24. Place_two_hands_one_obj_on_loc(CUP_B, coffee_machine)  
+25. Free_two_hands()  
+26. Press_button(coffee_machine)  
+27. Grasp_two_hands_one_obj(CUP_B)  
+28. Lift_two_hands_obj_from_loc(CUP_B, coffee_machine)  
+29. Place_two_hands_one_obj_on_loc(CUP_B, counter)  
+30. Free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. Grasp_two_hands_one_obj(CUP_B)  
+2. Lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. Place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. Free_two_hands()  
+5. Grasp_two_hands_one_obj(CUP_B)  
+6. Lift_two_hands_obj_from_loc(CUP_B, sink)  
+7. Place_two_hands_one_obj_on_loc(CUP_B, DR)  
+8. Free_two_hands()  
+9. Grasp_two_hands_one_obj(CUP_B)  
+10. Lift_two_hands_obj_from_loc(CUP_B, DR)  
+11. Place_two_hands_one_obj_on_loc(CUP_B, counter)  
+12. Free_two_hands()  
+13. Grasp_two_hands_one_obj(CUP_A)  
+14. Lift_two_hands_obj_from_loc(CUP_A, counter)  
+15. Place_two_hands_one_obj_on_loc(CUP_A, coffee_machine)  
+16. Free_two_hands()  
+17. Press_button(coffee_machine)  
+18. Grasp_two_hands_one_obj(CUP_A)  
+19. Lift_two_hands_obj_from_loc(CUP_A, coffee_machine)  
+20. Place_two_hands_one_obj_on_loc(CUP_A, counter)  
+21. Free_two_hands()  
+22. Grasp_two_hands_one_obj(CUP_B)  
+23. Lift_two_hands_obj_from_loc(CUP_B, counter)  
+24. Place_two_hands_one_obj_on_loc(CUP_B, coffee_machine)  
+25. Free_two_hands()  
+26. Press_button(coffee_machine)  
+27. Grasp_two_hands_one_obj(CUP_B)  
+28. Lift_two_hands_obj_from_loc(CUP_B, coffee_machine)  
+29. Place_two_hands_one_obj_on_loc(CUP_B, counter)  
+30. Free_two_hands()
+CoordinatorAgent: [
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "lift CUP_B from counter with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "place CUP_B on sink with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "lift CUP_B from sink with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "place CUP_B on DR with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "lift CUP_B from DR with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "place CUP_B on counter with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "grasp CUP_A with both hands"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "lift CUP_A from counter with both hands"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "place CUP_A on coffee_machine with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["coffee_machine"],
+    "interaction": "press button on coffee_machine"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "grasp CUP_A with both hands"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "lift CUP_A from coffee_machine with both hands"
+  },
+  {
+    "objects": ["CUP_A"],
+    "interaction": "place CUP_A on counter with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "lift CUP_B from counter with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "place CUP_B on coffee_machine with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["coffee_machine"],
+    "interaction": "press button on coffee_machine"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "lift CUP_B from coffee_machine with both hands"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "place CUP_B on counter with both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  }
+]
+ContactAgent: [
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim", "CUP_B, bottom", "sink, surface"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"],
+      ["CUP_B, bottom", "sink, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CU_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim", "CUP_B, bottom", "DR, surface"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"],
+      ["CUP_B, bottom", "DR, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim", "CUP_B, bottom", "counter, surface"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"],
+      ["CUP_B, bottom", "counter, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"]
+    ]
+  },
+  {
+    "object_parts": ["CUP_B, handle", "CUP_B, rim", "CUP_B, bottom", "coffee machine, surface"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "CUP_B, handle"],
+      ["right hand", "CUP_B, rim"],
+      ["CUP_B, bottom", "coffee machine, surface"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  },
+  {
+    "object_parts": ["coffee machine, button"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "coffee machine, button"],
+      ["right hand", "coffee machine, button"]
+    ]
+  },
+  {
+    "object_parts": ["coffee machine, button"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "coffee machine, button"],
+      ["right hand", "coffee machine, button"]
+    ]
+  },
+  {
+    "object_parts": ["coffee machine, button"],
+    "body_parts": ["left hand", "right hand"],
+    "edges": [
+      ["left hand", "coffee machine, button"],
+      ["right hand", "coffee machine, button"]
+    ]
+  },
+  {
+    "object_parts": [],
+    "body_parts": [],
+    "edges": []
+  }
+]
+============================================================
+

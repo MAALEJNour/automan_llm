@@ -1,0 +1,931 @@
+
+============================================================
+Timestamp: 2026-01-21 01:08:31
+Prompt:
+Setup
+
+You are an AI assistant specialized in planning action sequences for humanoid robots performing loco-manipulation tasks. Use only the actions listed—do not invent new ones. The number of steps may vary.
+
+Scene:
+
+- Countertop: coffee_machine CM (mug platform, OFF), sugar_jar SJ (closed)
+- Sink S with dish_soap DS, drying_rack DR
+- Fridge F 
+- Cup A on counter (CUP_A is CLEAN)
+- Cup B on counter (CUP_B is DIRTY)
+- milk_carton MC (closed and stored INSIDE fridge F which is also closed)
+
+Robot initial condition:
+
+- Robot stands on the floor, hands-free.
+
+
+Task:
+
+Prepare two coffees:
+1) One black coffee in CUP_A (no sugar, no milk).
+2) One coffee with sugar and milk in CUP_B.
+
+Limitations:
+
+- Do not place items on the floor as an intermediate surface.
+- Handle one small item at a time.
+- stand(object) allowed only if |Δheight| ≤ 0.6 m.
+- Liquids must be poured only into a clean cup.
+- To access an item inside a closed container, you must open that container first and close it when finished.
+
+Available Actions:
+
+grasp_two_hands_one_obj(object): Grasp the specified object using two hands. This action has to be called before using lift_two_hands_obj_from_loc.
+
+free_two_hands(): Free both hands after placing an object, releasing any held object. This action must be called after using place_two_hands_one_obj_on_loc.
+
+lift_two_hands_obj_from_loc(object1, object2): Lift object1 from object2 using two hands. This action has to be called before using place_two_hands_one_obj_on_loc. object2 can also be the floor.
+
+place_two_hands_one_obj_on_loc(object1, object2): Place object1 on object2 using two hands. object2 can also be the floor.
+
+stand(object): Stand on the specified object if the height difference between you and the object is less than 0.6m. Use this for locomotion or height adjustment when needed.
+
+open_container(container): Open a container (e.g., SJ).
+
+close_container(container): Close a container that was opened.
+
+wash_item_in_sink(item, sink, soap): Wash an item in the sink with soap (renders the item clean).
+
+dry_item_on_rack(item, rack): Place washed item on a rack briefly to drain (makes it ready to use).
+
+dispense_coffee(machine, target): Dispense hot coffee from CM into target.
+
+scoop_from_to(source_container, target, item_name): Transfer a small amount (e.g., sugar) from a container to a target.
+
+pour_from_to(source_container, target): Pour liquid from a container to a target.
+
+press_button(device, button_name): Press a device button (e.g., START, OFF).
+
+Output:
+
+Return only a numbered list of actions with their parameters, based on the scene and task. Use fewer or more actions as necessary. Do not include any additional explanations, text, or formatting beyond the list.
+
+------------------------------------------------------------
+Output:
+=== ACTION PLAN ===
+1. grasp_two_hands_one_obj(CUP_B)  
+2. lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. free_two_hands()  
+5. wash_item_in_sink(CUP_B, sink, DS)  
+6. grasp_two_hands_one_obj(CUP_B)  
+7. lift_two_hands_obj_from_loc(CUP_B, sink)  
+8. place_two_hands_one_obj_on_loc(CUP_B, DR)  
+9. free_two_hands()  
+10. dry_item_on_rack(CUP_B, DR)  
+11. grasp_two_hands_one_obj(CUP_B)  
+12. lift_two_hands_obj_from_loc(CUP_B, DR)  
+13. place_two_hands_one_obj_on_loc(CUP_B, counter)  
+14. free_two_hands()  
+15. press_button(CM, START)  
+16. dispense_coffee(CM, CUP_A)  
+17. dispense_coffee(CM, CUP_B)  
+18. open_container(SJ)  
+19. scoop_from_to(SJ, CUP_B, sugar)  
+20. close_container(SJ)  
+21. open_container(F)  
+22. grasp_two_hands_one_obj(MC)  
+23. lift_two_hands_obj_from_loc(MC, F)  
+24. place_two_hands_one_obj_on_loc(MC, counter)  
+25. free_two_hands()  
+26. open_container(MC)  
+27. pour_from_to(MC, CUP_B)  
+28. close_container(MC)  
+29. grasp_two_hands_one_obj(MC)  
+30. lift_two_hands_obj_from_loc(MC, counter)  
+31. place_two_hands_one_obj_on_loc(MC, F)  
+32. close_container(F)  
+33. free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. grasp_two_hands_one_obj(CUP_B)  
+2. lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. free_two_hands()  
+5. wash_item_in_sink(CUP_B, sink, DS)  
+6. grasp_two_hands_one_obj(CUP_B)  
+7. lift_two_hands_obj_from_loc(CUP_B, sink)  
+8. place_two_hands_one_obj_on_loc(CUP_B, DR)  
+9. free_two_hands()  
+10. dry_item_on_rack(CUP_B, DR)  
+11. grasp_two_hands_one_obj(CUP_B)  
+12. lift_two_hands_obj_from_loc(CUP_B, DR)  
+13. place_two_hands_one_obj_on_loc(CUP_B, counter)  
+14. free_two_hands()  
+15. press_button(CM, START)  
+16. dispense_coffee(CM, CUP_A)  
+17. dispense_coffee(CM, CUP_B)  
+18. open_container(SJ)  
+19. scoop_from_to(SJ, CUP_B, sugar)  
+20. close_container(SJ)  
+21. open_container(F)  
+22. grasp_two_hands_one_obj(MC)  
+23. lift_two_hands_obj_from_loc(MC, F)  
+24. place_two_hands_one_obj_on_loc(MC, counter)  
+25. free_two_hands()  
+26. open_container(MC)  
+27. pour_from_to(MC, CUP_B)  
+28. close_container(MC)  
+29. grasp_two_hands_one_obj(MC)  
+30. lift_two_hands_obj_from_loc(MC, counter)  
+31. place_two_hands_one_obj_on_loc(MC, F)  
+32. close_container(F)  
+33. free_two_hands()
+CoordinatorAgent: ```json
+[
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "counter"],
+    "interaction": "lift CUP B from the counter with both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "place CUP B on the sink using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink", "DS"],
+    "interaction": "wash CUP B in the sink with detergent solution"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "lift CUP B from the sink with both hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "place CUP B on the drying rack using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "dry CUP B on the drying rack"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "lift CUP B from the drying rack with both hands"
+  },
+  {
+    "objects": ["CUP_B", "counter"],
+    "interaction": "place CUP B on the counter using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CM", "START"],
+    "interaction": "press the start button on the coffee machine"
+  },
+  {
+    "objects": ["CM", "CUP_A"],
+    "interaction": "dispense coffee into CUP A from the coffee machine"
+  },
+  {
+    "objects": ["CM", "CUP_B"],
+    "interaction": "dispense coffee into CUP B from the coffee machine"
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "open the sugar jar"
+  },
+  {
+    "objects": ["SJ", "CUP_B", "sugar"],
+    "interaction": "scoop sugar from the sugar jar into CUP B"
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "close the sugar jar"
+  },
+  {
+    "objects": ["F"],
+    "interaction": "open the milk container"
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "grasp milk carton from the fridge with both hands"
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "lift milk carton from the fridge with both hands"
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "place milk carton on the counter using both hands"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "open the milk container"
+  },
+  {
+    "objects": ["MC", "CUP_B"],
+    "interaction": "pour milk from the milk carton into CUP B"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "close the milk container"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "grasp milk carton with both hands"
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "lift milk carton from the counter with both hands"
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "place milk carton in the fridge using both hands"
+  },
+  {
+    "objects": ["F"],
+    "interaction": "close the fridge"
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  }
+]
+```
+ContactAgent: To process each interaction step, we will generate a JSON graph for each input based on the rules provided. Here's how each interaction is analyzed:
+
+1. **Grasp CUP B with both hands**
+   - Object parts: `CUP_B, handle`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+2. **Lift CUP B from the counter with both hands**
+   - Object parts: `CUP_B, handle`, `counter, top surface`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+3. **Place CUP B on the sink using both hands**
+   - Object parts: `CUP_B, base`, `sink, top surface`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+4. **Release both hands**
+   - No interaction edges.
+
+5. **Wash CUP B in the sink with detergent solution**
+   - Object parts: `CUP_B, surface`, `sink, interior`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+6. **Grasp CUP B with both hands**
+   - Same as step 1.
+
+7. **Lift CUP B from the sink with both hands**
+   - Object parts: `CUP_B, handle`, `sink, top surface`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+8. **Place CUP B on the drying rack using both hands**
+   - Object parts: `CUP_B, base`, `DR, top surface`
+   - Body parts: `left hand`, `right hand`
+   - Interaction edges:
+     ```json
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, left hand"
+         ]
+     },
+     {
+         "nodes": [
+             "CUP_B, handle",
+             "person 1, right hand"
+         ]
+     }
+     ```
+
+9. **Release both hands**
+   - No interaction edges.
+
+10. **Dry CUP B on the drying rack**
+    - Object parts: `CUP_B, surface`, `DR, top surface`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CUP_B, base",
+              "DR, top surface"
+          ]
+      }
+      ```
+
+11. **Grasp CUP B with both hands**
+    - Same as step 1.
+
+12. **Lift CUP B from the drying rack with both hands**
+    - Object parts: `CUP_B, handle`, `DR, top surface`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CUP_B, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "CUP_B, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+13. **Place CUP B on the counter using both hands**
+    - Object parts: `CUP_B, base`, `counter, top surface`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CUP_B, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "CUP_B, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+14. **Release both hands**
+    - No interaction edges.
+
+15. **Press the start button on the coffee machine**
+    - Object parts: `CM, start button`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CM, start button",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+16. **Dispense coffee into CUP A from the coffee machine**
+    - Object parts: `CM, spout`, `CUP_A, interior`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CM, spout",
+              "CUP_A, interior"
+          ]
+      }
+      ```
+
+17. **Dispense coffee into CUP B from the coffee machine**
+    - Object parts: `CM, spout`, `CUP_B, interior`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "CM, spout",
+              "CUP_B, interior"
+          ]
+      }
+      ```
+
+18. **Open the sugar jar**
+    - Object parts: `SJ, lid`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "SJ, lid",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+19. **Scoop sugar from the sugar jar into CUP B**
+    - Object parts: `SJ, scoop`, `CUP_B, interior`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "SJ, scoop",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+20. **Close the sugar jar**
+    - Object parts: `SJ, lid`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "SJ, lid",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+21. **Open the milk container**
+    - Object parts: `MC, cap`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, cap",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+22. **Grasp milk carton from the fridge with both hands**
+    - Object parts: `MC, handle`, `F, interior`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+23. **Lift milk carton from the fridge with both hands**
+    - Object parts: `MC, handle`, `F, interior`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+24. **Place milk carton on the counter using both hands**
+    - Object parts: `MC, base`, `counter, top surface`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+25. **Release both hands**
+    - No interaction edges.
+
+26. **Pour milk from the milk carton into CUP B**
+    - Object parts: `MC, spout`, `CUP_B, interior`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, spout",
+              "CUP_B, interior"
+          ]
+      }
+      ```
+
+27. **Close the milk container**
+    - Object parts: `MC, cap`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, cap",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+28. **Grasp milk carton with both hands**
+    - Same as step 22.
+
+29. **Lift milk carton from the counter with both hands**
+    - Object parts: `MC, handle`, `counter, top surface`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+30. **Place milk carton in the fridge using both hands**
+    - Object parts: `MC, base`, `F, interior`
+    - Body parts: `left hand`, `right hand`
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, left hand"
+          ]
+      },
+      {
+          "nodes": [
+              "MC, handle",
+              "person 1, right hand"
+          ]
+      }
+      ```
+
+31. **Close the fridge**
+    - Object parts: `F, door`
+    - Body parts: `left hand` (assuming one hand is used)
+    - Interaction edges:
+      ```json
+      {
+          "nodes": [
+              "F, door",
+              "person 1, left hand"
+          ]
+      }
+      ```
+
+32. **Release both hands**
+    - No interaction edges.
+
+Here are the JSON graphs for each step:
+
+```json
+[
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands",
+    "object_parts": ["CUP_B, handle"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["CUP_B", "counter"],
+    "interaction": "lift CUP B from the counter with both hands",
+    "object_parts": ["CUP_B, handle", "counter, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "place CUP B on the sink using both hands",
+    "object_parts": ["CUP_B, base", "sink, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink", "DS"],
+    "interaction": "wash CUP B in the sink with detergent solution",
+    "object_parts": ["CUP_B, surface", "sink, interior"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands",
+    "object_parts": ["CUP_B, handle"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "lift CUP B from the sink with both hands",
+    "object_parts": ["CUP_B, handle", "sink, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "place CUP B on the sink using both hands",
+    "object_parts": ["CUP_B, base", "sink, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["CUP_B, handle", "person 1, left hand"]},
+      {"nodes": ["CUP_B, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["CM"],
+    "interaction": "press the start button on the coffee machine",
+    "object_parts": ["CM, start button"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["CM, start button", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["CM", "CUP_A"],
+    "interaction": "dispense coffee into CUP A from the coffee machine",
+    "object_parts": ["CM, spout", "CUP_A, interior"],
+    "body_parts": [],
+    "interaction_edges": [
+      {"nodes": ["CM, spout", "CUP_A, interior"]}
+    ]
+  },
+  {
+    "objects": ["CM", "CUP_B"],
+    "interaction": "dispense coffee into CUP B from the coffee machine",
+    "object_parts": ["CM, spout", "CUP_B, interior"],
+    "body_parts": [],
+    "interaction_edges": [
+      {"nodes": ["CM, spout", "CUP_B, interior"]}
+    ]
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "open the sugar jar",
+    "object_parts": ["SJ, lid"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["SJ, lid", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["SJ", "CUP_B"],
+    "interaction": "scoop sugar from the sugar jar into CUP B",
+    "object_parts": ["SJ, scoop", "CUP_B, interior"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["SJ, scoop", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "close the sugar jar",
+    "object_parts": ["SJ, lid"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["SJ, lid", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "open the milk container",
+    "object_parts": ["MC, cap"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, cap", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "grasp milk carton from the fridge with both hands",
+    "object_parts": ["MC, handle", "F, interior"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "lift milk carton from the fridge with both hands",
+    "object_parts": ["MC, handle", "F, interior"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "place milk carton on the counter using both hands",
+    "object_parts": ["MC, base", "counter, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  },
+  {
+    "objects": ["MC", "CUP_B"],
+    "interaction": "pour milk from the milk carton into CUP B",
+    "object_parts": ["MC, spout", "CUP_B, interior"],
+    "body_parts": [],
+    "interaction_edges": [
+      {"nodes": ["MC, spout", "CUP_B, interior"]}
+    ]
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "close the milk container",
+    "object_parts": ["MC, cap"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, cap", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "grasp milk carton with both hands",
+    "object_parts": ["MC, handle", "F, interior"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "lift milk carton from the counter with both hands",
+    "object_parts": ["MC, handle", "counter, top surface"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "place milk carton in the fridge using both hands",
+    "object_parts": ["MC, base", "F, interior"],
+    "body_parts": ["left hand", "right hand"],
+    "interaction_edges": [
+      {"nodes": ["MC, handle", "person 1, left hand"]},
+      {"nodes": ["MC, handle", "person 1, right hand"]}
+    ]
+  },
+  {
+    "objects": ["F"],
+    "interaction": "close the fridge",
+    "object_parts": ["F, door"],
+    "body_parts": ["left hand"],
+    "interaction_edges": [
+      {"nodes": ["F, door", "person 1, left hand"]}
+    ]
+  },
+  {
+    "objects": [],
+    "interaction": "release both hands"
+  }
+]
+```
+============================================================
+
