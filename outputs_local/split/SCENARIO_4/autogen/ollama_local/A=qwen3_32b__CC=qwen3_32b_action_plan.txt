@@ -1,0 +1,54 @@
+1. Grasp can_empty from B_side  
+2. Lift can_empty from B_side  
+3. Place can_empty into K_trash  
+4. Free hands  
+5. Grasp tissue_used from L_coffee  
+6. Lift tissue_used from L_coffee  
+7. Place tissue_used into K_trash  
+8. Free hands  
+9. Open_door(DW)  
+10. Grasp mug1 from B_side  
+11. Lift mug1 from B_side  
+12. Place mug1 into DW  
+13. Free hands  
+14. Grasp plate1 from L_coffee  
+15. Lift plate1 from L_coffee  
+16. Place plate1 into DW  
+17. Free hands  
+18. Grasp bowl1 from B_bed  
+19. Lift bowl1 from B_bed  
+20. Place bowl1 into DW  
+21. Free hands  
+22. Close_door(DW)  
+23. Grasp toy_car from K_counter  
+24. Lift toy_car from K_counter  
+25. Place toy_car into L_toys  
+26. Free hands  
+27. Grasp plush_bear from BA_sink  
+28. Lift plush_bear from BA_sink  
+29. Place plush_bear into L_toys  
+30. Free hands  
+31. Grasp tshirt1 from L_coffee  
+32. Lift tshirt1 from L_coffee  
+33. Place tshirt1 into B_laundry  
+34. Free hands  
+35. Grasp sock1 from L_coffee  
+36. Lift sock1 from L_coffee  
+37. Place sock1 into B_laundry  
+38. Free hands  
+39. Grasp shoe_pair1 from L_coffee  
+40. Lift shoe_pair1 from L_coffee  
+41. Place shoe_pair1 into E_shoes  
+42. Free hands  
+43. Grasp remote1 from K_counter  
+44. Lift remote1 from K_counter  
+45. Place remote1 on L_tv  
+46. Free hands  
+47. Grasp scissors1 from L_coffee  
+48. Lift scissors1 from L_coffee  
+49. Place scissors1 on K_counter  
+50. Free hands  
+51. Grasp pill_bottle from L_coffee  
+52. Lift pill_bottle from L_coffee  
+53. Place pill_bottle into BA_med  
+54. Free hands

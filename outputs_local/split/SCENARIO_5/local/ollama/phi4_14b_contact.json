@@ -1,0 +1,188 @@
+[
+  {
+    "object part nodes": [
+      "MC, main compartment"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "MC, lid"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "MC, main compartment"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "MC, main compartment",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, main compartment",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {},
+  {},
+  {
+    "object part nodes": [
+      "SJ, lid"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "SJ, lid"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "SJ, main compartment",
+      "floor"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "SJ, main compartment",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "SJ, main compartment",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {},
+  {},
+  {},
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "CM, coffee outlet",
+      "CUP_A, interior"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "CM, control panel"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "MC, main compartment"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "MC, main compartment",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, main compartment",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {},
+  {},
+  {
+    "object part nodes": [
+      "MC, main compartment",
+      "CUP_B, interior"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "SJ, main compartment"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "SJ, main compartment",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "SJ, main compartment",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {},
+  {},
+  {
+    "object part nodes": [
+      "SJ, main compartment",
+      "CUP_B, interior"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "CM, coffee outlet",
+      "CUP_B, interior"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "CM, control panel"
+    ],
+    "body part nodes": [],
+    "interaction edges": []
+  }
+]

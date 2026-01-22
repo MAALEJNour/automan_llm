@@ -1,0 +1,291 @@
+[
+  {
+    "interaction": "Grasp mug with both hands",
+    "objects": ["mug"],
+    "edges": [
+      {"from": "left hand", "to": "mug handle"},
+      {"from": "right hand", "to": "mug body"}
+    ]
+  },
+  {
+    "interaction": "Lift mug from table",
+    "objects": ["mug", "table"],
+    "edges": [
+      {"from": "left hand", "to": "mug handle"},
+      {"from": "right hand", "to": "mug body"}
+    ]
+  },
+  {
+    "interaction": "Place mug on counter",
+    "objects": ["mug", "counter"],
+    "edges": [
+      {"from": "left hand", "to": "mug handle"},
+      {"from": "right hand", "to": "mug body"},
+      {"from": "mug body", "to": "counter"}
+    ]
+  },
+  {
+    "interaction": "Open door",
+    "objects": ["door"],
+    "edges": [
+      {"from": "right hand", "to": "door handle"}
+    ]
+  },
+  {
+    "interaction": "Grasp plate with both hands",
+    "objects": ["plate"],
+    "edges": [
+      {"from": "left hand", "to": "plate surface"},
+      {"from": "right hand", "to": "plate surface"}
+    ]
+  },
+  {
+    "interaction": "Lift plate from coffee table",
+    "objects": ["plate", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "plate surface"},
+      {"from": "right hand", "to": "plate surface"}
+    ]
+  },
+  {
+    "interaction": "Place plate on counter",
+    "objects": ["plate", "counter"],
+    "edges": [
+      {"from": "left hand", "to": "plate surface"},
+      {"from": "right hand", "to": "plate surface"},
+      {"from": "plate surface", "to": "counter"}
+    ]
+  },
+  {
+    "interaction": "Grasp bowl with both hands",
+    "objects": ["bowl"],
+    "edges": [
+      {"from": "left hand", "to": "bowl interior"},
+      {"from": "right hand", "to": "bowl interior"}
+    ]
+  },
+  {
+    "interaction": "Lift bowl from bed",
+    "objects": ["bowl", "bed"],
+    "edges": [
+      {"from": "left hand", "to": "bowl interior"},
+      {"from": "right hand", "to": "bowl interior"}
+    ]
+  },
+  {
+    "interaction": "Place bowl on counter",
+    "objects": ["bowl", "counter"],
+    "edges": [
+      {"from": "left hand", "to": "bowl interior"},
+      {"from": "right hand", "to": "bowl interior"},
+      {"from": "bowl interior", "to": "counter"}
+    ]
+  },
+  {
+    "interaction": "Close door",
+    "objects": ["door"],
+    "edges": [
+      {"from": "right hand", "to": "door handle"}
+    ]
+  },
+  {
+    "interaction": "Grasp toy car with both hands",
+    "objects": ["toy car"],
+    "edges": [
+      {"from": "left hand", "to": "car body"},
+      {"from": "right hand", "to": "car body"}
+    ]
+  },
+  {
+    "interaction": "Lift toy car from counter",
+    "objects": ["toy car", "counter"],
+    "edges": [
+      {"from": "left hand", "to": "car body"},
+      {"from": "right hand", "to": "car body"}
+    ]
+  },
+  {
+    "interaction": "Place toy car on shelf",
+    "objects": ["toy car", "shelf"],
+    "edges": [
+      {"from": "left hand", "to": "car body"},
+      {"from": "right hand", "to": "car body"},
+      {"from": "car body", "to": "shelf"}
+    ]
+  },
+  {
+    "interaction": "Grasp plush bear with both hands",
+    "objects": ["plush bear"],
+    "edges": [
+      {"from": "left hand", "to": "bear body"},
+      {"from": "right hand", "to": "bear body"}
+    ]
+  },
+  {
+    "interaction": "Lift plush bear from sink",
+    "objects": ["plush bear", "sink"],
+    "edges": [
+      {"from": "left hand", "to": "bear body"},
+      {"from": "right hand", "to": "bear body"}
+    ]
+  },
+  {
+    "interaction": "Place plush bear on shelf",
+    "objects": ["plush bear", "shelf"],
+    "edges": [
+      {"from": "left hand", "to": "bear body"},
+      {"from": "right hand", "to": "bear body"},
+      {"from": "bear body", "to": "shelf"}
+    ]
+  },
+  {
+    "interaction": "Grasp t-shirt with both hands",
+    "objects": ["t-shirt"],
+    "edges": [
+      {"from": "left hand", "to": "t-shirt fabric"},
+      {"from": "right hand", "to": "t-shirt fabric"}
+    ]
+  },
+  {
+    "interaction": "Lift t-shirt from coffee table",
+    "objects": ["t-shirt", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "t-shirt fabric"},
+      {"from": "right hand", "to": "t-shirt fabric"}
+    ]
+  },
+  {
+    "interaction": "Place t-shirt on closet",
+    "objects": ["t-shirt", "closet"],
+    "edges": [
+      {"from": "left hand", "to": "t-shirt fabric"},
+      {"from": "right hand", "to": "t-shirt fabric"},
+      {"from": "t-shirt fabric", "to": "closet"}
+    ]
+  },
+  {
+    "interaction": "Grasp sock with both hands",
+    "objects": ["sock"],
+    "edges": [
+      {"from": "left hand", "to": "sock fabric"},
+      {"from": "right hand", "to": "sock fabric"}
+    ]
+  },
+  {
+    "interaction": "Lift sock from TV stand",
+    "objects": ["sock", "TV stand"],
+    "edges": [
+      {"from": "left hand", "to": "sock fabric"},
+      {"from": "right hand", "to": "sock fabric"}
+    ]
+  },
+  {
+    "interaction": "Place sock on closet",
+    "objects": ["sock", "closet"],
+    "edges": [
+      {"from": "left hand", "to": "sock fabric"},
+      {"from": "right hand", "to": "sock fabric"},
+      {"from": "sock fabric", "to": "closet"}
+    ]
+  },
+  {
+    "interaction": "Grasp shoe with both hands",
+    "objects": ["shoe"],
+    "edges": [
+      {"from": "left hand", "to": "shoe body"},
+      {"from": "right hand", "to": "shoe body"}
+    ]
+  },
+  {
+    "interaction": "Lift shoe from coffee table",
+    "objects": ["shoe", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "shoe body"},
+      {"from": "right hand", "to": "shoe body"}
+    ]
+  },
+  {
+    "interaction": "Place shoe on shoe rack",
+    "objects": ["shoe", "shoe rack"],
+    "edges": [
+      {"from": "left hand", "to": "shoe body"},
+      {"from": "right hand", "to": "shoe body"},
+      {"from": "shoe body", "to": "shoe rack"}
+    ]
+  },
+  {
+    "interaction": "Grasp scissors with both hands",
+    "objects": ["scissors"],
+    "edges": [
+      {"from": "left hand", "to": "scissor handles"},
+      {"from": "right hand", "to": "scissor handles"}
+    ]
+  },
+  {
+    "interaction": "Lift scissors from coffee table",
+    "objects": ["scissors", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "scissor handles"},
+      {"from": "right hand", "to": "scissor handles"}
+    ]
+  },
+  {
+    "interaction": "Place scissors on counter",
+    "objects": ["scissors", "counter"],
+    "edges": [
+      {"from": "left hand", "to": "scissor handles"},
+      {"from": "right hand", "to": "scissor handles"},
+      {"from": "scissor handles", "to": "counter"}
+    ]
+  },
+  {
+    "interaction": "Grasp bottle with both hands",
+    "objects": ["bottle"],
+    "edges": [
+      {"from": "left hand", "to": "bottle body"},
+      {"from": "right hand", "to": "bottle body"}
+    ]
+  },
+  {
+    "interaction": "Lift bottle from coffee table",
+    "objects": ["bottle", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "bottle body"},
+      {"from": "right hand", "to": "bottle body"}
+    ]
+  },
+  {
+    "interaction": "Place bottle on medicine cabinet",
+    "objects": ["bottle", "medicine cabinet"],
+    "edges": [
+      {"from": "left hand", "to": "bottle body"},
+      {"from": "right hand", "to": "bottle body"},
+      {"from": "bottle body", "to": "medicine cabinet"}
+    ]
+  },
+  {
+    "interaction": "Grasp can with both hands",
+    "objects": ["can"],
+    "edges": [
+      {"from": "left hand", "to": "can body"},
+      {"from": "right hand", "to": "can body"}
+    ]
+  },
+  {
+    "interaction": "Lift can from coffee table",
+    "objects": ["can", "coffee table"],
+    "edges": [
+      {"from": "left hand", "to": "can body"},
+      {"from": "right hand", "to": "can body"}
+    ]
+  },
+  {
+    "interaction": "Place can on medicine cabinet",
+    "objects": ["can", "medicine cabinet"],
+    "edges": [
+      {"from": "left hand", "to": "can body"},
+      {"from": "right hand", "to": "can body"},
+      {"from": "can body", "to": "medicine cabinet"}
+    ]
+  }
+]

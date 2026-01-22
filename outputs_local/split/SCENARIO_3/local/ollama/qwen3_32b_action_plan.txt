@@ -1,0 +1,59 @@
+he robot can only carry **two boxes at a time**.
+2. The trolley must be **pushed** to the destination before placing boxes.
+3. The robot must **free its hands** after each trip.
+
+---
+
+### ✅ **Step-by-Step Action Plan**
+
+1. **Push the trolley to Table A**  
+   `push_obj_near(trolley A, table A)`
+
+2. **Lift boxes A and B from Table A**  
+   `lift_two_hands_obj_from_loc(box A, box B, table A)`
+
+3. **Place box A on the trolley**  
+   `place_two_hands_one_obj_on_loc(box A, trolley A)`
+
+4. **Place box B on the trolley**  
+   `place_two_hands_one_obj_on_loc(box B, trolley A)`
+
+5. **Push the trolley to Table B**  
+   `push_obj_near(trolley A, table B)`
+
+6. **Place box A on Table B**  
+   `place_two_hands_one_obj_on_loc(box A, table B)`
+
+7. **Place box B on Table B**  
+   `place_two_hands_one_obj_on_loc(box B, table B)`
+
+8. **Free the robot's hands**  
+   `free_two_hands()`
+
+9. **Push the trolley back to Table A**  
+   `push_obj_near(trolley A, table A)`
+
+10. **Lift box C from Table A**  
+    `lift_two_hands_obj_from_loc(box C, table A)`
+
+11. **Place box C on the trolley**  
+    `place_two_hands_one_obj_on_loc(box C, trolley A)`
+
+12. **Push the trolley to Table B**  
+    `push_obj_near(trolley A, table B)`
+
+13. **Place box C on Table B**  
+    `place_two_hands_one_obj_on_loc(box C, table B)`
+
+14. **Free the robot's hands**  
+    `free_two_hands()`
+
+---
+
+### ✅ **Summary**
+
+- **Total trips**: 2 (one for two boxes, one for the third)
+- **Boxes moved**: A, B, and C
+- **Final state**: All boxes are on **Table B**
+
+This plan ensures that the robot adheres to the constraints and efficiently moves all boxes using the trolley.

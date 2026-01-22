@@ -1,0 +1,648 @@
+[
+           "box A, left side",
+           "box A, right side",
+           "box A, front side",
+           "box A, back side",
+           "box A, top side",
+           "box A, bottom side"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box A, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box A, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+2. **Grasp Box B with Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box B, left side",
+           "box B, right side",
+           "box B, front side",
+           "box B, back side",
+           "box B, top side",
+           "box B, bottom side"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box B, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box B, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+3. **Lift Box A from the Location of Box B Using Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box A, left side",
+           "box A, right side",
+           "box A, front side",
+           "box A, back side",
+           "box A, top side",
+           "box A, bottom side"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box A, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box A, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+4. **Place Box A on Trolley A Using Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box A, left side",
+           "box A, right side",
+           "box A, front side",
+           "box A, back side",
+           "box A, top side",
+           "box A, bottom side",
+           "trolley A, main compartment"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box A, bottom side",
+                   "trolley A, main compartment"
+               ]
+           },
+           {
+               "nodes": [
+                   "box A, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box A, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+5. **Place Box B on Trolley A Using Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box B, left side",
+           "box B, right side",
+           "box B, front side",
+           "box B, back side",
+           "box B, top side",
+           "box B, bottom side",
+           "trolley A, main compartment"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box B, bottom side",
+                   "trolley A, main compartment"
+               ]
+           },
+           {
+               "nodes": [
+                   "box B, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box B, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+6. **Free Both Hands**
+   ```json
+   {
+       "object part nodes": [],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": []
+   }
+   ```
+
+7. **Grasp Box C with Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box C, left side",
+           "box C, right side",
+           "box C, front side",
+           "box C, back side",
+           "box C, top side",
+           "box C, bottom side"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box C, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box C, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+8. **Lift Box C from the Location of Table A Using Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box C, left side",
+           "box C, right side",
+           "box C, front side",
+           "box C, back side",
+           "box C, top side",
+           "box C, bottom side"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box C, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box C, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+9. **Place Box C on Trolley A Using Both Hands**
+   ```json
+   {
+       "object part nodes": [
+           "box C, left side",
+           "box C, right side",
+           "box C, front side",
+           "box C, back side",
+           "box C, top side",
+           "box C, bottom side",
+           "trolley A, main compartment"
+       ],
+       "body part nodes": [
+           "person 1, left hand",
+           "person 1, right hand",
+           "person 1, left foot",
+           "person 1, right foot"
+       ],
+       "interaction edges": [
+           {
+               "nodes": [
+                   "box C, bottom side",
+                   "trolley A, main compartment"
+               ]
+           },
+           {
+               "nodes": [
+                   "box C, left side",
+                   "person 1, left hand"
+               ]
+           },
+           {
+               "nodes": [
+                   "box C, right side",
+                   "person 1, right hand"
+               ]
+           }
+       ]
+   }
+   ```
+
+10. **Free Both Hands**
+    ```json
+    {
+        "object part nodes": [],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": []
+    }
+    ```
+
+11. **Push Trolley A Near Table B**
+    ```json
+    {
+        "object part nodes": [
+            "trolley A, main compartment",
+            "table B, top surface"
+        ],
+        "body part nodes": [],
+        "interaction edges": []
+    }
+    ```
+
+12. **Grasp Box A with Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [
+            "box A, left side",
+            "box A, right side",
+            "box A, front side",
+            "box A, back side",
+            "box A, top side",
+            "box A, bottom side"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box A, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box A, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+13. **Grasp Box B with Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [
+            "box B, left side",
+            "box B, right side",
+            "box B, front side",
+            "box B, back side",
+            "box B, top side",
+            "box B, bottom side"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box B, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box B, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+14. **Lift Box A from the Location of Box B Using Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [
+            "box A, left side",
+            "box A, right side",
+            "box A, front side",
+            "box A, back side",
+            "box A, top side",
+            "box A, bottom side"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box A, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box A, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+15. **Place Box A on Table B Using Both Hands**
+    ```json
+    {
+        "object part nodes": [
+            "box A, left side",
+            "box A, right side",
+            "box A, front side",
+            "box A, back side",
+            "box A, top side",
+            "box A, bottom side",
+            "table B, top surface"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box A, bottom side",
+                    "table B, top surface"
+                ]
+            },
+            {
+                "nodes": [
+                    "box A, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box A, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+16. **Place Box B on Table B Using Both Hands**
+    ```json
+    {
+        "object part nodes": [
+            "box B, left side",
+            "box B, right side",
+            "box B, front side",
+            "box B, back side",
+            "box B, top side",
+            "box B, bottom side",
+            "table B, top surface"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box B, bottom side",
+                    "table B, top surface"
+                ]
+            },
+            {
+                "nodes": [
+                    "box B, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box B, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+17. **Free Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": []
+    }
+    ```
+
+18. **Grasp Box C with Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [
+            "box C, left side",
+            "box C, right side",
+            "box C, front side",
+            "box C, back side",
+            "box C, top side",
+            "box C, bottom side"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box C, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box C, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+19. **Lift Box C from the Location of Trolley A Using Both Hands**
+    ```json
+    {
+        "object part nodes": [
+            "box C, left side",
+            "box C, right side",
+            "box C, front side",
+            "box C, back side",
+            "box C, top side",
+            "box C, bottom side"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box C, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box C, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+20. **Place Box C on Table B Using Both Hands**
+    ```json
+    {
+        "object part nodes": [
+            "box C, left side",
+            "box C, right side",
+            "box C, front side",
+            "box C, back side",
+            "box C, top side",
+            "box C, bottom side",
+            "table B, top surface"
+        ],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": [
+            {
+                "nodes": [
+                    "box C, bottom side",
+                    "table B, top surface"
+                ]
+            },
+            {
+                "nodes": [
+                    "box C, left side",
+                    "person 1, left hand"
+                ]
+            },
+            {
+                "nodes": [
+                    "box C, right side",
+                    "person 1, right hand"
+                ]
+            }
+        ]
+    }
+    ```
+
+21. **Free Both Hands (Repeated)**
+    ```json
+    {
+        "object part nodes": [],
+        "body part nodes": [
+            "person 1, left hand",
+            "person 1, right hand",
+            "person 1, left foot",
+            "person 1, right foot"
+        ],
+        "interaction edges": []

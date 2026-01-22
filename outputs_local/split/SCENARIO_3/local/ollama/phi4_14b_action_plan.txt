@@ -1,0 +1,25 @@
+*grasp_two_hands_one_obj(box A)**
+2. **grasp_two_hands_one_obj(box B)**
+3. **lift_two_hands_obj_from_loc(box A, box B)**
+4. **push_obj_near(trolley A, table A)** (Assuming the robot needs to move closer if not already near)
+5. **place_two_hands_one_obj_on_loc(box A, trolley A)**
+6. **place_two_hands_one_obj_on_loc(box B, trolley A)**
+7. **free_two_hands()**
+8. **push_obj_near(trolley A, table B)** (Move the trolley to Table B)
+9. **grasp_two_hands_one_obj(box C)**
+10. **lift_two_hands_obj_from_loc(box C, table A)**
+11. **place_two_hands_one_obj_on_loc(box C, trolley A)**
+12. **free_two_hands()**
+13. **push_obj_near(trolley A, table B)** (Move the trolley to Table B again)
+14. **grasp_two_hands_one_obj(box A)**
+15. **grasp_two_hands_one_obj(box B)**
+16. **lift_two_hands_obj_from_loc(box A, trolley A)**
+17. **place_two_hands_one_obj_on_loc(box A, table B)**
+18. **free_two_hands()**
+19. **grasp_two_hands_one_obj(box B)**
+20. **lift_two_hands_obj_from_loc(box B, trolley A)**
+21. **place_two_hands_one_obj_on_loc(box B, table B)**
+22. **free_two_hands()**
+23. **grasp_two_hands_one_obj(box C)**
+24. **lift_two_hands_obj_from_loc(box C, trolley A)**
+25. **place_two_hands_one_obj_on_loc(box C, table B)**

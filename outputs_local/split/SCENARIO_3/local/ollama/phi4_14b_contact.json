@@ -1,0 +1,430 @@
+[
+  {
+    "object part nodes": [
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, top side",
+      "box A, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box A, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, top side",
+      "box B, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box B, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, top side",
+      "box A, bottom side",
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, top side",
+      "box B, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box B, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "trolley A, wheels",
+      "table A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left foot",
+      "robot 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box A, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "trolley A, wheels",
+      "table B, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left foot",
+      "robot 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box C, left side",
+      "box C, right side",
+      "box C, front side",
+      "box C, back side",
+      "box C, top side",
+      "box C, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box C, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, bottom side",
+      "table A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, bottom side", "table A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "trolley A, wheels",
+      "table B, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left foot",
+      "robot 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, top side",
+      "box A, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box A, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, top side",
+      "box B, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box B, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box A, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box A, bottom side",
+      "table B, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box A, bottom side", "table B, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, top side",
+      "box B, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box B, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, bottom side",
+      "table B, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box B, bottom side", "table B, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, left side",
+      "box C, right side",
+      "box C, front side",
+      "box C, back side",
+      "box C, top side",
+      "box C, bottom side"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, left side", "robot 1, left hand"]
+      },
+      {
+        "nodes": ["box C, right side", "robot 1, right hand"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, bottom side",
+      "trolley A, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, bottom side", "trolley A, top surface"]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, bottom side",
+      "table B, top surface"
+    ],
+    "body part nodes": [
+      "robot 1, left hand",
+      "robot 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": ["box C, bottom side", "table B, top surface"]
+      }
+    ]
+  }
+]
+ALL NODES:
+[
+  "box A, left side",
+  "box A, right side",
+  "box A, front side",
+  "box A, back side",
+  "box A, top side",
+  "box A, bottom side",
+  "box B, left side",
+  "box B, right side",
+  "box B, front side",
+  "box B, back side",
+  "box B, top side",
+  "box B, bottom side",
+  "box C, left side",
+  "box C, right side",
+  "box C, front side",
+  "box C, back side",
+  "box C, top side",
+  "box C, bottom side",
+  "robot 1, left hand",
+  "robot 1, right hand",
+  "trolley A, wheels",
+  "table A, top surface",
+  "trolley A, top surface",
+  "table B, top surface"
+]
+ALL EDGES:
+[
+  {
+    "nodes": ["box A, bottom side", "trolley A, top surface"]
+  },
+  {
+    "nodes": ["box B, bottom side", "trolley A, top surface"]
+  },
+  {
+    "nodes": ["box C, bottom side", "trolley A, top surface"]
+  },
+  {
+    "nodes": ["box A, bottom side", "table B, top surface"]
+  },
+  {
+    "nodes": ["box B, bottom side", "table B, top surface"]
+  },
+  {
+    "nodes": ["box C, bottom side", "table B, top surface"]
+  }
+]

@@ -1,0 +1,134 @@
+[
+  {
+    "object part nodes": [
+      "cup_a, left side",
+      "cup_a, right side",
+      "cup_a, front side",
+      "cup_a, back side",
+      "cup_a, top side",
+      "cup_a, bottom side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_a, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_a, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "milk_carton, left side",
+      "milk_carton, right side",
+      "milk_carton, top side",
+      "milk_carton, bottom side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "milk_carton, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "milk_carton, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "sugar_jar, left side",
+      "sugar_jar, right side",
+      "sugar_jar, top side",
+      "sugar_jar, bottom side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sugar_jar, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sugar_jar, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "cup_b, left side",
+      "cup_b, right side",
+      "cup_b, front side",
+      "cup_b, back side",
+      "cup_b, top side",
+      "cup_b, bottom side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_b, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "coffee_machine, button"
+    ],
+    "body part nodes": [
+      "person 1, left hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "coffee_machine, button",
+          "person 1, left hand"
+        ]
+      }
+    ]
+  }
+]

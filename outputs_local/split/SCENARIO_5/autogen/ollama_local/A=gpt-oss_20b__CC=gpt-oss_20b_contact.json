@@ -1,0 +1,656 @@
+[
+  {
+    "object part nodes": [
+      "SJ, lid",
+      "SJ, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "SJ, lid",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "SJ, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "F, lid",
+      "F, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "F, lid",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "F, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "MC, handle",
+      "MC, spout",
+      "MC, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "counter, top surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "counter, top surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "S, bottom",
+      "S, sides"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "S, bottom"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "S, bottom",
+      "S, sides",
+      "DS, handle",
+      "DS, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "S, bottom"
+        ]
+      },
+      {
+        "nodes": [
+          "DS, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "DS, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "DR, surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "DR, surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "DR, surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "DR, surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body",
+      "counter, top surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, bottom",
+          "counter, top surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "SJ, lid",
+      "SJ, body",
+      "sugar, grains",
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "MC, handle",
+      "MC, spout",
+      "MC, body",
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, spout",
+          "CUP_B, rim"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "MC, handle",
+      "MC, spout",
+      "MC, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "MC, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "F, lid",
+      "F, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "F, lid",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "F, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "SJ, lid",
+      "SJ, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "SJ, lid",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "SJ, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CM, button",
+      "CM, cup holder",
+      "CM, spout",
+      "START, button"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CM, button",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CM, button",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CM, button",
+      "CM, cup holder",
+      "CM, spout",
+      "CUP_A, handle",
+      "CUP_A, rim",
+      "CUP_A, bottom",
+      "CUP_A, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CM, cup holder",
+          "CUP_A, bottom"
+        ]
+      },
+      {
+        "nodes": [
+          "CM, spout",
+          "CUP_A, rim"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_A, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_A, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "CM, button",
+      "CM, cup holder",
+      "CM, spout",
+      "CUP_B, handle",
+      "CUP_B, rim",
+      "CUP_B, bottom",
+      "CUP_B, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "CM, cup holder",
+          "CUP_B, bottom"
+        ]
+      },
+      {
+        "nodes": [
+          "CM, spout",
+          "CUP_B, rim"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "CUP_B, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  }
+]

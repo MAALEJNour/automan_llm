@@ -1,0 +1,132 @@
+*grasp_two_hands_one_obj(mug1)**
+2. **lift_two_hands_obj_from_loc(mug1, B_side)**
+3. **place_two_hands_one_obj_on_loc(mug1, K_sink)**
+4. **free_two_hands()**
+
+5. **grasp_two_hands_one_obj(can_empty)**
+6. **lift_two_hands_obj_from_loc(can_empty, B_side)**
+7. **stand(K_trash)**
+8. **place_two_hands_one_obj_on_loc(can_empty, K_trash)**
+9. **free_two_hands()**
+
+10. **grasp_two_hands_one_obj(plate1)**
+11. **lift_two_hands_obj_from_loc(plate1, L_coffee)**
+12. **stand(K_counter)**
+13. **place_two_hands_one_obj_on_loc(plate1, K_counter)**
+14. **free_two_hands()**
+
+15. **grasp_two_hands_one_obj(bowl1)**
+16. **lift_two_hands_obj_from_loc(bowl1, B_bed)**
+17. **stand(K_counter)**
+18. **place_two_hands_one_obj_on_loc(bowl1, K_counter)**
+19. **free_two_hands()**
+
+20. **grasp_two_hands_one_obj(toy_car)**
+21. **lift_two_hands_obj_from_loc(toy_car, K_counter)**
+22. **stand(L_toys)**
+23. **place_two_hands_one_obj_on_loc(toy_car, L_toys)**
+24. **free_two_hands()**
+
+25. **grasp_two_hands_one_obj(plush_bear)**
+26. **lift_two_hands_obj_from_loc(plush_bear, BA_sink)**
+27. **stand(L_toys)**
+28. **place_two_hands_one_obj_on_loc(plush_bear, L_toys)**
+29. **free_two_hands()**
+
+30. **grasp_two_hands_one_obj(tshirt1)**
+31. **lift_two_hands_obj_from_loc(tshirt1, L_coffee)**
+32. **stand(B_closet)**
+33. **place_two_hands_one_obj_on_loc(tshirt1, B_closet)**
+34. **free_two_hands()**
+
+35. **grasp_two_hands_one_obj(sock1)**
+36. **lift_two_hands_obj_from_loc(sock1, L_tv)**
+37. **stand(B_closet)**
+38. **place_two_hands_one_obj_on_loc(sock1, B_closet)**
+39. **free_two_hands()**
+
+40. **grasp_two_hands_one_obj(shoe_pair1)**
+41. **lift_two_hands_obj_from_loc(shoe_pair1, L_coffee)**
+42. **stand(L_shoes)**
+43. **place_two_hands_one_obj_on_loc(shoe_pair1, L_shoes)**
+44. **free_two_hands()**
+
+45. **grasp_two_hands_one_obj(scissors1)**
+46. **lift_two_hands_obj_from_loc(scissors1, L_coffee)**
+47. **stand(K_counter)**
+48. **place_two_hands_one_obj_on_loc(scissors1, K_counter)**
+49. **free_two_hands()**
+
+50. **grasp_two_hands_one_obj(remote1)**
+51. **lift_two_hands_obj_from_loc(remote1, K_counter)**
+52. **stand(L_tv)**
+53. **place_two_hands_one_obj_on_loc(remote1, L_tv)**
+54. **free_two_hands()**
+
+55. **grasp_two_hands_one_obj(pill_bottle)**
+56. **lift_two_hands_obj_from_loc(pill_bottle, L_coffee)**
+57. **stand(BA_med)**
+58. **place_two_hands_one_obj_on_loc(pill_bottle, BA_med)**
+59. **free_two_hands()**
+
+60. **grasp_two_hands_one_obj(tissue_used)**
+61. **lift_two_hands_obj_from_loc(tissue_used, L_coffee)**
+62. **stand(K_trash)**
+63. **place_two_hands_one_obj_on_loc(tissue_used, K_trash)**
+64. **free_two_hands()**
+
+65. **open_DW(DW)**
+66. **grasp_two_hands_one_obj(DW)**
+67. **lift_two_hands_obj_from_loc(DW, DW_location)**
+68. **stand(K_counter)**
+69. **place_two_hands_one_obj_on_loc(DW, K_counter)**
+70. **close_DW()**
+71. **free_two_hands()**
+
+72. **open_DW(DW)**
+73. **grasp_two_hands_one_obj(DW)**
+74. **lift_two_hands_obj_from_loc(DW, DW_location)**
+75. **stand(L_shoes)**
+76. **place_two_hands_one_obj_on_loc(DW, L_shoes)**
+77. **close_DW()**
+78. **free_two_hands()**
+
+79. **open_DW(DW)**
+80. **grasp_two_hands_one_obj(DW)**
+81. **lift_two_hands_obj_from_loc(DW, DW_location)**
+82. **stand(B_closet)**
+83. **place_two_hands_one_obj_on_loc(DW, B_closet)**
+84. **close_DW()**
+85. **free_two_hands()**
+
+86. **open_DW(DW)**
+87. **grasp_two_hands_one_obj(DW)**
+88. **lift_two_hands_obj_from_loc(DW, DW_location)**
+89. **stand(BA_med)**
+90. **place_two_hands_one_obj_on_loc(DW, BA_med)**
+91. **close_DW()**
+92. **free_two_hands()**
+
+93. **open_DW(DW)**
+94. **grasp_two_hands_one_obj(DW)**
+95. **lift_two_hands_obj_from_loc(DW, DW_location)**
+96. **stand(L_tv)**
+97. **place_two_hands_one_obj_on_loc(DW, L_tv)**
+98. **close_DW()**
+99. **free_two_hands()**
+
+100. **open_DW(DW)**
+101. **grasp_two_hands_one_obj(DW)**
+102. **lift_two_hands_obj_from_loc(DW, DW_location)**
+103. **stand(L_toys)**
+104. **place_two_hands_one_obj_on_loc(DW, L_toys)**
+105. **close_DW()**
+106. **free_two_hands()**
+
+107. **open_DW(DW)**
+108. **grasp_two_hands_one_obj(DW)**
+109. **lift_two_hands_obj_from_loc(DW, DW_location)**
+110. **stand(K_trash)**
+111. **place_two_hands_one_obj_on_loc(DW, K_trash)**
+112. **close_DW()**
+113. **free_two_hands()**

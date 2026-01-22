@@ -1,0 +1,242 @@
+[
+  {
+    "object part nodes": [
+      "mug1, handle",
+      "mug1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "mug1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "mug1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plate1, rim",
+      "plate1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plate1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plate1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "bowl1, rim",
+      "bowl1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "bowl1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "bowl1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "toy_car, body",
+      "toy_car, wheels"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "toy_car, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "toy_car, wheels",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plush_bear, body",
+      "plush_bear, head"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plush_bear, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plush_bear, head",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tshirt1, sleeve",
+      "tshirt1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tshirt1, sleeve",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tshirt1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "sock1, top",
+      "sock1, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sock1, top",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sock1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "shoe_pair1, sole",
+      "shoe_pair1, upper"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "shoe_pair1, sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "shoe_pair1, upper",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "scissors, handle",
+      "scissors, blade"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "scissors, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "scissors, blade",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "remote_control, body",
+      "remote_control, buttons"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "remote_control, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "remote_control, buttons",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  }
+]

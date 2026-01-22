@@ -1,0 +1,326 @@
+[
+  {
+    "object part nodes": [
+      "box A, top side",
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, bottom side"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box A, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box A, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box A, top side",
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, bottom side",
+      "table A, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box A, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box A, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box A, top side",
+      "box A, left side",
+      "box A, right side",
+      "box A, front side",
+      "box A, back side",
+      "box A, bottom side",
+      "table B, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box A, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box A, right side",
+          "right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box A, bottom side",
+          "table B, table top"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box B, top side",
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, bottom side"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box B, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box B, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, top side",
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, bottom side",
+      "table A, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box B, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box B, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box B, top side",
+      "box B, left side",
+      "box B, right side",
+      "box B, front side",
+      "box B, back side",
+      "box B, bottom side",
+      "table B, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box B, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box B, right side",
+          "right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box B, bottom side",
+          "table B, table top"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "box C, top side",
+      "box C, left side",
+      "box C, right side",
+      "box C, front side",
+      "box C, back side",
+      "box C, bottom side"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box C, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box C, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, top side",
+      "box C, left side",
+      "box C, right side",
+      "box C, front side",
+      "box C, back side",
+      "box C, bottom side",
+      "table A, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box C, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box C, right side",
+          "right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "box C, top side",
+      "box C, left side",
+      "box C, right side",
+      "box C, front side",
+      "box C, back side",
+      "box C, bottom side",
+      "table B, table top"
+    ],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "box C, left side",
+          "left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box C, right side",
+          "right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "box C, bottom side",
+          "table B, table top"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "left hand",
+      "right hand",
+      "left foot",
+      "right foot"
+    ],
+    "interaction edges": []
+  }
+]

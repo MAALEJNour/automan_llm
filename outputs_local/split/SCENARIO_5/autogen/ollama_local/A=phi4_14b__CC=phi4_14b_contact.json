@@ -1,0 +1,92 @@
+[
+  {
+    "object": ["CM"],
+    "interaction": "grasp CM with both hands",
+    "graph": {
+      "objects": ["coffee maker"],
+      "parts": ["coffee maker, handle"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["CM", "floor"],
+    "interaction": "lift CM from the floor using both hands",
+    "graph": {
+      "objects": ["coffee maker", "floor"],
+      "parts": ["coffee maker, base"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["CM"],
+    "interaction": "place CM on its platform",
+    "graph": {
+      "objects": ["coffee maker", "platform"],
+      "parts": ["coffee maker, base", "platform, surface"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["CM"],
+    "interaction": "press the START button on CM",
+    "graph": {
+      "objects": ["coffee maker"],
+      "parts": ["coffee maker, start button"],
+      "body_parts": ["left hand"] // Assuming left hand for pressing
+    }
+  },
+  {
+    "object": ["CM"],
+    "interaction": "press the OFF button on CM",
+    "graph": {
+      "objects": ["coffee maker"],
+      "parts": ["coffee maker, off button"],
+      "body_parts": ["right hand"] // Assuming right hand for pressing
+    }
+  },
+  {
+    "object": ["MC"],
+    "interaction": "grasp MC with both hands",
+    "graph": {
+      "objects": ["milk carton"],
+      "parts": ["milk carton, handle"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["MC", "F"],
+    "interaction": "lift MC from F using both hands",
+    "graph": {
+      "objects": ["milk carton", "fridge"],
+      "parts": ["milk carton, base", "fridge, shelf"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["MC"],
+    "interaction": "place MC on the floor",
+    "graph": {
+      "objects": ["milk carton", "floor"],
+      "parts": ["milk carton, base", "floor, surface"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["CUP_B"],
+    "interaction": "grasp CUP B with both hands",
+    "graph": {
+      "objects": ["cup B"],
+      "parts": ["cup B, handle"], // Assuming handle for grasping
+      "body_parts": ["left hand", "right hand"]
+    }
+  },
+  {
+    "object": ["CUP_B", "DR"],
+    "interaction": "place CUP B on DR to dry it",
+    "graph": {
+      "objects": ["cup B", "drying rack"],
+      "parts": ["cup B, base", "drying rack, surface"],
+      "body_parts": ["left hand", "right hand"]
+    }
+  }
+]

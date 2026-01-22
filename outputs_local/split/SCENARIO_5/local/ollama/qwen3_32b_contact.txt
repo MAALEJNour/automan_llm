@@ -1,0 +1,129 @@
+
+```json  
+[  
+  {  
+    "object part nodes": ["fridge, handle"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["fridge, handle", "person 1, left hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, left side", "milk carton, right side"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, left side", "person 1, left hand"] },  
+      { "nodes": ["milk carton, right side", "person 1, right hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, base", "fridge, interior"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, base", "fridge, interior"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, base", "countertop, surface"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, base", "countertop, surface"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, lid"],  
+    "body part nodes": ["person 1, left hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, lid", "person 1, left hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["coffee machine, button"],  
+    "body part nodes": ["person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["coffee machine, button", "person 1, right hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["coffee machine, spout", "cup A, rim"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["coffee machine, spout", "cup A, rim"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["cup B, exterior", "sink, basin", "dish soap, liquid"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["cup B, exterior", "sink, basin"] },  
+      { "nodes": ["cup B, exterior", "dish soap, liquid"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["cup B, surface", "drying rack, slots"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["cup B, surface", "drying rack, slots"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["coffee machine, spout", "cup B, rim"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["coffee machine, spout", "cup B, rim"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["sugar jar, lid"],  
+    "body part nodes": ["person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["sugar jar, lid", "person 1, right hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["sugar jar, interior", "cup B, interior"],  
+    "body part nodes": ["person 1, left hand"],  
+    "interaction edges": [  
+      { "nodes": ["sugar jar, interior", "cup B, interior"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, spout", "cup B, rim"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, spout", "cup B, rim"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, lid"],  
+    "body part nodes": ["person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, lid", "person 1, right hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["milk carton, base", "fridge, interior"],  
+    "body part nodes": ["person 1, left hand", "person 1, right hand"],  
+    "interaction edges": [  
+      { "nodes": ["milk carton, base", "fridge, interior"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["fridge, handle"],  
+    "body part nodes": ["person 1, left hand"],  
+    "interaction edges": [  
+      { "nodes": ["fridge, handle", "person 1, left hand"] }  
+    ]  
+  },  
+  {  
+    "object part nodes": ["sugar jar, lid"],  
+    "body part nodes": ["person 1, left hand"],  
+    "interaction edges": [  
+      { "nodes": ["sugar jar, lid", "person 1, left hand"] }  
+    ]  
+  }  
+]  
+```  
+---  
+**ALL**  
+ALL

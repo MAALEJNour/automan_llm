@@ -1,0 +1,17 @@
+*Grasp box A** from table A.
+2. **Lift box A** from table A.
+3. **Place box A** on table C.
+4. **Free both hands** after placing box A.
+
+5. **Grasp box B** from table B.
+6. **Lift box B** from table B.
+7. **Place box B** on table C.
+8. **Free both hands** after placing box B.
+
+9. **Stand on the floor** (if needed for reaching).
+10. **Grasp box C** from the floor.
+11. **Lift box C** from the floor.
+12. **Place box C** on table C.
+13. **Free both hands** after placing box C.
+
+This sequence ensures all boxes are placed on table C using the specified actions.

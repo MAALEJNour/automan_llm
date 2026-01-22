@@ -1,0 +1,49 @@
+1. stand(CM)
+2. grasp_two_hands_one_obj(CM)
+3. lift_two_hands_obj_from_loc(CM, floor)
+4. place_two_hands_one_obj_on_loc(CM, CM)  // Ensure it's on its platform
+5. press_button(CM, START)
+6. dispense_coffee(CM, CUP_A)
+7. free_two_hands()
+8. grasp_two_hands_one_obj(CM)
+9. lift_two_hands_obj_from_loc(CM, floor)
+10. place_two_hands_one_obj_on_loc(CM, CM)  // Ensure it's on its platform
+11. press_button(CM, OFF)
+
+12. stand(F)
+13. grasp_two_hands_one_obj(MC)
+14. lift_two_hands_obj_from_loc(MC, F)
+15. close_container(F)
+16. free_two_hands()
+
+17. grasp_two_hands_one_obj(MC)
+18. place_two_hands_one_obj_on_loc(MC, floor)
+
+19. stand(SJ)
+20. open_container(SJ)
+21. scoop_from_to(SJ, CUP_B, sugar)
+22. close_container(SJ)
+
+23. grasp_two_hands_one_obj(MC)
+24. lift_two_hands_obj_from_loc(MC, floor)
+25. pour_from_to(MC, CUP_B, milk)
+
+26. stand(CM)
+27. grasp_two_hands_one_obj(CM)
+28. lift_two_hands_obj_from_loc(CM, floor)
+29. place_two_hands_one_obj_on_loc(CM, CM)  // Ensure it's on its platform
+30. press_button(CM, START)
+31. dispense_coffee(CM, CUP_B)
+32. free_two_hands()
+
+33. grasp_two_hands_one_obj(CM)
+34. lift_two_hands_obj_from_loc(CM, floor)
+35. place_two_hands_one_obj_on_loc(CM, CM)  // Ensure it's on its platform
+36. press_button(CM, OFF)
+
+37. stand(B)  // Assuming B is a location near the sink for drying CUP_B
+38. grasp_two_hands_one_obj(CUP_B)
+39. lift_two_hands_obj_from_loc(CUP_B, floor)
+40. place_two_hands_one_obj_on_loc(CUP_B, DR)  // Dry CUP_B
+
+41. free_two_hands()

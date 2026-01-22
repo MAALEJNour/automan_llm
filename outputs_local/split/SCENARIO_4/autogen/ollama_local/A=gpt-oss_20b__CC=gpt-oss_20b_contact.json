@@ -1,0 +1,998 @@
+[
+  {
+    "object part nodes": [
+      "mug1, handle",
+      "mug1, body",
+      "mug1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "mug1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "mug1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "mug1, handle",
+      "mug1, body",
+      "mug1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "mug1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "mug1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "mug1, handle",
+      "mug1, body",
+      "mug1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "mug1, handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "mug1, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "plate1, rim",
+      "plate1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plate1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plate1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plate1, rim",
+      "plate1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plate1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plate1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plate1, rim",
+      "plate1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plate1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plate1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "bowl1, rim",
+      "bowl1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "bowl1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "bowl1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "bowl1, rim",
+      "bowl1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "bowl1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "bowl1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "bowl1, rim",
+      "bowl1, base"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "bowl1, rim",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "bowl1, base",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "toy_car, wheels",
+      "toy_car, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "toy_car, wheels",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "toy_car, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "toy_car, wheels",
+      "toy_car, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "toy_car, wheels",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "toy_car, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "toy_car, wheels",
+      "toy_car, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "toy_car, wheels",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "toy_car, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "plush_bear, paws",
+      "plush_bear, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plush_bear, paws",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plush_bear, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plush_bear, paws",
+      "plush_bear, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plush_bear, paws",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plush_bear, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "plush_bear, paws",
+      "plush_bear, body"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "plush_bear, paws",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "plush_bear, body",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "tshirt1, front",
+      "tshirt1, back"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tshirt1, front",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tshirt1, back",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tshirt1, front",
+      "tshirt1, back"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tshirt1, front",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tshirt1, back",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tshirt1, front",
+      "tshirt1, back"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tshirt1, front",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tshirt1, back",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "sock1, sole",
+      "sock1, upper"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sock1, sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sock1, upper",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "sock1, sole",
+      "sock1, upper"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sock1, sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sock1, upper",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "sock1, sole",
+      "sock1, upper"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "sock1, sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "sock1, upper",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "shoe_pair1, left shoe sole",
+      "shoe_pair1, right shoe sole"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "shoe_pair1, left shoe sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "shoe_pair1, right shoe sole",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "shoe_pair1, left shoe sole",
+      "shoe_pair1, right shoe sole"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "shoe_pair1, left shoe sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "shoe_pair1, right shoe sole",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "shoe_pair1, left shoe sole",
+      "shoe_pair1, right shoe sole"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "shoe_pair1, left shoe sole",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "shoe_pair1, right shoe sole",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "scissors1, blades",
+      "scissors1, handle"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "scissors1, blades",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "scissors1, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "scissors1, blades",
+      "scissors1, handle"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "scissors1, blades",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "scissors1, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "scissors1, blades",
+      "scissors1, handle"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "scissors1, blades",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "scissors1, handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "pill_bottle, body",
+      "pill_bottle, cap"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "pill_bottle, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "pill_bottle, cap",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "pill_bottle, body",
+      "pill_bottle, cap"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "pill_bottle, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "pill_bottle, cap",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "pill_bottle, body",
+      "pill_bottle, cap"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "pill_bottle, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "pill_bottle, cap",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "can_empty, body",
+      "can_empty, lid"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "can_empty, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "can_empty, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "can_empty, body",
+      "can_empty, lid"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "can_empty, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "can_empty, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "can_empty, body",
+      "can_empty, lid"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "can_empty, body",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "can_empty, lid",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "tissue_used, sheet"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tissue_used, sheet"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "tissue_used, sheet"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "tissue_used, sheet",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [],
+    "interaction edges": []
+  }
+]

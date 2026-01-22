@@ -1,0 +1,421 @@
+ 
+```json
+[
+  {
+    "objects": ["DW"],
+    "contact_graph": {
+      "object_parts": ["DW, door handle"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "DW, door handle", "to": "left hand"},
+        {"from": "DW, door handle", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["mug1", "B_side"],
+    "contact_graph": {
+      "object_parts": ["mug1, handle"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "mug1, handle", "to": "left hand"},
+        {"from": "mug1, handle", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["mug1"],
+    "contact_graph": {
+      "object_parts": ["mug1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "mug1, body", "to": "left hand"},
+        {"from": "mug1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["mug1", "DW"],
+    "contact_graph": {
+      "object_parts": ["mug1, rim"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "mug1, rim", "to": "left hand"},
+        {"from": "mug1, rim", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plate1", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["plate1, edge"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plate1, edge", "to": "left hand"},
+        {"from": "plate1, edge", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plate1"],
+    "contact_graph": {
+      "object_parts": ["plate1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plate1, body", "to": "left hand"},
+        {"from": "plate1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plate1", "DW"],
+    "contact_graph": {
+      "object_parts": ["plate1, rim"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plate1, rim", "to": "left hand"},
+        {"from": "plate1, rim", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["bowl1", "B_bed"],
+    "contact_graph": {
+      "object_parts": ["bowl1, rim"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "bowl1, rim", "to": "left hand"},
+        {"from": "bowl1, rim", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["bowl1"],
+    "contact_graph": {
+      "object_parts": ["bowl1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "bowl1, body", "to": "left hand"},
+        {"from": "bowl1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["bowl1", "DW"],
+    "contact_graph": {
+      "object_parts": ["bowl1, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "bowl1, base", "to": "left hand"},
+        {"from": "bowl1, base", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["DW"],
+    "contact_graph": {
+      "object_parts": ["DW, door handle"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "DW, door handle", "to": "left hand"},
+        {"from": "DW, door handle", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["toy_car", "K_counter"],
+    "contact_graph": {
+      "object_parts": ["toy_car, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "toy_car, body", "to": "left hand"},
+        {"from": "toy_car, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["toy_car"],
+    "contact_graph": {
+      "object_parts": ["toy_car, wheels"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "toy_car, wheels", "to": "left hand"},
+        {"from": "toy_car, wheels", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["toy_car", "L_toys"],
+    "contact_graph": {
+      "object_parts": ["toy_car, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "toy_car, base", "to": "left hand"},
+        {"from": "toy_car, base", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plush_bear", "BA_sink"],
+    "contact_graph": {
+      "object_parts": ["plush_bear, head"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plush_bear, head", "to": "left hand"},
+        {"from": "plush_bear, head", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plush_bear"],
+    "contact_graph": {
+      "object_parts": ["plush_bear, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plush_bear, body", "to": "left hand"},
+        {"from": "plush_bear, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["plush_bear", "L_toys"],
+    "contact_graph": {
+      "object_parts": ["plush_bear, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "plush_bear, base", "to": "left hand"},
+        {"from": "plush_bear, base", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["tshirt1", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["tshirt1, hem"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "tshirt1, hem", "to": "left hand"},
+        {"from": "tshirt1, hem", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["tshirt1"],
+    "contact_graph": {
+      "object_parts": ["tshirt1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "tshirt1, body", "to": "left hand"},
+        {"from": "tshirt1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["tshirt1", "B_laundry"],
+    "contact_graph": {
+      "object_parts": ["tshirt1, sleeve"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "tshirt1, sleeve", "to": "left hand"},
+        {"from": "tshirt1, sleeve", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["sock1", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["sock1, toe"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "sock1, toe", "to": "left hand"},
+        {"from": "sock1, toe", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["sock1"],
+    "contact_graph": {
+      "object_parts": ["sock1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "sock1, body", "to": "left hand"},
+        {"from": "sock1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["sock1", "B_laundry"],
+    "contact_graph": {
+      "object_parts": ["sock1, heel"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "sock1, heel", "to": "left hand"},
+        {"from": "sock1, heel", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["shoe_pair1", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["shoe_pair1, laces"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "shoe_pair1, laces", "to": "left hand"},
+        {"from": "shoe_pair1, laces", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "contact_graph": {
+      "object_parts": ["shoe_pair1, sole"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "shoe_pair1, sole", "to": "left hand"},
+        {"from": "shoe_pair1, sole", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["shoe_pair1", "E_shoes"],
+    "contact_graph": {
+      "object_parts": ["shoe_pair1, toe"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "shoe_pair1, toe", "to": "left hand"},
+        {"from": "shoe_pair1, toe", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["scissors1", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["scissors1, handle"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "scissors1, handle", "to": "left hand"},
+        {"from": "scissors1, handle", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["scissors1"],
+    "contact_graph": {
+      "object_parts": ["scissors1, blade"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "scissors1, blade", "to": "left hand"},
+        {"from": "scissors1, blade", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["scissors1", "K_counter"],
+    "contact_graph": {
+      "object_parts": ["scissors1, tip"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "scissors1, tip", "to": "left hand"},
+        {"from": "scissors1, tip", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["remote1", "K_counter"],
+    "contact_graph": {
+      "object_parts": ["remote1, buttons"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "remote1, buttons", "to": "left hand"},
+        {"from": "remote1, buttons", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["remote1"],
+    "contact_graph": {
+      "object_parts": ["remote1, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "remote1, body", "to": "left hand"},
+        {"from": "remote1, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["remote1", "L_tv"],
+    "contact_graph": {
+      "object_parts": ["remote1, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "remote1, base", "to": "left hand"},
+        {"from": "remote1, base", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["pill_bottle", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["pill_bottle, cap"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "pill_bottle, cap", "to": "left hand"},
+        {"from": "pill_bottle, cap", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["pill_bottle"],
+    "contact_graph": {
+      "object_parts": ["pill_bottle, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "pill_bottle, body", "to": "left hand"},
+        {"from": "pill_bottle, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["pill_bottle", "BA_med"],
+    "contact_graph": {
+      "object_parts": ["pill_bottle, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "pill_bottle, base", "to": "left hand"},
+        {"from": "pill_bottle, base", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["can", "L_coffee"],
+    "contact_graph": {
+      "object_parts": ["can, tab"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "can, tab", "to": "left hand"},
+        {"from": "can, tab", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["can"],
+    "contact_graph": {
+      "object_parts": ["can, body"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "can, body", "to": "left hand"},
+        {"from": "can, body", "to": "right hand"}
+      ]
+    }
+  },
+  {
+    "objects": ["can", "L_recycling"],
+    "contact_graph": {
+      "object_parts": ["can, base"],
+      "body_parts": ["left hand", "right hand"],
+      "edges": [
+        {"from": "can, base", "to": "left hand"},
+        {"from": "can, base", "to": "right hand"}
+      ]
+    }
+  }

@@ -1,0 +1,5 @@
+grasp_two_hands_one_obj(box A)`: The robot grasps box A using both hands.
+2. `lift_two_hands_obj_from_loc(box A, floor)`: Lift box A from the floor.
+3. `stand(shelf A)`: Stand on shelf A to increase the robot's base height by 1.5 m (total height = 2.2 m).
+4. `place_two_hands_one_obj_on_loc(box A, shelf A)`: Place box A on shelf A.
+5. `free_two_hands()`: Free both hands after placing box A.
