@@ -1,0 +1,125 @@
+[
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["CUP_A, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_A, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_B, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_B, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_B, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_B, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["SJ, lid"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["SJ, lid", "person 1, left hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["SJ, main body", "CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["SJ, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["MC, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["MC, main body", "person 1, left hand"]},
+      {"nodes": ["MC, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["MC, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["MC, main body", "person 1, left hand"]},
+      {"nodes": ["MC, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": ["MC, main body", "CUP_B, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["MC, main body", "person 1, left hand"]},
+      {"nodes": ["CUP_B, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": ["MC, main body"],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": [
+      {"nodes": ["MC, main body", "person 1, left hand"]},
+      {"nodes": ["MC, main body", "person 1, right hand"]}
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": ["person 1, left hand", "person 1, right hand", "person 1, left foot", "person 1, right foot"],
+    "interaction edges": []
+  }
+]

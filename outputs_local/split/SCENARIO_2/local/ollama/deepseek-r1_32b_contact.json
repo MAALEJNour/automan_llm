@@ -1,0 +1,122 @@
+[
+  {
+    "object part nodes": [
+      "Box B, top side",
+      "Box B, bottom side",
+      "Box B, front side",
+      "Box B, back side",
+      "Box B, left side",
+      "Box B, right side"
+    ],
+    "body part nodes": [
+      "person 1, left foot",
+      "person 1, right foot",
+      "person 1, left hand",
+      "person 1, right hand"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "Box B, top side",
+          "person 1, left foot"
+        ]
+      },
+      {
+        "nodes": [
+          "Box B, top side",
+          "person 1, right foot"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "Box A, top side",
+      "Box A, bottom side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, left side",
+      "Box A, right side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "Box A, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "Box A, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "Box A, top side",
+      "Box A, bottom side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, left side",
+      "Box A, right side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "Box A, left side",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "Box A, right side",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "Box A, top side",
+      "Box A, bottom side",
+      "Box A, front side",
+      "Box A, back side",
+      "Box A, left side",
+      "Box A, right side",
+      "Shelf A, top side",
+      "Shelf A, bottom side",
+      "Shelf A, front side",
+      "Shelf A, back side",
+      "Shelf A, left side",
+      "Shelf A, right side"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "Box A, bottom side",
+          "Shelf A, top side"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+1. stand(Box B)
+2. grasp_two_hands_one_obj(Box A)
+3. lift_two_hands_obj_from_loc(Box A, floor)
+4. place_two_hands_one_obj_on_loc(Box A, Shelf A)
