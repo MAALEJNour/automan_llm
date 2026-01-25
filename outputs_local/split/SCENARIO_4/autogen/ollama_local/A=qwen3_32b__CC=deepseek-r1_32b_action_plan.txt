@@ -1,0 +1,416 @@
+rasp can_empty from B_side  
+2. Lift can_empty from B_side  
+3. Place can_empty into K_trash  
+4. Free hands  
+5. Grasp tissue_used from L_coffee  
+6. Lift tissue_used from L_coffee  
+7. Place tissue_used into K_trash  
+8. Free hands  
+9. Open_door(DW)  
+10. Grasp mug1 from B_side  
+11. Lift mug1 from B_side  
+12. Place mug1 into DW  
+13. Free hands  
+14. Grasp plate1 from L_coffee  
+15. Lift plate1 from L_coffee  
+16. Place plate1 into DW  
+17. Free hands  
+18. Grasp bowl1 from B_bed  
+19. Lift bowl1 from B_bed  
+20. Place bowl1 into DW  
+21. Free hands  
+22. Close_door(DW)  
+23. Grasp toy_car from K_counter  
+24. Lift toy_car from K_counter  
+25. Place toy_car into L_toys  
+26. Free hands  
+27. Grasp plush_bear from BA_sink  
+28. Lift plush_bear from BA_sink  
+29. Place plush_bear into L_toys  
+30. Free hands  
+31. Grasp tshirt1 from L_coffee  
+32. Lift tshirt1 from L_coffee  
+33. Place tshirt1 into B_laundry  
+34. Free hands  
+35. Grasp sock1 from L_coffee  
+36. Lift sock1 from L_coffee  
+37. Place sock1 into B_laundry  
+38. Free hands  
+39. Grasp shoe_pair1 from L_coffee  
+40. Lift shoe_pair1 from L_coffee  
+41. Place shoe_pair1 into E_shoes  
+42. Free hands  
+43. Grasp remote1 from K_counter  
+44. Lift remote1 from K_counter  
+45. Place remote1 on L_tv  
+46. Free hands  
+47. Grasp scissors1 from L_coffee  
+48. Lift scissors1 from L_coffee  
+49. Place scissors1 on K_counter  
+50. Free hands  
+51. Grasp pill_bottle from L_coffee  
+52. Lift pill_bottle from L_coffee  
+53. Place pill_bottle into BA_med  
+54. Free hands
+
+=== COORDINATOR + CONTACT ===
+user: 1. Grasp can_empty from B_side  
+2. Lift can_empty from B_side  
+3. Place can_empty into K_trash  
+4. Free hands  
+5. Grasp tissue_used from L_coffee  
+6. Lift tissue_used from L_coffee  
+7. Place tissue_used into K_trash  
+8. Free hands  
+9. Open_door(DW)  
+10. Grasp mug1 from B_side  
+11. Lift mug1 from B_side  
+12. Place mug1 into DW  
+13. Free hands  
+14. Grasp plate1 from L_coffee  
+15. Lift plate1 from L_coffee  
+16. Place plate1 into DW  
+17. Free hands  
+18. Grasp bowl1 from B_bed  
+19. Lift bowl1 from B_bed  
+20. Place bowl1 into DW  
+21. Free hands  
+22. Close_door(DW)  
+23. Grasp toy_car from K_counter  
+24. Lift toy_car from K_counter  
+25. Place toy_car into L_toys  
+26. Free hands  
+27. Grasp plush_bear from BA_sink  
+28. Lift plush_bear from BA_sink  
+29. Place plush_bear into L_toys  
+30. Free hands  
+31. Grasp tshirt1 from L_coffee  
+32. Lift tshirt1 from L_coffee  
+33. Place tshirt1 into B_laundry  
+34. Free hands  
+35. Grasp sock1 from L_coffee  
+36. Lift sock1 from L_coffee  
+37. Place sock1 into B_laundry  
+38. Free hands  
+39. Grasp shoe_pair1 from L_coffee  
+40. Lift shoe_pair1 from L_coffee  
+41. Place shoe_pair1 into E_shoes  
+42. Free hands  
+43. Grasp remote1 from K_counter  
+44. Lift remote1 from K_counter  
+45. Place remote1 on L_tv  
+46. Free hands  
+47. Grasp scissors1 from L_coffee  
+48. Lift scissors1 from L_coffee  
+49. Place scissors1 on K_counter  
+50. Free hands  
+51. Grasp pill_bottle from L_coffee  
+52. Lift pill_bottle from L_coffee  
+53. Place pill_bottle into BA_med  
+54. Free hands
+CoordinatorAgent: [
+  {
+    "objects": ["can_empty"],
+    "interaction": "grasp can_empty from B_side"
+  },
+  {
+    "objects": ["can_empty"],
+    "interaction": "lift can_empty from B_side"
+  },
+  {
+    "objects": ["can_empty", "K_trash"],
+    "interaction": "place can_empty into K_trash"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["tissue_used"],
+    "interaction": "grasp tissue_used from L_coffee"
+  },
+  {
+    "objects": ["tissue_used"],
+    "interaction": "lift tissue_used from L_coffee"
+  },
+  {
+    "objects": ["tissue_used", "K_trash"],
+    "interaction": "place tissue_used into K_trash"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["DW"],
+    "interaction": "open DW door"
+  },
+  {
+    "objects": ["mug1"],
+    "interaction": "grasp mug1 from B_side"
+  },
+  {
+    "objects": ["mug1"],
+    "interaction": "lift mug1 from B_side"
+  },
+  {
+    "objects": ["mug1", "DW"],
+    "interaction": "place mug1 into DW"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["plate1"],
+    "interaction": "grasp plate1 from L_coffee"
+  },
+  {
+    "objects": ["plate1"],
+    "interaction": "lift plate1 from L_coffee"
+  },
+  {
+    "objects": ["plate1", "DW"],
+    "interaction": "place plate1 into DW"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["bowl1"],
+    "interaction": "grasp bowl1 from B_bed"
+  },
+  {
+    "objects": ["bowl1"],
+    "interaction": "lift bowl1 from B_bed"
+  },
+  {
+    "objects": ["bowl1", "DW"],
+    "interaction": "place bowl1 into DW"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["DW"],
+    "interaction": "close DW door"
+  },
+  {
+    "objects": ["toy_car"],
+    "interaction": "grasp toy_car from K_counter"
+  },
+  {
+    "objects": ["toy_car"],
+    "interaction": "lift toy_car from K_counter"
+  },
+  {
+    "objects": ["toy_car", "L_toys"],
+    "interaction": "place toy_car into L_toys"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["plush_bear"],
+    "interaction": "grasp plush_bear from BA_sink"
+  },
+  {
+    "objects": ["plush_bear"],
+    "interaction": "lift plush_bear from BA_sink"
+  },
+  {
+    "objects": ["plush_bear", "L_toys"],
+    "interaction": "place plush_bear into L_toys"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["tshirt1"],
+    "interaction": "grasp tshirt1 from L_coffee"
+  },
+  {
+    "objects": ["tshirt1"],
+    "interaction": "lift tshirt1 from L_coffee"
+  },
+  {
+    "objects": ["tshirt1", "B_laundry"],
+    "interaction": "place tshirt1 into B_laundry"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["sock1"],
+    "interaction": "grasp sock1 from L_coffee"
+  },
+  {
+    "objects": ["sock1"],
+    "interaction": "lift sock1 from L_coffee"
+  },
+  {
+    "objects": ["sock1", "B_laundry"],
+    "interaction": "place sock1 into B_laundry"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "interaction": "grasp shoe_pair1 from L_coffee"
+  },
+  {
+    "objects": ["shoe_pair1"],
+    "interaction": "lift shoe_pair1 from L_coffee"
+  },
+  {
+    "objects": ["shoe_pair1", "E_shoes"],
+    "interaction": "place shoe_pair1 into E_shoes"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["remote1"],
+    "interaction": "grasp remote1 from K_counter"
+  },
+  {
+    "objects": ["remote1"],
+    "interaction": "lift remote1 from K_counter"
+  },
+  {
+    "objects": ["remote1", "L_tv"],
+    "interaction": "place remote1 on L_tv"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["scissors1"],
+    "interaction": "grasp scissors1 from L_coffee"
+  },
+  {
+    "objects": ["scissors1"],
+    "interaction": "lift scissors1 from L_coffee"
+  },
+  {
+    "objects": ["scissors1", "K_counter"],
+    "interaction": "place scissors1 on K_counter"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  },
+  {
+    "objects": ["pill_bottle"],
+    "interaction": "grasp pill_bottle from L_coffee"
+  },
+  {
+    "objects": ["pill_bottle"],
+    "interaction": "lift pill_bottle from L_coffee"
+  },
+  {
+    "objects": ["pill_bottle", "BA_med"],
+    "interaction": "place pill_bottle into BA_med"
+  },
+  {
+    "objects": [],
+    "interaction": "free hands"
+  }
+]
+ContactAgent: Here is the structured response based on the thought process:
+
+1. **Grasp can_empty from B_side**
+   - **Object Part Nodes**: `can_empty, back side`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `can_empty, back side`
+     - `right hand` -> `can_empty, back side`
+
+2. **Lift can_empty from B_side**
+   - **Object Part Nodes**: `can_empty, back side`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `can_empty, back side`
+     - `right hand` -> `can_empty, back side`
+
+3. **Place can_empty into K_trash**
+   - **Object Part Nodes**: `can_empty, back side`, `K_trash, opening`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `can_empty, back side`
+     - `right hand` -> `can_empty, back side`
+     - `can_empty, back side` -> `K_trash, opening`
+
+4. **Free hands**
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**: None
+
+5. **Grasp tissue_used from L_coffee**
+   - **Object Part Nodes**: `tissue_used, side`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `tissue_used, side`
+     - `right hand` -> `tissue_used, side`
+
+6. **Lift tissue_used from L_coffee**
+   - **Object Part Nodes**: `tissue_used, side`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `tissue_used, side`
+     - `right hand` -> `tissue_used, side`
+
+7. **Place tissue_used into K_trash**
+   - **Object Part Nodes**: `tissue_used, side`, `K_trash, opening`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `tissue_used, side`
+     - `right hand` -> `tissue_used, side`
+     - `tissue_used, side` -> `K_trash, opening`
+
+8. **Free hands**
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**: None
+
+9. **Open DW door**
+   - **Object Part Nodes**: `DW, handle`
+   - **Body Part Nodes**: `left hand`, `right hand`
+   - **Edges**:
+     - `left hand` -> `DW, handle`
+     - `right hand` -> `DW, handle`
+
+10. **Grasp mug1 from B_side**
+    - **Object Part Nodes**: `mug1, back side`
+    - **Body Part Nodes**: `left hand`, `right hand`
+    - **Edges**:
+      - `left hand` -> `mug1, back side`
+      - `right hand` -> `mug1, back side`
+
+11. **Lift mug1 from B_side**
+    - **Object Part Nodes**: `mug1, back side`
+    - **Body Part Nodes**: `left hand`, `right hand`
+    - **Edges**:
+      - `left hand` -> `mug1, back side`
+      - `right hand` -> `mug1, back side`
+
+12. **Place mug1 into DW**
+    - **Object Part Nodes**: `mug1, back side`, `DW, interior`
+    - **Body Part Nodes**: `left hand`, `right hand`
+    - **Edges**:
+      - `left hand` -> `mug1, back side`
+      - `right hand` -> `mug1, back side`
+      - `mug1, back side` -> `DW, interior`
+
+13. **Free hands**
+    - **Body Part Nodes**: `left hand`, `right hand`
+    - **Edges**: None
+
+This pattern continues for each subsequent interaction, ensuring that each step is accurately represented with the appropriate nodes and edges.

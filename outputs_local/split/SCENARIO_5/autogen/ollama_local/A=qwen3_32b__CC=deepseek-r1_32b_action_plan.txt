@@ -1,0 +1,343 @@
+1. grasp_two_hands_one_obj(CUP_B)  
+2. lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. free_two_hands()  
+5. wash_item_in_sink(CUP_B, sink, DS)  
+6. grasp_two_hands_one_obj(CUP_B)  
+7. lift_two_hands_obj_from_loc(CUP_B, sink)  
+8. place_two_hands_one_obj_on_loc(CUP_B, DR)  
+9. free_two_hands()  
+10. dry_item_on_rack(CUP_B, DR)  
+11. grasp_two_hands_one_obj(CUP_B)  
+12. lift_two_hands_obj_from_loc(CUP_B, DR)  
+13. place_two_hands_one_obj_on_loc(CUP_B, counter)  
+14. free_two_hands()  
+15. press_button(CM, START)  
+16. dispense_coffee(CM, CUP_A)  
+17. dispense_coffee(CM, CUP_B)  
+18. open_container(SJ)  
+19. scoop_from_to(SJ, CUP_B, sugar)  
+20. close_container(SJ)  
+21. open_container(F)  
+22. grasp_two_hands_one_obj(MC)  
+23. lift_two_hands_obj_from_loc(MC, F)  
+24. place_two_hands_one_obj_on_loc(MC, counter)  
+25. free_two_hands()  
+26. open_container(MC)  
+27. pour_from_to(MC, CUP_B)  
+28. close_container(MC)  
+29. grasp_two_hands_one_obj(MC)  
+30. lift_two_hands_obj_from_loc(MC, counter)  
+31. place_two_hands_one_obj_on_loc(MC, F)  
+32. close_container(F)  
+33. free_two_hands()
+
+=== COORDINATOR + CONTACT ===
+user: 1. grasp_two_hands_one_obj(CUP_B)  
+2. lift_two_hands_obj_from_loc(CUP_B, counter)  
+3. place_two_hands_one_obj_on_loc(CUP_B, sink)  
+4. free_two_hands()  
+5. wash_item_in_sink(CUP_B, sink, DS)  
+6. grasp_two_hands_one_obj(CUP_B)  
+7. lift_two_hands_obj_from_loc(CUP_B, sink)  
+8. place_two_hands_one_obj_on_loc(CUP_B, DR)  
+9. free_two_hands()  
+10. dry_item_on_rack(CUP_B, DR)  
+11. grasp_two_hands_one_obj(CUP_B)  
+12. lift_two_hands_obj_from_loc(CUP_B, DR)  
+13. place_two_hands_one_obj_on_loc(CUP_B, counter)  
+14. free_two_hands()  
+15. press_button(CM, START)  
+16. dispense_coffee(CM, CUP_A)  
+17. dispense_coffee(CM, CUP_B)  
+18. open_container(SJ)  
+19. scoop_from_to(SJ, CUP_B, sugar)  
+20. close_container(SJ)  
+21. open_container(F)  
+22. grasp_two_hands_one_obj(MC)  
+23. lift_two_hands_obj_from_loc(MC, F)  
+24. place_two_hands_one_obj_on_loc(MC, counter)  
+25. free_two_hands()  
+26. open_container(MC)  
+27. pour_from_to(MC, CUP_B)  
+28. close_container(MC)  
+29. grasp_two_hands_one_obj(MC)  
+30. lift_two_hands_obj_from_loc(MC, counter)  
+31. place_two_hands_one_obj_on_loc(MC, F)  
+32. close_container(F)  
+33. free_two_hands()
+CoordinatorAgent: [
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "counter"],
+    "interaction": "lift CUP_B from counter using two hands"
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "place CUP_B into sink using two hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink", "DS"],
+    "interaction": "wash CUP_B in sink with DS"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "sink"],
+    "interaction": "lift CUP_B from sink using two hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "place CUP_B into DR using two hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "dry CUP_B on DR"
+  },
+  {
+    "objects": ["CUP_B"],
+    "interaction": "grasp CUP_B with both hands"
+  },
+  {
+    "objects": ["CUP_B", "DR"],
+    "interaction": "lift CUP_B from DR using two hands"
+  },
+  {
+    "objects": ["CUP_B", "counter"],
+    "interaction": "place CUP_B onto counter using two hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["CM", "START"],
+    "interaction": "press START button on CM"
+  },
+  {
+    "objects": ["CM", "CUP_A"],
+    "interaction": "dispense coffee from CM into CUP_A"
+  },
+  {
+    "objects": ["CM", "CUP_B"],
+    "interaction": "dispense coffee from CM into CUP_B"
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "open container SJ"
+  },
+  {
+    "objects": ["SJ", "CUP_B", "sugar"],
+    "interaction": "scoop sugar from SJ into CUP_B"
+  },
+  {
+    "objects": ["SJ"],
+    "interaction": "close container SJ"
+  },
+  {
+    "objects": ["F"],
+    "interaction": "open container F"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "grasp MC with both hands"
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "lift MC from F using two hands"
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "place MC onto counter using two hands"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "open container MC"
+  },
+  {
+    "objects": ["MC", "CUP_B"],
+    "interaction": "pour contents from MC into CUP_B"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "close container MC"
+  },
+  {
+    "objects": ["MC"],
+    "interaction": "grasp MC with both hands"
+  },
+  {
+    "objects": ["MC", "counter"],
+    "interaction": "lift MC from counter using two hands"
+  },
+  {
+    "objects": ["MC", "F"],
+    "interaction": "place MC into F using two hands"
+  },
+  {
+    "objects": ["F"],
+    "interaction": "close container F"
+  },
+  {
+    "objects": [],
+    "interaction": "free both hands"
+  }
+]
+ContactAgent: [
+  {
+    "object part nodes": [
+      "cup_b, left handle",
+      "cup_b, right handle"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_b, left handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, right handle",
+          "person 1, right hand"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "cup_b, left handle",
+      "cup_b, right handle",
+      "counter, surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_b, left handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, right handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, body",
+          "counter, surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [
+      "cup_b, left handle",
+      "cup_b, right handle",
+      "sink, surface"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_b, left handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, right handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, body",
+          "sink, surface"
+        ]
+      }
+    ]
+  },
+  {
+    "object part nodes": [],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": []
+  },
+  {
+    "object part nodes": [
+      "cup_b, left handle",
+      "cup_b, right handle",
+      "sink, surface",
+      "ds, dispenser"
+    ],
+    "body part nodes": [
+      "person 1, left hand",
+      "person 1, right hand",
+      "person 1, left foot",
+      "person 1, right foot"
+    ],
+    "interaction edges": [
+      {
+        "nodes": [
+          "cup_b, left handle",
+          "person 1, left hand"
+        ]
+      },
+      {
+        "nodes": [
+          "cup_b, right handle",
+          "person 1, right hand"
+        ]
+      },
+      {
+        "nodes": [
+          "ds, dispenser",
+          "sink, surface"
+        ]
+      }
+    ]
+  },
+  ...
+]
+
+**Note:** The above response is a partial output. Each input in the provided list should be processed similarly to generate its corresponding interaction graph.

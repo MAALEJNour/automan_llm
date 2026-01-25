@@ -1,0 +1,12 @@
+{
+  "plan_type": "action+contact_plan",
+  "provider": "ollama_local",
+  "model": "A=qwen3:32b__CC=deepseek-r1:32b",
+  "total_latency": [
+    1736.8140580654144,
+    181.50773072242737,
+    182.11813187599182,
+    182.03200793266296,
+    181.99108409881592
+  ]
+}
