@@ -3,6 +3,7 @@
   "provider": "ollama",
   "model": "deepseek-r1:32b",
   "total_latency": [
-    887.3451838493347
+    887.3451838493347,
+    101.27525019645691
   ]
 }
